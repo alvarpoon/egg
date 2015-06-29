@@ -27,17 +27,17 @@ switch ($_SERVER['SERVER_NAME']) {
     define( 'DB_PASSWORD', 'root' );
     define( 'DB_HOST',     'localhost' );
 
-  case "egg.nowwhat.hk":
-    define( 'DB_NAME',     'egg' );
-    define( 'WP_SITEURL',  'http://egg.nowwhat.hk' );
-    define( 'WP_HOME', 'http://egg.nowwhat.hk' );
-    define( 'DB_USER',     'purauser' );
-    define( 'DB_PASSWORD', 'puraetx2015' );
+  case "egg-v2.nowwhat.hk":
+    define( 'DB_NAME',     'nowwhat_egg_v2' );
+    define( 'WP_SITEURL',  'http://egg-v2.nowwhat.hk' );
+    define( 'WP_HOME', 'http://egg-v2.nowwhat.hk' );
+    define( 'DB_USER',     'nowwhat' );
+    define( 'DB_PASSWORD', '20273214' );
     define( 'DB_HOST',     'localhost' );
 }
 
 /** Database Charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8mb4');
+define('DB_CHARSET', 'utf8');
 
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
