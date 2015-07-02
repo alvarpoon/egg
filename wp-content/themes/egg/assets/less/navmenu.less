@@ -1,8 +1,123 @@
 //===============================================================================
 //===============================================================================
-// Base
+// Base / Mobile
 //===============================================================================
 //===============================================================================
+.container {
+	position:relative;
+}
+.navbar-default {
+    background-color: rgba(42, 28, 0, 0.6);
+    border: none;
+	.navbar-header{
+		.navbar-brand{
+			width: 111px;
+			height:auto;
+			padding: 10px;
+			margin-left: 12px;
+
+			img{
+				width:100%;
+				height:auto;
+			}
+		}
+		.navbar-toggle{
+			margin-right: 24px;
+		}
+	} 
+	.nav-container{
+		.main-menu{
+			text-align: center;
+		}
+		li {
+			text-align: center;
+			display: block;
+			float:none;
+			a{
+				color:#fff;
+			}
+			&:hover {
+				a{
+				background: none;
+				color:#ccc;
+				}
+			}
+		}
+		li.active a{
+			color:#fff;
+			background: none;
+			&:hover {
+				background: none;
+				color:#ccc;
+			}
+		}
+		#menu-primary-navigation{
+		  float: none;
+		  text-align: center;
+		  margin: 0 auto;
+		  display: inline-block;
+		}
+	}
+	.nav-social {
+		padding-bottom: 10px;
+		color: rgba(225, 225, 225, 0.5);
+		text-align: center;
+		a{
+			color: rgba(225, 225, 225, 0.5);
+			&:hover{color: rgba(225, 225, 225, 0.7);}
+		}
+	}
+}
+.content-info{
+	padding: 22px 0;
+	background-color: rgb(147, 144, 139);
+	color:#fff;
+	text-transform: uppercase;
+	.footer_link_container{
+		font-size: 12px;
+		letter-spacing: 1px;
+		.navbar-nav {
+			float:none;
+			margin: 10px 0;
+			li {
+				display: inline-block;
+				margin: 10px 7px 10px 0;
+				border-right: 1px solid #fff;
+				a{
+				color:#fff;
+				margin: 0px 7px 0px 0;
+				padding: 0;
+				display: inline-block;
+				border-bottom: 1px solid #fff;
+				&:hover{
+					color:#ccc;
+					background:none;
+					border-bottom: 1px solid #ccc;
+					}
+				}
+				&:last-child{
+					border-right: 0px;
+				}
+			}
+		}
+	}
+	.nav-social {
+		color: rgba(225, 225, 225, 0.5);
+		text-align: center;
+		margin: 10px 0;
+		a{
+			color: rgba(225, 225, 225, 0.5);
+			&:hover{
+				color: rgba(225, 225, 225, 0.7);
+				}
+			border-bottom: 0px;
+		}
+		.fa-inverse {
+		  color: #93908B;
+		}
+	}	
+}
+
 
 //===============================================================================
 //===============================================================================
@@ -10,14 +125,18 @@
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-sm-min) {
-  .navbar-collapse.collapse {
-    display: block !important;
-    height: auto !important;
-    padding-bottom: 0;
-    overflow: visible !important;
-    visibility: visible!important;
-  }
+
+.navbar-default {
+	.nav-container{
+	    li{
+			display: inline-block;
+		}
+	}
 }
+	
+  
+}
+
 //===============================================================================
 //===============================================================================
 // Desktop
@@ -25,8 +144,49 @@
 //===============================================================================
 @media (min-width: @screen-md-min) {
 
+.navbar-default {
+
+	.navbar-header {
+	  position: absolute;
+	  padding-top: 15px;
+	  .navbar-brand{
+	    padding: 0px;
+		margin-left: 0px; 
+	  }
+	}
+	
+	.nav-container{
+	    margin-top: 37px;
+		li{
+			display: inline-block;
+		}
+	}
+	
+	.nav-social {
+		padding-bottom: 0px;
+		position: absolute;
+		right: 0;
+		bottom: 11px;
+	}
 }
 
+.content-info{
+	.nav-social{
+			text-align: right;
+	}
+		
+	.footer_link_container{
+		.navbar-nav {
+			margin: 0;
+			li a{
+			margin: 0 7px 0 0;
+			}
+		}
+	}
+}
+
+
+}
 //===============================================================================
 //===============================================================================
 // Wide desktop
