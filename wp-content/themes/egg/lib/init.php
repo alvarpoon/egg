@@ -24,6 +24,9 @@ function roots_setup() {
   // http://codex.wordpress.org/Function_Reference/add_image_size
   add_theme_support('post-thumbnails');
 
+  add_image_size('product_image', 690, 322); // 271px wide
+  add_image_size('collection_thumb', 690, 460); // 271px wide
+
   // Add post formats
   // http://codex.wordpress.org/Post_Formats
   add_theme_support('post-formats', array('aside', 'gallery', 'link', 'image', 'quote', 'video', 'audio'));
