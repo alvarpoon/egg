@@ -6711,6 +6711,7 @@ figure.alignnone {
   margin-left: -58px;
   width: 116px;
   text-align: center;
+  font-size: 28px;
 }
 .home-new-collection {
   margin: 45px auto 80px;
@@ -6727,9 +6728,10 @@ figure.alignnone {
   position: absolute;
   left: 50%;
   margin-top: -70px;
-  margin-left: -150px;
-  width: 300px;
+  margin-left: -141px;
+  width: 282px;
   text-align: center;
+  font-size: 28px;
 }
 .home-new-collection .sectionIntro {
   border: 1px solid #640;
@@ -6755,6 +6757,7 @@ figure.alignnone {
   margin-left: -118px;
   width: 236px;
   text-align: center;
+  font-size: 28px;
 }
 .home-find-store {
   margin: 45px auto 144px;
@@ -6773,6 +6776,7 @@ figure.alignnone {
   margin-left: -185px;
   width: 370px;
   text-align: center;
+  font-size: 28px;
 }
 .home-find-store h2:before {
   content: "";
@@ -6784,6 +6788,22 @@ figure.alignnone {
   right: 5px;
   bottom: 5px;
   border: 1px solid #664400;
+}
+@media (min-width: 992px) {
+  .home-new-collection h2 {
+    font-size: 30px;
+    margin-left: -150px;
+    width: 300px;
+  }
+  .home-collections h2 {
+    font-size: 30px;
+  }
+  .home-news h2 {
+    font-size: 30px;
+  }
+  .home-find-store h2 {
+    font-size: 30px;
+  }
 }
 .container {
   position: relative;
