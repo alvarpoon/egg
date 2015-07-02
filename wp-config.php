@@ -79,7 +79,7 @@ $table_prefix  = 'egg_';
  */
 define('WP_DEBUG', false);
 
-/*define('WP_MEMORY_LIMIT', '96M');*/
+define('WP_MEMORY_LIMIT', '96M');
 
 define('WP_ENV', 'development');
 
