@@ -52,6 +52,7 @@
             }
 			?>
         </div>
+        <div class="view-all-btn"><a href="/news">All News ></a></div>
 	</div>
 </div>
 </section>
