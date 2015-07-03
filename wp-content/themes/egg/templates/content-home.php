@@ -61,7 +61,9 @@
 <div class="container">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sectionIntro">
 		<div class="section-title"><h2>New Collection</h2></div>
-		<div class="section-contents">contents goes here.</div>
+		<div class="section-contents">contents goes here.
+        	<div class="view-all-btn"><a href="/news">All News ></a></div>
+        </div>
 	</div>
 </div>
 </section>
@@ -70,7 +72,9 @@
 <div class="container">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 sectionIntro">
 		<div class="section-title"><h2>Collections</h2></div>
-		<div class="section-contents">contents goes here.</div>
+		<div class="section-contents">contents goes here.
+        	<div class="view-all-btn"><a href="/news">All News ></a></div>
+        </div>
 	</div>
 </div>
 </section>
