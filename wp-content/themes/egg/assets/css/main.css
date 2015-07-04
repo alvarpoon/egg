@@ -6987,11 +6987,11 @@ figure.alignnone {
 }
 #news-page .page-head-container {
   position: relative;
-}
-#news-page .page-head-container img {
-  display: block;
-  width: 100%;
-  height: auto;
+  /*img{
+			display: block;
+			width: 100%;
+			height: auto;
+		}*/
 }
 #news-page .page-head-container .page-title {
   text-align: center;
