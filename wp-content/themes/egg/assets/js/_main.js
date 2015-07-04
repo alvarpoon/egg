@@ -76,6 +76,40 @@ var Roots = {
 	  
     }
   },
+  // News page
+  news: {
+    init: function() {
+      // JavaScript to be fired on the home page
+      
+	$(document).ready(function(){
+		
+		$('.row .news-content-container').hide();
+		
+		$('.row:first-child .news-content-container').show();
+		$('.row:first-child .news-excerpt-container').hide();
+
+		$('.row:first-child .expend-btn').addClass("expended");
+
+		$('.row .expend-btn').click(function(e){
+			e.preventDefault();
+			// hide all span
+			var $thiscontent = $(this).parent().find('.news-content-container');
+			var $thisexcerpt = $(this).parent().find('.news-excerpt-container');
+			$thiscontent.slideToggle(1000);
+			$thisexcerpt.slideToggle(1000);
+			
+			$(this).toggleClass('expended');
+			
+			
+		});
+
+
+
+	  });
+	  
+    }
+  },
+  
   // About us page, note the change from about-us to about_us.
   about_us: {
     init: function() {

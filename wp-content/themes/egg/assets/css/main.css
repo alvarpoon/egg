@@ -7016,15 +7016,54 @@ figure.alignnone {
 #news-page .container {
   padding: 70px 0;
 }
-#news-page .container .content-container {
+#news-page .container .row {
   background-color: #fff;
+  margin: 0 0 50px 0;
+}
+#news-page .container .row .left-content-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+#news-page .container .row .left-content-container .post-img img {
+  width: 100%;
+}
+#news-page .container .row .right-content-container {
+  padding: 20px 30px;
+}
+#news-page .container .row .right-content-container h4 {
+  margin-top: 3px;
+}
+#news-page .container .row .right-content-container .expend-btn {
+  cursor: pointer;
+  display: inline-block;
+  margin: 10px 0;
+  float: right;
+  background-image: url(../img/icon-expend.png);
+  width: 56px;
+  height: 56px;
+}
+#news-page .container .row .right-content-container .expended {
+  background-image: url(../img/icon-expended.png);
 }
 .container {
   position: relative;
 }
+.navbar-fixed-top {
+  position: absolute;
+}
+.main {
+  position: relative;
+  top: 64px;
+  padding-bottom: 64px;
+}
 .navbar-default {
-  background-color: rgba(42, 28, 0, 0.6);
+  background-color: rgba(42, 28, 0, 0.9);
   border: none;
+  margin-bottom: 0;
+}
+.navbar-default .navbar-header {
+  margin-right: 0;
+  margin-left: 0;
 }
 .navbar-default .navbar-header .navbar-brand {
   width: 111px;
@@ -7071,7 +7110,6 @@ figure.alignnone {
 }
 .navbar-default .nav-social {
   padding-bottom: 10px;
-  color: rgba(225, 225, 225, 0.5);
   text-align: center;
 }
 .navbar-default .nav-social a {
@@ -7080,8 +7118,11 @@ figure.alignnone {
 .navbar-default .nav-social a:hover {
   color: rgba(225, 225, 225, 0.7);
 }
+.navbar-default .nav-social .fa-stack {
+  font-size: 100%;
+}
 .content-info {
-  padding: 22px 0;
+  padding: 10px 0;
   background-color: #93908b;
   color: #fff;
   text-transform: uppercase;
@@ -7130,21 +7171,27 @@ figure.alignnone {
   color: #93908B;
 }
 @media (min-width: 768px) {
+  .main {
+    position: initial;
+    padding-bottom: 0;
+  }
   .navbar-default .nav-container li {
     display: inline-block;
   }
 }
 @media (min-width: 992px) {
   .navbar-default .navbar-header {
-    position: absolute;
     padding-top: 15px;
+    position: relative;
   }
   .navbar-default .navbar-header .navbar-brand {
     padding: 0px;
     margin-left: 0px;
   }
   .navbar-default .nav-container {
-    margin-top: 37px;
+    margin-top: -37px;
+    width: 100%;
+    float: left;
   }
   .navbar-default .nav-container li {
     display: inline-block;

@@ -22,7 +22,7 @@
 			?>
 		</nav>
 	  </div>
-	  <div class="nav-social">
+	  <div class="nav-social hidden-xs">
 		<a href="http://weibo.com/eggoptical" target="_blank"><span class="fa-stack fa-lg">
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
