@@ -1,5 +1,24 @@
-<div class="page-head-container">
-	<? $url = wp_get_attachment_url( get_post_thumbnail_id($post_id) ); ?>
-	<img class="img-responsive" src="<? echo $url ?>" />
-    <div class="page-title"><h2><?=roots_title(); ?></h2></div>
-</div>
+<?
+	if(is_page()){
+		$url = wp_get_attachment_url( get_post_thumbnail_id($post_id) );
+?>
+	<div class="page-head-container">
+		<img class="img-responsive" src="<? echo $url ?>" />
+		<div class="page-title"><h2><?=roots_title(); ?></h2></div>
+	</div>
+<?
+	}
+	/*else if(is_tax()){
+	//if it's a collection page
+		global $wp_query;
+	    $term = $wp_query->get_queried_object();
+	    $title = $term->name;*/
+?>
+	<!-- <div class="collection-head-container">
+		<a href="/collections">< Back to all collections</a>
+		<div class="page-title"><h2><?=$title; ?></h2></div>
+	</div> -->
+<?
+	//}
+?>
+    
