@@ -83,20 +83,18 @@ var Roots = {
       
 	$(document).ready(function(){
 		
-		$('.row .news-content-container').hide();
 		
-		$('.row:first-child .news-content-container').show();
-		$('.row:first-child .news-excerpt-container').hide();
-
-		$('.row:first-child .expend-btn').addClass("expended");
-
-		$('.row .expend-btn').click(function(e){
+		$('.have-excerpt .news-content-container').hide();
+		$('.have-excerpt .news-excerpt-container').show();
+		
+		$('.have-excerpt .expend-btn').click(function(e){
 			e.preventDefault();
 			// hide all span
-			var $thiscontent = $(this).parent().find('.news-content-container');
 			var $thisexcerpt = $(this).parent().find('.news-excerpt-container');
-			$thiscontent.slideToggle(1000);
+			var $thiscontent = $(this).parent().find('.news-content-container');
+			
 			$thisexcerpt.slideToggle(1000);
+			$thiscontent.slideToggle(1000);
 			
 			$(this).toggleClass('expended');
 			
@@ -109,6 +107,94 @@ var Roots = {
 	  
     }
   },
+
+
+
+  // Product Content page
+  single_product: {
+    init: function() {
+      // JavaScript to be fired on the home page
+      
+	$(document).ready(function(){
+		
+		
+		$('#product-slider').slick({
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 3,
+		  slidesToScroll: 3,
+		  responsive: [
+			{
+			  breakpoint: 1024,
+			  settings: {
+				slidesToShow: 3,
+				slidesToScroll: 3,
+				infinite: true,
+			  }
+			},
+			{
+			  breakpoint: 600,
+			  settings: {
+				slidesToShow: 2,
+				slidesToScroll: 2
+			  }
+			},
+			{
+			  breakpoint: 480,
+			  settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1
+			  }
+			}
+			// You can unslick at a given breakpoint now by adding:
+			// settings: "unslick"
+			// instead of a settings object
+		  ]
+	  });
+
+
+	$('#collection-slider').slick({
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 5,
+		  slidesToScroll: 5,
+		  responsive: [
+			{
+			  breakpoint: 1024,
+			  settings: {
+				slidesToShow: 5,
+				slidesToScroll: 5,
+				infinite: true,
+			  }
+			},
+			{
+			  breakpoint: 600,
+			  settings: {
+				slidesToShow: 2,
+				slidesToScroll: 2
+			  }
+			},
+			{
+			  breakpoint: 480,
+			  settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1
+			  }
+			}
+			// You can unslick at a given breakpoint now by adding:
+			// settings: "unslick"
+			// instead of a settings object
+		  ]
+	  });
+
+
+
+	  });
+	  
+    }
+  },
+  
+  
   
   // About us page, note the change from about-us to about_us.
   about_us: {

@@ -147,7 +147,21 @@
 	.nav-container{
 	    li{
 			display: inline-block;
+				a{  
+					padding: 10px 14px; 
+				}
+			&:last-child a{padding-right:0; }
 		}
+		.main-menu{
+			padding-top: 28px;
+			text-align: right;
+		}
+	}
+	
+	.nav-social {
+		position: absolute;
+		  right: 0;
+		  padding-top: 5px;
 	}
 }
 	
@@ -160,11 +174,14 @@
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-md-min) {
-
+.navbar-fixed-top{
+  position: fixed;
+ }
 .navbar-default {
 	
 	.navbar-header {
-	  padding-top: 15px;
+	  padding-top: 22px;
+	  padding-bottom: 12px;
 	  position: relative;
 	  .navbar-brand{
 	    padding: 0px;
@@ -176,9 +193,22 @@
 		  margin-top: -37px;
 		  width: 100%;
 		  float: left;
+		  margin-left: -28px;
+		  padding-bottom: 10px; 
 		li{
 			display: inline-block;
 		}
+		.main-menu{
+			padding-top: 0px;
+			text-align: center;
+		}
+	}
+	
+	.nav-social {
+		padding-bottom: 0px;
+		  position: absolute;
+		  right: 0; 
+		  bottom: 11px;
 	}
 	
 }
