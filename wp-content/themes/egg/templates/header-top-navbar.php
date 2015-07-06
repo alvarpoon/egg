@@ -10,6 +10,26 @@
       <a href="javascript:;" class="menu-label hidden-xs hidden-sm hidden-md hidden-lg" data-toggle="collapse" data-target=".navbar-collapse">menu</a>
       <a class="navbar-brand" href="<?php echo home_url(); ?>/"><img src="<?=get_stylesheet_directory_uri()?>/assets/img/logo-top.png"></a>
     </div>
+
+    <div class="lang-switcher hidden-xs visible-sm visible-md visible-lg">
+    <?
+            $lang_arr = icl_get_languages('skip_missing=0&orderby=id&order=asc');
+            $lang_len = sizeof($lang_arr);
+            $i = 0;
+            foreach( $lang_arr as $lang ){
+              if ($lang['active'] == 0){
+                if ($i == $lang_len - 1) {
+                  $lang_class = "last";
+                }
+                else{
+                  $lang_class = "";
+                }
+                echo '<a class="'.$lang_class.'" href="'.$lang['url'].'">'.$lang['tag'].'</a>';
+              }
+              $i++;
+            }
+      ?>
+      </div>
   
 	  <div class="nav-social hidden-xs">
 		<a href="http://weibo.com/eggoptical" target="_blank"><span class="fa-stack fa-lg">

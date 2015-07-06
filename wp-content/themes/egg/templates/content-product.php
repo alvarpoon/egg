@@ -11,7 +11,7 @@
 	<div class="container">
             <div class="row">
             	<div class="col-md-10 col-md-push-1 ">
-    				<a class="back-btn" href="/collections">< Back to all collections</a>
+    				<a class="back-btn" href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/collections">< <?_e('Back to all collections');?></a>
                 </div>
              </div>
     </div>
@@ -36,7 +36,7 @@
 <? get_template_part('templates/page-header'); ?>
 
 <div class="row">
-	<div class="col-sm-10 col-sm-push-1">
+	<div class="col-md-12 col-lg-10 col-lg-push-1">
 
 
 	<?
@@ -84,7 +84,7 @@
 		</div>
         
     	<div class="others-collection-container ">
-            <h3>Others in this collection</h3>
+            <h3><?_e('Others in this collection');?></h3>
             
             <div class="collection-container">
             <?

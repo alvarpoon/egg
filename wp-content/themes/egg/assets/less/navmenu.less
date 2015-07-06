@@ -64,7 +64,7 @@
 				color:#ccc;
 			}
 		}
-		#menu-primary-navigation{
+		#menu-primary-navigation,#menu-primary-navigation-chinese-traditional{
 		  float: none;
 		  text-align: center;
 		  margin: 0 auto;
@@ -133,6 +133,32 @@
 	}	
 }
 
+.lang-switcher {
+	position: absolute;
+	right: 0;
+	top: 8px;
+
+	a{
+		display: inline-block;
+		border-right: 1px solid #fff;
+		padding-right: 5px;
+		margin-right: 5px;
+		color:#fff;
+		line-height: 100%;
+  		font-size: 13px;
+
+  		&:hover{
+  			color: #ccc;
+  			text-decoration: none;
+  		}
+
+		&:last-of-type{
+			border: none;
+			padding-right: 0;
+			margin-right: 0;
+		}
+	}
+}
 
 //===============================================================================
 //===============================================================================
@@ -162,14 +188,14 @@
 	
 	.nav-social {
 		position: absolute;
-		  right: 0;
-		  padding-top: 5px;
+		right: 85px;
+  		padding-top: 7px;
 	}
 }
 .content-info{
 	text-align:left;
 }
-  
+
 }
 
 //===============================================================================
@@ -233,6 +259,9 @@
 }
 
 
+.lang-switcher {
+	top: 22px;
+  }
 }
 //===============================================================================
 //===============================================================================

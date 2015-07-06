@@ -6626,6 +6626,9 @@ button.close {
 body {
   font-family: 'Lato', sans-serif;
 }
+body.zh-hant {
+  font-family: 'Heiti TC Medium', MHeiHK, '微軟正黑體', 'Microsoft JhengHei', SimHei, sans-serif;
+}
 .noPadding {
   padding-left: 0;
   padding-right: 0;
@@ -6719,6 +6722,7 @@ figure.alignnone {
   text-indent: -9999px;
   position: absolute;
   top: 50%;
+  outline: none;
 }
 #main-banner .slick-prev {
   background: url(../img/arrow-left-white.png) no-repeat transparent center;
@@ -6975,6 +6979,14 @@ figure.alignnone {
   top: 20px;
   padding-left: 5px;
 }
+.zh-hant .home-collections .view-all-btn a,
+.zh-hans .home-collections .view-all-btn a,
+.zh-hant .home-new-collection .sectionIntro .section-contents .view-all-btn a,
+.zh-hans .home-new-collection .sectionIntro .section-contents .view-all-btn a,
+.zh-hant .home-news .view-all-btn a,
+.zh-hans .home-news .view-all-btn a {
+  font-style: normal;
+}
 @media (min-width: 768px) {
   #main-banner {
     position: relative;
@@ -7093,6 +7105,11 @@ figure.alignnone {
   color: #664400;
   text-transform: uppercase;
 }
+.product-name-container .page-title h2 {
+  margin: 5px 0;
+  font-size: 36px;
+  letter-spacing: 3px;
+}
 #product-content-page .product-container {
   margin-top: 80px;
   position: relative;
@@ -7104,7 +7121,7 @@ figure.alignnone {
   background-color: #fff;
 }
 #product-content-page .product-container .product-right-container {
-  padding: 64px 40px;
+  padding: 42px 40px;
 }
 #product-content-page .product-container .product-right-container .product-info {
   margin-bottom: 30px;
@@ -7137,8 +7154,8 @@ figure.alignnone {
   font-size: 23px;
 }
 #product-content-page .product-container #product-slider .product-slider-item {
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 #product-content-page .product-container #product-slider .product-slider-item img {
   width: 100%;
@@ -7150,19 +7167,21 @@ figure.alignnone {
   z-index: 100;
   text-indent: -9999px;
   position: absolute;
-  top: 45%;
+  top: 50%;
   -webkit-background-size: cover;
           background-size: cover;
   width: 21px;
   height: 24px;
+  margin-top: -12px;
+  outline: none;
 }
 #product-content-page .product-container #product-slider .slick-prev {
   background: url(../img/arrow-left-triangle.png) no-repeat transparent center;
-  left: -8%;
+  left: -30px;
 }
 #product-content-page .product-container #product-slider .slick-next {
   background: url(../img/arrow-right-triangle.png) no-repeat transparent center;
-  right: -8%;
+  right: -30px;
 }
 #product-content-page .others-collection-container {
   padding-top: 40px;
@@ -7215,13 +7234,13 @@ figure.alignnone {
   }
   #product-content-page .product-container #product-slider .slick-prev,
   #product-content-page .product-container #product-slider .slick-next {
-    top: 17%;
+    /*top: 17%;*/
   }
 }
 @media (min-width: 992px) {
   #product-content-page .product-container #product-slider .slick-prev,
   #product-content-page .product-container #product-slider .slick-next {
-    top: 30%;
+    /*top: 30%;*/
   }
   #product-content-page .others-collection-container .collection-container #collection-slider .slick-prev {
     background: url(../img/arrow-left-triangle.png) no-repeat transparent center;
@@ -7289,7 +7308,8 @@ figure.alignnone {
   background: none;
   color: #ccc;
 }
-.navbar-default .nav-container #menu-primary-navigation {
+.navbar-default .nav-container #menu-primary-navigation,
+.navbar-default .nav-container #menu-primary-navigation-chinese-traditional {
   float: none;
   text-align: center;
   margin: 0 auto;
@@ -7361,6 +7381,29 @@ figure.alignnone {
 .content-info .nav-social .fa-inverse {
   color: #93908B;
 }
+.lang-switcher {
+  position: absolute;
+  right: 0;
+  top: 8px;
+}
+.lang-switcher a {
+  display: inline-block;
+  border-right: 1px solid #fff;
+  padding-right: 5px;
+  margin-right: 5px;
+  color: #fff;
+  line-height: 100%;
+  font-size: 13px;
+}
+.lang-switcher a:hover {
+  color: #ccc;
+  text-decoration: none;
+}
+.lang-switcher a:last-of-type {
+  border: none;
+  padding-right: 0;
+  margin-right: 0;
+}
 @media (min-width: 768px) {
   .main {
     position: initial;
@@ -7381,8 +7424,8 @@ figure.alignnone {
   }
   .navbar-default .nav-social {
     position: absolute;
-    right: 0;
-    padding-top: 5px;
+    right: 85px;
+    padding-top: 7px;
   }
   .content-info {
     text-align: left;
@@ -7429,6 +7472,9 @@ figure.alignnone {
   }
   .content-info .footer_link_container .navbar-nav li a {
     margin: 0 7px 0 0;
+  }
+  .lang-switcher {
+    top: 22px;
   }
 }
 @media (min-width: 1200px) {

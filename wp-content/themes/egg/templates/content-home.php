@@ -30,7 +30,7 @@
 <div class="container ">
 	<div class="row">
         <div class="col-md-10 col-md-push-1 sectionIntro">
-            <div class="section-title"><h2>News</h2></div> 
+            <div class="section-title"><h2><?_e('News');?></h2></div> 
             <div class="section-contents">
                 <?
                 $args= array(
@@ -44,18 +44,18 @@
                 $results = get_posts( $args );
                 foreach( $results as $result ){
                     $url = wp_get_attachment_url( get_post_thumbnail_id($result->ID, 'thumbnail',array('class'=> "media-object")) );
-                    $post_title = get_the_title( $result->ID );
+                    $post_title = apply_filters('the_content',get_field('introduction',$result->ID));
                     
                     echo '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
                     echo '<div class="news-slider">';
-                        echo '<div class="post-img"><a href="'.get_permalink($result->ID).'"><img src="'. $url.'" /></a></div>';
-                        echo '<div class="post-title"><a href="'.get_permalink($result->ID).'">'.$post_title.'</a></div>';
+                        echo '<div class="post-img"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news"><img src="'. $url.'" /></a></div>';
+                        echo '<div class="post-title"><a href="/news">'.$post_title.'</a></div>';
                     echo '</div></div>';
                     
                 }
                 ?>
             </div>
-            <div class="view-all-btn"><a href="/news">All News ></a></div>
+            <div class="view-all-btn"><a href="/news"><?_e('All News');?> ></a></div>
         </div>
     </div>
 </div>
@@ -65,9 +65,33 @@
 <div class="container">
 	<div class="row">
         <div class="col-md-10 col-md-push-1 sectionIntro">
-            <div class="section-title"><h2>New Collection</h2></div>
-            <div class="section-contents">contents goes here.
-                <div class="view-all-btn"><a href="/news">All News ></a></div>
+            <div class="section-title"><h2><?=get_field("new_collection_title",$post->ID);?></h2></div>
+            <div class="section-contents">
+            	<?
+                    $new_collection = get_field('new_collection',$post->ID);
+                    if( $new_collection){
+                        foreach( $new_collection as $index => $new_product ){
+                            if($index%3==0){
+                            	$product_image_url = wp_get_attachment_url( get_post_thumbnail_id($new_product->ID) );
+                ?>
+                            <div class="row">
+                <?
+                            }
+                ?>
+                            <div class="col-sm-4">
+                                <a href="<?=get_permalink($new_product->ID)?>"><img class="img-responsive" src="<?=$product_image_url; ?>" /></a>
+                            </div>
+                <?
+                            if($index%3==2){
+                ?>
+                            </div>
+                <?
+                            }
+                        }
+                    }
+                ?>
+
+                <div class="view-all-btn"><a href="/news"><?_e('All in');?> <?=get_field("new_collection_title",$post->ID);?> ></a></div>
             </div>
         </div>
     </div>
@@ -78,13 +102,29 @@
 <div class="container">
 	<div class="row">
         <div class="col-md-10 col-md-push-1 sectionIntro">
-            <div class="section-title"><h2>Collections</h2></div>
+            <div class="section-title"><h2><?_e('Collections');?></h2></div>
             <div class="section-contents">
                     
                 <?
                     $featured_collections = get_field('featured_collection',$post->ID);
                     if( $featured_collections){
                         foreach( $featured_collections as $index => $featured_collection ){
+                        	$args= array(
+								'post_type' => 'product',
+								'tax_query' => array(
+												  array(
+													'taxonomy' => 'collection',
+													'field'    => 'slug',
+													'terms'    => $featured_collection->slug
+												  )
+												),
+								'post_status' 		=> 'publish',
+								'orderby'			=> 'menu_order',
+								'order' 			=> 'ASC',
+								'numberposts' 		=> 1,
+								'suppress_filters' => 0
+							);
+							$results = get_posts( $args );
                             if($index%4==0){
                 ?>
                             <div class="row">
@@ -92,8 +132,8 @@
                             }
                 ?>
                             <div class="col-sm-3">
-                                <a href="/collection/<?=$featured_collection->slug?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($featured_collection->term_id); ?>" /></a>
-                                <h3><a href="/collection/<?=$featured_collection->slug?>"><?=$featured_collection->name?></a></h3>
+                                <a href="<?=get_permalink($results[0]->ID);?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($featured_collection->term_id); ?>" /></a>
+                                <h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$featured_collection->name?></a></h3>
                             </div>
                 <?
                             if($index%4==3){
@@ -105,7 +145,7 @@
                     }
                 ?>
                 </div>
-                <div class="view-all-btn"><a href="/collections">All Collections ></a></div>
+                <div class="view-all-btn"><a href="/collections"><?_e('All Collections');?> ></a></div>
             </div>
 	</div>
 </div>
@@ -116,8 +156,8 @@
 	<div class="row">
         <div class="col-md-10 col-md-push-1  sectionIntro">
             <div class="section-title">
-                <div class="find-store-btn"><h2><a href="/our-stores/">Find a EGG Store</a></h2></div>
-                <img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-brown.png"  />
+                <div class="find-store-btn"><h2><a href="/our-stores/"><?_e('Find a EGG Store');?></a></h2></div>
+                <a href="/our-stores/"><img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-brown.png"  /></a>
             </div>
             
         </div>
