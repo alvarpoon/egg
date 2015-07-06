@@ -6851,6 +6851,7 @@ figure.alignnone {
   left: 0;
   right: 0;
   top: -29px;
+  z-index: 10;
 }
 .home-new-collection .section-title h2 {
   color: #664400;
@@ -6865,9 +6866,9 @@ figure.alignnone {
   display: inline-block;
   font-size: 23px;
 }
-.home-new-collection .sectionIntro {
+.home-new-collection .sectionIntro .section-contents {
   border: 1px solid #640;
-  padding-top: 40px;
+  padding: 40px 20px;
   padding-bottom: 10px;
   position: relative;
 }
@@ -7307,11 +7308,15 @@ figure.alignnone {
 .navbar-default .nav-social .fa-stack {
   font-size: 100%;
 }
+.navbar-default .nav-social .fa-inverse {
+  color: rgba(42, 28, 0, 0.9);
+}
 .content-info {
   padding: 10px 0;
   background-color: #93908b;
   color: #fff;
   text-transform: uppercase;
+  text-align: center;
 }
 .content-info .footer_link_container {
   font-size: 12px;
@@ -7379,6 +7384,9 @@ figure.alignnone {
     right: 0;
     padding-top: 5px;
   }
+  .content-info {
+    text-align: left;
+  }
 }
 @media (min-width: 992px) {
   .navbar-fixed-top {
@@ -7411,7 +7419,7 @@ figure.alignnone {
     padding-bottom: 0px;
     position: absolute;
     right: 0;
-    bottom: 11px;
+    bottom: 16px;
   }
   .content-info .nav-social {
     text-align: right;
@@ -7428,7 +7436,7 @@ figure.alignnone {
     padding-bottom: 0px;
     position: absolute;
     right: 0;
-    bottom: 11px;
+    bottom: 16px;
   }
 }
 /* Slider */
