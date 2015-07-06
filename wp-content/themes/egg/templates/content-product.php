@@ -9,13 +9,17 @@
 
 <section class="product-back-btn-container">
 	<div class="container">
-    	<a class="back-btn" href="/collections">< Back to all collections</a>
+            <div class="row">
+            	<div class="col-md-10 col-md-push-1 ">
+    				<a class="back-btn" href="/collections">< Back to all collections</a>
+                </div>
+             </div>
     </div>
 </section>
 <section class="product-name-container">
 	<div class="container">
-        <div class="row">
-            <div class="col-sm-6">
+            <div class="row">
+            	<div class="col-md-10 col-md-push-1 ">
                     <div class="page-title"><h2><?=$term->name ?></h2></div>
              </div>
         </div>
@@ -27,14 +31,12 @@
 ?>
     
     
-<div id="product-content-page">
+<div class="container" id="product-content-page" >
 
 <? get_template_part('templates/page-header'); ?>
 
-<div class="container">
-
-
-
+<div class="row">
+	<div class="col-sm-10 col-sm-push-1">
 
 
 	<?
@@ -44,44 +46,44 @@
 
 	?>
 		
-		<div class="row product-container"> 
+		<div class="product-container"> 
         	
-            <div class="model-name"><h2><?=$product->post_name?></h2></div>
             
-			<div class="col-sm-6 product-left-container">
-				<img class="img-responsive" src="<?=$product_image_url ?>" />
-			</div>
-			<div class="col-sm-6 product-right-container">
-				<div class="product-info"><?=apply_filters('the_content', $product->post_content); ?></div>
-				<div id="product-slider"  class="row">
-					<?
-						$image_args = array(
-							'post_type' => 'attachment',
-							'numberposts' => -1,
-							'post_status' => null,
-							'post_parent' => $product_id,
-							'order' => 'ASC',
-							'orderby' => 'menu_order'
-						);
-						$images = get_posts( $image_args );
-						foreach( $images as $image ){
-					  	//$page_url = get_field("page_link",$result->ID);
-					?>
-						 
-                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 product-slider-item">
-                                    <?=wp_get_attachment_image($image->ID,'full')?>
-                                </div>
-                          
-					<?
-						}
-					?>
+                <div class="model-name"><h2><?=$product->post_name?></h2></div>
+                <div class="row">
+                    <div class="col-sm-6 product-left-container">
+                        <img class="img-responsive" src="<?=$product_image_url ?>" />
                     </div>
-				</div>
-			</div>
+                    <div class="col-sm-6 product-right-container">
+                            <div class="product-info"><?=apply_filters('the_content', $product->post_content); ?></div>
+                            <div id="product-slider"  class="row">
+                                <?
+                                $image_args = array(
+                                    'post_type' => 'attachment',
+                                    'numberposts' => -1,
+                                    'post_status' => null,
+                                    'post_parent' => $product_id,
+                                    'order' => 'ASC',
+                                    'orderby' => 'menu_order'
+                                );
+                                $images = get_posts( $image_args );
+                                foreach( $images as $image ){
+                                //$page_url = get_field("page_link",$result->ID);
+								?>
+									 
+											<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 product-slider-item">
+												<?=wp_get_attachment_image($image->ID,'full')?>
+											</div>
+									  
+								<?
+									}
+								?>
+                            </div>
+                    </div>
+                 </div>
 		</div>
         
-    <div class="others-collection-container row">
-    	<div class="col-sm-10 col-sm-push-1">
+    	<div class="others-collection-container ">
             <h3>Others in this collection</h3>
             
             <div class="collection-container">
@@ -126,7 +128,6 @@
                 }
         ?>
         	</div>
-        </div>
-	</div>
+		</div>
 </div>
 </div>
