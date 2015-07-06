@@ -55,7 +55,7 @@
                 }
                 ?>
             </div>
-            <div class="view-all-btn"><a href="/news"><?_e('All News');?> ></a></div>
+            <div class="view-all-btn"><a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/news"><?_e('All News');?> ></a></div>
         </div>
     </div>
 </div>
@@ -65,10 +65,27 @@
 <div class="container">
 	<div class="row">
         <div class="col-md-10 col-md-push-1 sectionIntro">
-            <div class="section-title"><h2><?=get_field("new_collection_title",$post->ID);?></h2></div>
+            <div class="section-title"><h2><?_e('New Collection')?></h2></div>
             <div class="section-contents">
             	<?
                     $new_collection = get_field('new_collection',$post->ID);
+                    $new_collection_name = get_field('new_collection_name',$post->ID);
+                    $args= array(
+						'post_type' => 'product',
+						'tax_query' => array(
+										  array(
+											'taxonomy' => 'collection',
+											'field'    => 'slug',
+											'terms'    => $new_collection_name->slug
+										  )
+										),
+						'post_status' 		=> 'publish',
+						'orderby'			=> 'menu_order',
+						'order' 			=> 'ASC',
+						'numberposts' 		=> 1,
+						'suppress_filters' => 0
+					);
+					$results = get_posts( $args );
                     if( $new_collection){
                         foreach( $new_collection as $index => $new_product ){
                             if($index%3==0){
@@ -91,7 +108,7 @@
                     }
                 ?>
 
-                <div class="view-all-btn"><a href="/news"><?_e('All in');?> <?=get_field("new_collection_title",$post->ID);?> ></a></div>
+                <div class="view-all-btn"><a href="<?=get_permalink($results[0]->ID); ?>"><?_e('All in New Collection');?> ></a></div>
             </div>
         </div>
     </div>
