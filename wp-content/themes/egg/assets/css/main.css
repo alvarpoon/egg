@@ -6719,6 +6719,14 @@ figure.alignnone {
   width: 100%;
   height: auto;
 }
+#main-banner .slick-prev {
+  background: url(../img/arrow-left-white.png) no-repeat transparent center;
+  left: 22px;
+}
+#main-banner .slick-next {
+  background: url(../img/arrow-right-white.png) no-repeat transparent center;
+  right: 22px;
+}
 #main-banner .slick-prev,
 #main-banner .slick-next {
   border: none;
@@ -6727,18 +6735,6 @@ figure.alignnone {
   position: absolute;
   top: 50%;
   outline: none;
-}
-#main-banner .slick-prev {
-  background: url(../img/arrow-left-white.png) no-repeat transparent center;
-  left: 22px;
-  -webkit-background-size: cover;
-          background-size: cover;
-  width: 30px;
-  height: 30px;
-}
-#main-banner .slick-next {
-  background: url(../img/arrow-right-white.png) no-repeat transparent center;
-  right: 22px;
   -webkit-background-size: cover;
           background-size: cover;
   width: 30px;
@@ -6818,6 +6814,14 @@ figure.alignnone {
   color: #fff;
   text-decoration: none;
 }
+.home-news .slick-prev {
+  background: url(../img/arrow-left-brown.png) no-repeat transparent center;
+  left: -3%;
+}
+.home-news .slick-next {
+  background: url(../img/arrow-right-brown.png) no-repeat transparent center;
+  right: -3%;
+}
 .home-news .slick-prev,
 .home-news .slick-next {
   border: none;
@@ -6825,22 +6829,10 @@ figure.alignnone {
   text-indent: -9999px;
   position: absolute;
   top: 45%;
-}
-.home-news .slick-prev {
-  background: url(../img/arrow-left-brown.png) no-repeat transparent center;
-  left: -5%;
   -webkit-background-size: cover;
           background-size: cover;
-  width: 30px;
-  height: 30px;
-}
-.home-news .slick-next {
-  background: url(../img/arrow-right-brown.png) no-repeat transparent center;
-  right: -5%;
-  -webkit-background-size: cover;
-          background-size: cover;
-  width: 30px;
-  height: 30px;
+  width: 23px;
+  height: 23px;
 }
 .home-news .view-all-btn {
   text-align: center;
