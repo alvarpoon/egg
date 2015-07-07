@@ -36,7 +36,7 @@
 <? get_template_part('templates/page-header'); ?>
 
 <div class="row">
-	<div class="col-md-12 col-lg-10 col-lg-push-1">
+	<div class="col-md-10 col-md-push-1">
 
 
 	<?
@@ -51,7 +51,7 @@
             
                 <div class="model-name"><h2><?=$product->post_name?></h2></div>
                 <div class="row">
-                    <div class="col-sm-12 col-lg-6 product-left-container">
+                    <div class="col-sm-12 col-md-6 product-left-container">
                         <?
                                 $image_args = array(
                                     'post_type' => 'attachment',
@@ -74,7 +74,7 @@
 							
                     </div>
                     
-                    <div class="col-sm-12 col-lg-6 product-right-container">
+                    <div class="col-sm-12 col-md-6 product-right-container">
                             <div class="product-info"><?=apply_filters('the_content', $product->post_content); ?></div>
                             <div id="product-slider"  class="row hidden-xs">
                                 <?

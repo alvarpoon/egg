@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EGG website\n"
-"POT-Creation-Date: 2015-07-07 02:39+0800\n"
-"PO-Revision-Date: 2015-07-07 02:40+0800\n"
+"POT-Creation-Date: 2015-07-07 23:39+0800\n"
+"PO-Revision-Date: 2015-07-08 00:54+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -27,6 +27,10 @@ msgstr ""
 msgid "Comments are closed."
 msgstr ""
 
+#: ../themes/egg/templates/content-collection.php:36
+msgid "SEE THE COLLECTION"
+msgstr "瀏覽系列"
+
 #: ../themes/egg/templates/content-home.php:33
 msgid "News"
 msgstr "最新消息"
@@ -35,19 +39,23 @@ msgstr "最新消息"
 msgid "All News"
 msgstr "全部消息"
 
-#: ../themes/egg/templates/content-home.php:94
-msgid "All in"
-msgstr "全部"
+#: ../themes/egg/templates/content-home.php:68
+msgid "New Collection"
+msgstr "最新系列"
 
-#: ../themes/egg/templates/content-home.php:105
+#: ../themes/egg/templates/content-home.php:111
+msgid "All in New Collection"
+msgstr "新系列其他款式"
+
+#: ../themes/egg/templates/content-home.php:122
 msgid "Collections"
 msgstr "眼鏡系列"
 
-#: ../themes/egg/templates/content-home.php:147
+#: ../themes/egg/templates/content-home.php:167
 msgid "All Collections"
 msgstr "全部眼鏡系列"
 
-#: ../themes/egg/templates/content-home.php:158
+#: ../themes/egg/templates/content-home.php:178
 msgid "Find a EGG Store"
 msgstr "分店網絡"
 
@@ -55,7 +63,7 @@ msgstr "分店網絡"
 msgid "Back to all collections"
 msgstr "返回所有眼鏡系列"
 
-#: ../themes/egg/templates/content-product.php:87
+#: ../themes/egg/templates/content-product.php:110
 msgid "Others in this collection"
 msgstr "同系列其他款式"
 
@@ -75,3 +83,6 @@ msgstr "搜尋："
 #: ../themes/egg/templates/searchform.php:6
 msgid "Search"
 msgstr "搜尋"
+
+#~ msgid "All in"
+#~ msgstr "全部"

@@ -4641,25 +4641,27 @@ var Roots = {
 		  slidesToScroll: 3,
 		  responsive: [
 			{
-			  breakpoint: 1024,
+			  breakpoint: 9999,
 			  settings: {
 				slidesToShow: 3,
 				slidesToScroll: 3,
-				infinite: true,
+				infinite: true
 			  }
 			},
 			{
-			  breakpoint: 600,
+			  breakpoint: 992,
 			  settings: {
 				slidesToShow: 2,
-				slidesToScroll: 2
+				slidesToScroll: 2,
+				infinite: true
 			  }
 			},
 			{
-			  breakpoint: 480,
+			  breakpoint: 768,
 			  settings: {
 				slidesToShow: 1,
-				slidesToScroll: 1
+				slidesToScroll: 1,
+				infinite: true
 			  }
 			}
 			// You can unslick at a given breakpoint now by adding:

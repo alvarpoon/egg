@@ -69,6 +69,14 @@
 		#product-slider{
 			margin-top: 30px;
 			.product-slider-item{
+				cursor: pointer;
+				/*&.slick-center{
+					  
+					  padding: 1px;
+					  img{
+					  	border: 1px solid #664400;
+					  }
+				}*/
 				padding-left: 2px;
 		    	padding-right: 2px;
 				img{
@@ -127,7 +135,8 @@
 						  z-index: 100;
 						  text-indent: -9999px;
 						  position: absolute;
-						  top: 45%;
+						  top: 50%;
+						  margin-top: -12px;
 						  
 						  background-size: cover;
 						  width: 21px;
@@ -193,6 +202,9 @@
 
 #product-content-page{
 	.product-container{
+		.product-right-container{
+			padding: 37px 40px;
+		}
 		#product-slider{
 			.slick-prev, .slick-next {
 				  /*top: 30%;*/
