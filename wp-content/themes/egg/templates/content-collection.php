@@ -32,10 +32,22 @@
 <?
         }
 ?>
-            <div class="col-sm-4">
-                <a href="<?=get_permalink($results[0]->ID);?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($term->term_id); ?>" /></a>
-                <h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$term->name?></a></h3>
+            <div class="col-sm-4 collection-box">
+                <div class="single-collection-img"><a href="<?=get_permalink($results[0]->ID);?>"><span class="overlay"><p>SEE THE COLLECTION</p></span><img class="img-responsive" src="<?=z_taxonomy_image_url($term->term_id); ?>" /></a></div>
+                <div class="single-collection-title"><h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$term->name?></a></h3></div>
             </div>
+            
+            <!--
+            <a href="<?=get_permalink($results[0]->ID);?>">
+				<span class="col-sm-4 collection-box">
+					<span class="img-wrapper">
+						<span class="single-collection-img"><img class="img-responsive" src="<?=z_taxonomy_image_url($term->term_id); ?>" /></span>
+						<span class="overlay"><p>SEE THE COLLECTION</p></span>
+					</span>
+					<span class="single-collection-title"><h3><?=$term->name?></h3></span>
+				</span>
+            </a>
+            -->
 <?
             if($index%3==2){
 ?>

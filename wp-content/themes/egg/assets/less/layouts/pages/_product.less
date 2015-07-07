@@ -33,15 +33,14 @@
 		position:relative;
 		border:1px solid #e6e4e0;
 		.product-left-container{
-			padding-top: 64px;
+			padding-top: 42px;
 			padding-bottom:20px;
 			background-color: #fff;
+				img{width:100%;height:auto;}
 			}
 		.product-right-container{
 			padding: 42px 40px;
 				.product-info {
-				    margin-bottom: 30px;
-				    padding: 0 6px;
 				}
 			}
 		.row{margin:0;  background-color: #e6e4e0;}
@@ -68,7 +67,7 @@
 				}
 		}
 		#product-slider{
-			
+			margin-top: 30px;
 			.product-slider-item{
 				padding-left: 2px;
 		    	padding-right: 2px;
@@ -93,10 +92,12 @@
 			.slick-prev {
 			  background: url(../img/arrow-left-triangle.png) no-repeat transparent center;
 			  left:-30px;
+			  	&:hover{ background: url(../img/arrow-left-triangle-hover.png) no-repeat transparent center;}
 			}
 			.slick-next{
 			  background: url(../img/arrow-right-triangle.png) no-repeat transparent center;
-			   right: -30px;
+			  right: -30px;
+			   	&:hover{ background: url(../img/arrow-right-triangle-hover.png) no-repeat transparent center;}
 			}
 			
 			
@@ -136,10 +137,13 @@
 						.slick-prev {
 						  background: url(../img/arrow-left-triangle.png) no-repeat transparent center;
 						  left:-5%;
+						  &:hover{ background: url(../img/arrow-left-triangle-hover.png) no-repeat transparent center;}
+						  
 						}
 						.slick-next{
 						  background: url(../img/arrow-right-triangle.png) no-repeat transparent center;
 						  right: -5%;
+						  &:hover{ background: url(../img/arrow-right-triangle-hover.png) no-repeat transparent center;}
 						}
 			
 						}

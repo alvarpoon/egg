@@ -149,8 +149,10 @@
                             }
                 ?>
                             <div class="col-sm-3">
-                                <a href="<?=get_permalink($results[0]->ID);?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($featured_collection->term_id); ?>" /></a>
-                                <h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$featured_collection->name?></a></h3>
+                            	<div class="single-collection">
+									<div class="single-collection-img"><a href="<?=get_permalink($results[0]->ID);?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($featured_collection->term_id); ?>" /></a></div>
+									<div class="single-collection-title"><h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$featured_collection->name?></a></h3></div>
+								</div>
                             </div>
                 <?
                             if($index%4==3){

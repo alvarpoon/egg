@@ -4714,7 +4714,7 @@ var Roots = {
       
 	$(document).ready(function(){
 		
-		
+		/*
 		$('#product-slider').slick({
 		  infinite: true,
 		  speed: 300,
@@ -4748,7 +4748,33 @@ var Roots = {
 			// instead of a settings object
 		  ]
 	  });
-
+	  */
+	  
+	   $('.product-left-container').slick({
+		  slidesToShow: 1,
+		  slidesToScroll: 1,
+		  arrows: false,
+		  fade: true,
+		  asNavFor: '#product-slider',
+		  responsive: [
+			{
+			  breakpoint: 480,
+			  settings: {
+				arrows: true
+			  }
+			}
+		  ]
+		});
+		$('#product-slider').slick({
+		  slidesToShow: 3,
+		  slidesToScroll: 1,
+		  asNavFor: '.product-left-container',
+		  centerMode: true,
+		  focusOnSelect: true
+		});
+				
+				
+				
 
 	$('#collection-slider').slick({
 		  infinite: true,

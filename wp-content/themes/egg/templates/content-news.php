@@ -24,7 +24,7 @@
 		?>
             
             <div class="row">
-            <div class="col-sm-10 col-sm-push-1">
+            <div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1">
 				<div class="row news-container">
                 	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 left-content-container">
 						<div class="post-img"><img src="<? echo $url; ?>" /></div>

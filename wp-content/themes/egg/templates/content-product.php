@@ -10,7 +10,7 @@
 <section class="product-back-btn-container">
 	<div class="container">
             <div class="row">
-            	<div class="col-md-10 col-md-push-1 ">
+            	<div class="col-md-12 col-lg-10 col-lg-push-1 ">
     				<a class="back-btn" href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/collections">< <?_e('Back to all collections');?></a>
                 </div>
              </div>
@@ -19,7 +19,7 @@
 <section class="product-name-container">
 	<div class="container">
             <div class="row">
-            	<div class="col-md-10 col-md-push-1 ">
+            	<div class="col-md-12 col-lg-10 col-lg-push-1 ">
                     <div class="page-title"><h2><?=$term->name ?></h2></div>
              </div>
         </div>
@@ -51,12 +51,32 @@
             
                 <div class="model-name"><h2><?=$product->post_name?></h2></div>
                 <div class="row">
-                    <div class="col-sm-6 product-left-container">
-                        <img class="img-responsive" src="<?=$product_image_url ?>" />
+                    <div class="col-sm-12 col-lg-6 product-left-container">
+                        <?
+                                $image_args = array(
+                                    'post_type' => 'attachment',
+                                    'numberposts' => -1,
+                                    'post_status' => null,
+                                    'post_parent' => $product_id,
+                                    'order' => 'ASC',
+                                    'orderby' => 'menu_order'
+                                );
+                                $images = get_posts( $image_args );
+                                foreach( $images as $image ){
+                                //$page_url = get_field("page_link",$result->ID);
+								?>
+								
+								<div><?=wp_get_attachment_image($image->ID,'full')?></div>
+								
+								<?
+									}
+								?>
+							
                     </div>
-                    <div class="col-sm-6 product-right-container">
+                    
+                    <div class="col-sm-12 col-lg-6 product-right-container">
                             <div class="product-info"><?=apply_filters('the_content', $product->post_content); ?></div>
-                            <div id="product-slider"  class="row">
+                            <div id="product-slider"  class="row hidden-xs">
                                 <?
                                 $image_args = array(
                                     'post_type' => 'attachment',
@@ -81,6 +101,9 @@
                             </div>
                     </div>
                  </div>
+                 
+                 
+                 
 		</div>
         
     	<div class="others-collection-container ">
