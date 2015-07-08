@@ -4,63 +4,24 @@
 //===============================================================================
 //===============================================================================
 
-body{
-	font-family: 'Lato', sans-serif;
+#services-page{
 
-	&.zh-hant{
-		font-family: 'Heiti TC Medium', MHeiHK, '微軟正黑體', 'Microsoft JhengHei', SimHei, sans-serif;
+	.services-container {
+	  background-color: #e6e4e0;
+	  margin:0 0 50px 0;
+	  padding: 15px 0px;
+	  	h3{  margin-top: 10px;margin-bottom: 25px;font-weight: 700;}
+	  	.right-content-container{ padding-left:15px;padding-right:15px;}
 	}
 }
-.noPadding{
-	padding-left:0;
-	padding-right:0;
-}
-
-.page-head-container{
-	position:relative;
-	img{ 
-		display: block;
-		width: 100%;
-		height: auto;}
-	.page-title{
-		text-align: center;
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: -23px;
-		
-		h2{
-		  color: #664400;
-		  text-transform: uppercase;
-		  font-weight: bold;
-		  border: 1px solid #664400;
-		  padding: 10px 37px;
-		  background-color: #fff;
-		  letter-spacing: 3px;
-		  margin-top: 0;
-		  margin-bottom: 0;
-		  display: inline-block;
-		  font-size: 23px;
-		}
-	}
-}
-
-#news-page .container, 
-#collection-content-page, 
-#services-page .container{  padding: 70px 15px;}
-
- 
 //===============================================================================
 //===============================================================================
 // tablet
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-sm-min) {
-.page-head-container{
-	.page-title{
-		h2{padding: 10px 80px;}
-		}
-}
+
+
 }
 //===============================================================================
 //===============================================================================
@@ -68,6 +29,13 @@ body{
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-md-min) {
+
+#services-page{
+
+	.services-container {
+	  	.right-content-container{ padding-left:30px;padding-right:30px;}
+	}
+}
 
 }
 

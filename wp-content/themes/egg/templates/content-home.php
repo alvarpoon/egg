@@ -45,10 +45,11 @@
                 foreach( $results as $result ){
                     $url = wp_get_attachment_url( get_post_thumbnail_id($result->ID, 'thumbnail',array('class'=> "media-object")) );
                     $post_title = apply_filters('the_content',get_field('introduction',$result->ID));
+                    $slug = get_post_field( 'post_name', get_post($result->ID) );
                     
                     echo '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
                     echo '<div class="news-slider">';
-                        echo '<div class="post-img"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news"><img src="'. $url.'" /></a></div>';
+                        echo '<div class="post-img"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news/#'. $slug .'"><img src="'. $url.'" /></a></div>';
                         echo '<div class="post-title"><a href="/news">'.$post_title.'</a></div>';
                     echo '</div></div>';
                     

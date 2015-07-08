@@ -85,9 +85,32 @@ var Roots = {
       
 	$(document).ready(function(){
 		
+		var hash = window.location.hash;
+		$('.row:first-child .news-container:first-child ').addClass('first-news');
 		
 		$('.have-excerpt .news-content-container').hide();
 		$('.have-excerpt .news-excerpt-container').show();
+		
+		$('.no-excerpt .news-content-container').show();
+		$('.no-excerpt .news-excerpt-container').hide();
+
+	 	if(hash !== ''){
+	 		var $thisexcerpt = $(hash).parent().find('.news-excerpt-container');
+			var $thiscontent = $(hash).parent().find('.news-content-container');
+			
+			$thisexcerpt.slideToggle(1000);
+			$thiscontent.slideToggle(1000);
+			
+			$(hash).find('.expend-btn').addClass('expended');
+			
+			
+	 	}else{
+	 	
+			$('.first-news .have-excerpt .news-content-container').show();
+			$('.first-news .have-excerpt .news-excerpt-container').hide();
+			$('.first-news .have-excerpt .expend-btn').addClass('expended');
+			
+		}
 		
 		$('.have-excerpt .expend-btn').click(function(e){
 			e.preventDefault();
@@ -103,8 +126,7 @@ var Roots = {
 			
 		});
 
-
-
+	
 	  });
 	  
     }
@@ -119,41 +141,7 @@ var Roots = {
       
 	$(document).ready(function(){
 		
-		/*
-		$('#product-slider').slick({
-		  infinite: true,
-		  speed: 300,
-		  slidesToShow: 3,
-		  slidesToScroll: 3,
-		  responsive: [
-			{
-			  breakpoint: 1024,
-			  settings: {
-				slidesToShow: 3,
-				slidesToScroll: 3,
-				infinite: true,
-			  }
-			},
-			{
-			  breakpoint: 600,
-			  settings: {
-				slidesToShow: 2,
-				slidesToScroll: 2
-			  }
-			},
-			{
-			  breakpoint: 480,
-			  settings: {
-				slidesToShow: 1,
-				slidesToScroll: 1
-			  }
-			}
-			// You can unslick at a given breakpoint now by adding:
-			// settings: "unslick"
-			// instead of a settings object
-		  ]
-	  });
-	  */
+	
 	  
 	   $('.product-left-container').slick({
 		  slidesToShow: 1,
@@ -163,7 +151,7 @@ var Roots = {
 		  asNavFor: '#product-slider',
 		  responsive: [
 			{
-			  breakpoint: 480,
+			  breakpoint: 767,
 			  settings: {
 				arrows: true
 			  }
@@ -252,5 +240,22 @@ var UTIL = {
 };
 
 $(document).ready(UTIL.loadEvents);
+
+function showHideNews(classname){
+	$(classname).click(function(e){
+		e.preventDefault();
+		// hide all span
+		var $thisexcerpt = $(this).parent().find('.news-excerpt-container');
+		var $thiscontent = $(this).parent().find('.news-content-container');
+		
+		$thisexcerpt.slideToggle(1000);
+		$thiscontent.slideToggle(1000);
+		
+		$(this).toggleClass('expended');
+		
+		
+	});
+	
+}
 
 })(jQuery); // Fully reference jQuery after this point.

@@ -7,7 +7,6 @@
 		<?=get_template_part('partials/_page_title'); ?>
         <?=apply_filters('the_content',$post->post_content);?>
 
-
           <?
 	    	$args= array(
 			    'post_type' 		=> 'post',
@@ -21,11 +20,14 @@
 	    	foreach( $results as $result ){
 	    		$url = wp_get_attachment_url( get_post_thumbnail_id($result->ID, 'thumbnail',array('class'=> "img-responsive")) );
 				$post_title = get_the_title( $result->ID );
+				$slug = get_post_field( 'post_name', get_post($result->ID) );
+				
 		?>
             
             <div class="row">
             <div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1">
-				<div class="row news-container">
+				<div class="row news-container" id="<? echo $slug ?>">
+
                 	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 left-content-container">
 						<div class="post-img"><img src="<? echo $url; ?>" /></div>
                     </div>
@@ -34,8 +36,10 @@
                         
                         
                         <? if( !get_field("introduction",$result->ID) ): ?>
-                            <div class="news-content-container">
-                                <?=apply_filters('the_content', $result->post_content); ?>
+                            <div class="no-excerpt">
+								<div class="news-content-container">
+									<?=apply_filters('the_content', $result->post_content); ?>
+								</div>
                             </div>
                         <?php else : ?>
                         	<div class="have-excerpt">
@@ -45,6 +49,7 @@
                                 <div class="news-content-container">
                                     <?=apply_filters('the_content', $result->post_content); ?>
                                 </div>
+                                
                                 <div class="expend-btn "></div>
                             </div>
                         <?php endif; ?>
