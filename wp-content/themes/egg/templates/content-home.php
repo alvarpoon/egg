@@ -177,7 +177,7 @@
         <div class="col-md-10 col-md-push-1  sectionIntro">
             <div class="section-title">
                 <div class="find-store-btn"><h2><a href="/our-stores/"><?_e('Find a EGG Store');?></a></h2></div>
-                <a href="/our-stores/"><img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-brown.png"  /></a>
+                <a href="/our-stores/"><img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-line-brown.png"  /></a>
             </div>
             
         </div>

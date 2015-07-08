@@ -6825,11 +6825,11 @@ figure.alignnone {
 }
 .home-news .slick-prev {
   background: url(../img/arrow-left-brown.png) no-repeat transparent center;
-  left: -3px;
+  left: -15px;
 }
 .home-news .slick-next {
   background: url(../img/arrow-right-brown.png) no-repeat transparent center;
-  right: -3px;
+  right: -15px;
 }
 .home-news .slick-prev,
 .home-news .slick-next {
@@ -6837,11 +6837,12 @@ figure.alignnone {
   z-index: 100;
   text-indent: -9999px;
   position: absolute;
-  top: 45%;
+  top: 50%;
   -webkit-background-size: cover;
           background-size: cover;
-  width: 23px;
-  height: 23px;
+  width: 46px;
+  height: 46px;
+  margin-top: -23px;
 }
 .home-news .view-all-btn {
   text-align: center;
@@ -7094,15 +7095,17 @@ figure.alignnone {
   .home-news .slick-slider {
     padding: 0;
   }
+  .home-news .slick-prev,
+  .home-news .slick-next {
+    /*width: 46px;
+	  height: 46px;*/
+    margin-top: -33px;
+  }
   .home-news .slick-prev {
-    width: 50px;
-    height: 49px;
-    left: -7%;
+    left: -67px;
   }
   .home-news .slick-next {
-    width: 50px;
-    height: 49px;
-    right: -7%;
+    right: -67px;
   }
 }
 #news-page {
@@ -7132,8 +7135,8 @@ figure.alignnone {
   margin: 10px 0;
   float: right;
   background-image: url(../img/icon-expend.png);
-  width: 56px;
-  height: 56px;
+  width: 46px;
+  height: 46px;
 }
 #news-page .container .news-container .right-content-container .expended {
   background-image: url(../img/icon-expended.png);
@@ -7173,6 +7176,9 @@ figure.alignnone {
   padding-top: 42px;
   padding-bottom: 20px;
   background-color: #fff;
+}
+#product-content-page .product-container .product-left-container .slick-active {
+  cursor: pointer;
 }
 #product-content-page .product-container .product-left-container img {
   width: 100%;
@@ -7448,12 +7454,20 @@ figure.alignnone {
 }
 #services-page .services-container h3 {
   margin-top: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   font-weight: 700;
 }
 #services-page .services-container .right-content-container {
   padding-left: 15px;
   padding-right: 15px;
+}
+#services-page .services-container ul {
+  padding-left: 18px;
+}
+@media (min-width: 768px) {
+  #services-page .services-container h3 {
+    margin-top: 0;
+  }
 }
 @media (min-width: 992px) {
   #services-page .services-container .right-content-container {

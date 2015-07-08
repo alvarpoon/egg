@@ -121,7 +121,7 @@ function career_register() {
       'capability_type' => 'post',
       'hierarchical' => true,
       'menu_position' => 6,
-      'supports'      => array( 'title'),
+      'supports'      => array( 'title', 'editor'),
   );
   register_post_type( 'career' , $args );
 }
