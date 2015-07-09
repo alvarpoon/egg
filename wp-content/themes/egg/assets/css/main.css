@@ -6629,6 +6629,13 @@ body {
 body.zh-hant {
   font-family: 'Heiti TC Medium', MHeiHK, '微軟正黑體', 'Microsoft JhengHei', SimHei, sans-serif;
 }
+.content-container h3 {
+  font-weight: 700;
+}
+.content-container a {
+  color: #333333;
+  text-decoration: underline;
+}
 .noPadding {
   padding-left: 0;
   padding-right: 0;
@@ -6711,6 +6718,9 @@ figure.alignnone {
     float: left;
     width: 33.33333333%;
   }
+}
+.page-template-default .content-container {
+  padding-bottom: 40px;
 }
 .slick-prev,
 .slick-next {
@@ -6840,9 +6850,9 @@ figure.alignnone {
   top: 50%;
   -webkit-background-size: cover;
           background-size: cover;
-  width: 46px;
-  height: 46px;
-  margin-top: -23px;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
 }
 .home-news .view-all-btn {
   text-align: center;
@@ -7135,8 +7145,10 @@ figure.alignnone {
   margin: 10px 0;
   float: right;
   background-image: url(../img/icon-expend.png);
-  width: 46px;
-  height: 46px;
+  width: 30px;
+  height: 30px;
+  -webkit-background-size: cover;
+          background-size: cover;
 }
 #news-page .container .news-container .right-content-container .expended {
   background-image: url(../img/icon-expended.png);
@@ -7419,6 +7431,7 @@ figure.alignnone {
   color: #000;
   display: block;
   padding: 15px 10px;
+  font-size: 20px;
 }
 #collection-content-page .collection-box .single-collection-title h3 a:hover {
   text-decoration: none;

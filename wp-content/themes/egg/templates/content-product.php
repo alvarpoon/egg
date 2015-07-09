@@ -49,7 +49,7 @@
 		<div class="product-container"> 
         	
             
-                <div class="model-name"><h2><?=$product->post_name?></h2></div>
+                <!-- <div class="model-name"><h2><?//=$product->post_name?></h2></div> -->
                 <div class="row">
                     <div class="col-sm-12 col-md-6 product-left-container">
                         <?
