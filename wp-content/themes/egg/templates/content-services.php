@@ -15,8 +15,8 @@
 				$args= array(
 					'post_type' 		=> 'page',
 					'post_status' 		=> 'publish',
-					'orderby'			=> 'date',
-					'order' 			=> 'DESC',
+					'orderby'			=> 'menu_order',
+					'order' 			=> 'ASC',
 					'post_parent'       => '13',
 					'numberposts' 		=> -1
 				  );
@@ -28,7 +28,7 @@
 			
 						<div class="row services-container">
 							<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5 left-content-container">
-								<img src="<? echo $url; ?>" class="img-responsive" />
+								<img src="<? echo $url; ?>" />
 							</div>
 							<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7 right-content-container">
 								<h3><? echo $post_title; ?></h3>
