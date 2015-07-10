@@ -52,16 +52,17 @@
 			&:hover {
 				a{
 				background: none;
-				color:#ccc;
+				color:#f8b03a;
 				}
 			}
+			&:focus{background: none;color:#f8b03a;}
 		}
 		li.active a{
-			color:#fff;
+			color:#f8b03a;
 			background: none;
 			&:hover {
 				background: none;
-				color:#ccc;
+				color:#f8b03a;
 			}
 		}
 		#menu-primary-navigation,#menu-primary-navigation-chinese-traditional{
@@ -72,7 +73,6 @@
 		}
 	}
 	.nav-social {
-		padding-bottom: 10px;
 		text-align: center;
 		a{
 			color: rgba(225, 225, 225, 0.5);
@@ -83,6 +83,7 @@
 	}
 }
 .content-info{
+	.container{display: block;}
 	padding: 10px 0;
 	background-color: rgb(147, 144, 139);
 	color:#fff;
@@ -135,7 +136,7 @@
 
 .lang-switcher {
 	position: absolute;
-	right: 0;
+	right: 15px;
 	top: 8px;
 
 	a{
@@ -173,23 +174,26 @@
 
 .navbar-default {
 	.nav-container{
+		float: none;
 	    li{
 			display: inline-block;
 				a{  
-					padding: 10px 14px; 
+					padding: 10px 12px; 
 				}
 			&:last-child a{padding-right:0; }
+			&:first-child a{padding-left:0; }
 		}
 		.main-menu{
 			padding-top: 28px;
 			text-align: right;
+			
 		}
 	}
 	
 	.nav-social {
 		position: absolute;
 		right: 85px;
-  		padding-top: 7px;
+		top: 7px;
 	}
 }
 .content-info{
@@ -223,10 +227,12 @@
 		  margin-top: -37px;
 		  width: 100%;
 		  float: left;
-		  margin-left: -28px;
 		  padding-bottom: 10px; 
 		li{
 			display: inline-block;
+				a{  
+					padding: 10px 14px; 
+				}
 		}
 		.main-menu{
 			padding-top: 0px;
@@ -235,9 +241,9 @@
 	}
 	
 	.nav-social {
-		padding-bottom: 0px;
 		  position: absolute;
 		  right: 0; 
+		  top: initial;
 		  bottom: 16px;
 	}
 	
@@ -273,12 +279,13 @@
 
 .navbar-default {	
 	.nav-social {
-		padding-bottom: 0px;
 		position: absolute;
-		right: 0;
+		right: 15px;
 		bottom: 16px;
 	}
 }
-
+.lang-switcher {
+	right: 15px;
+}
 
 }

@@ -1,9 +1,15 @@
 <?
 	if(is_page()){
-		$url = wp_get_attachment_url( get_post_thumbnail_id($post_id) );
+		
+			$url = wp_get_attachment_url( get_post_thumbnail_id($post_id) );
+		
 ?>
 	<div class="page-head-container">
-		<img class="img-responsive" src="<? echo $url ?>" />
+		<? if ( $url) { ?>
+			<img class="img-responsive" src="<? echo $url ?>" />
+		<? } else { ?>
+			<div class="no-featured-img	"></div>
+		<? } ?>
 		<div class="page-title"><h2><?=roots_title(); ?></h2></div>
 	</div>
 <?

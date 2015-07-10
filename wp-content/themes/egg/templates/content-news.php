@@ -50,11 +50,12 @@
                                     <?=apply_filters('the_content', $result->post_content); ?>
                                 </div>
                                 
-                                <div class="expend-btn "></div>
+                               
                             </div>
                         <?php endif; ?>
                         
                 	</div>
+                	 <div class="expend-btn "></div>
                 </div>
              </div>
              </div>

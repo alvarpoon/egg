@@ -1,5 +1,5 @@
 <header class="banner navbar navbar-default navbar-fixed-top" role="banner">
-  <div class="container noPadding">
+  <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
         <span class="sr-only">Toggle navigation</span>
@@ -40,13 +40,9 @@
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
 		</span></a>
-        <a href="https://www.facebook.com/EggOpticalBoutique/info?tab=page_info" target="_blank"><span class="fa-stack fa-lg">
+        <a href="https://www.facebook.com/EggOpticalBoutique" target="_blank"><span class="fa-stack fa-lg">
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-		</span></a>
-		<a href="#" target="_blank"><span class="fa-stack fa-lg">
-		  <i class="fa fa-circle fa-stack-2x"></i>
-		  <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
 		</span></a>
 		<a href="http://www.instagram.com/eggoptical" target="_blank"><span class="fa-stack fa-lg">
 		  <i class="fa fa-circle fa-stack-2x"></i>

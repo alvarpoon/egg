@@ -4695,8 +4695,8 @@ var Roots = {
 	 		var $thisexcerpt = $(hash).parent().find('.news-excerpt-container');
 			var $thiscontent = $(hash).parent().find('.news-content-container');
 			
-			$thisexcerpt.slideToggle(1000);
-			$thiscontent.slideToggle(1000);
+			$thisexcerpt.slideToggle(500);
+			$thiscontent.slideToggle(500);
 			
 			$(hash).find('.expend-btn').addClass('expended');
 			
@@ -4709,14 +4709,14 @@ var Roots = {
 			
 		}
 		
-		$('.have-excerpt .expend-btn').click(function(e){
+		$(' .expend-btn').click(function(e){
 			e.preventDefault();
 			// hide all span
 			var $thisexcerpt = $(this).parent().find('.news-excerpt-container');
 			var $thiscontent = $(this).parent().find('.news-content-container');
 			
-			$thisexcerpt.slideToggle(1000);
-			$thiscontent.slideToggle(1000);
+			$thisexcerpt.slideToggle(500);
+			$thiscontent.slideToggle(500);
 			
 			$(this).toggleClass('expended');
 			

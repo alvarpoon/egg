@@ -8,7 +8,7 @@
             <?=apply_filters('the_content', $post->post_content); ?>
 		</div>
 	
-	
+	</div>
 	
 	<?
 		$args= array(
@@ -25,9 +25,11 @@
 	  ?>
 	
 				<div class="row">
-					<div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1 career-post">
-						<h3><? echo $post_title; ?></h3>
-						<?=apply_filters('the_content', $result->post_content); ?>
+					<div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1 ">
+						<div class="career-post">
+							<h3><? echo $post_title; ?></h3>
+							<?=apply_filters('the_content', $result->post_content); ?>
+						</div>
 					</div>
 				</div>
 			
@@ -36,7 +38,7 @@
 		}
 	?>
 		 
-	</div>
+
 	
 		
 		

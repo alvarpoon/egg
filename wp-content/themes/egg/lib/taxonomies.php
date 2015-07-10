@@ -21,13 +21,13 @@ function create_product_taxonomies() {
 add_action( 'init', 'create_store_taxonomies', 0 );
 function create_store_taxonomies() {
   register_taxonomy(
-      'store_category',
+      'region',
       'store',
       array(
           'labels' => array(
-              'name' => 'Clinic Category',
-              'add_new_item' => 'Add Clinic Category',
-              'new_item_name' => 'New Clinic Category'
+              'name' => 'Store Region',
+              'add_new_item' => 'Add Store Region',
+              'new_item_name' => 'New Store Region'
           ),
           'show_ui' => true,
           'show_tagcloud' => false,

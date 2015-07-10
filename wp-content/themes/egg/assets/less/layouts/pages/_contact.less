@@ -4,7 +4,7 @@
 //===============================================================================
 //===============================================================================
 #contact-page{
-	  background-color: #e6e4e0;
+	background-color: #e6e4e0;
 	.contact-info {
 		
   		padding-top: 30px;
@@ -22,29 +22,50 @@
 				  color: rgb(102, 68, 0);
 				  font-size: 16px;
 				  word-wrap: break-word;
-  				}
+				  margin-bottom:20px;
+  				} 
   		}
   	
   	.contact-form{ 
   		background-color: #fff;
   		padding-top: 50px;
   		padding-bottom: 50px;
-  		text-align:center;
   		
-  			input[type="reset"] {
-			  background-color: #93908c;
-			  border: none;
-			  color: #fff;
-			  padding: 11px 44px;
-			  margin-left: 10px;
-			}
-			input[type="submit"] {
-			  background-color: #664400;
-			  border: none;
-			  color: #fff;
-			  padding: 11px 44px;
-			  margin-left: 10px;
-			}
+  			
+			.form-wrapper{
+				width:100%;
+				padding:0 10px;
+				margin: 0 auto;
+					.form-group {
+						label{
+							width: 100%;
+							text-align: left;
+							vertical-align: top;
+							display:inline-block;
+							}
+						input, textarea {border:1px solid #999999;padding:5px;width:100%}
+						span.wpcf7-form-control-wrap{  width: 100%;display: inline-block;}
+						}
+					.submit-btn{
+						text-align:right;
+							input[type="reset"] {
+								  background-color: #93908c;
+								  border: none;
+								  color: #fff;
+								  padding: 11px 40px;
+								  letter-spacing: 1px;
+								}
+								input[type="submit"] {
+								  background-color: #664400;
+								  border: none;
+								  color: #fff;
+								  padding: 11px 40px;
+								  margin-left: 10px;
+								  letter-spacing: 1px;
+								}
+							.ajax-loader{float:left;}
+						}
+				}
   		}
 }
 //===============================================================================
@@ -54,7 +75,22 @@
 //===============================================================================
 @media (min-width: @screen-sm-min) {
 
-
+#contact-page{
+	.contact-form{ 
+			
+				.form-wrapper{
+					width:65%;
+						.form-group {
+							label{
+								width: 20%;
+								line-height: 32px;
+								}
+							span.wpcf7-form-control-wrap{  width: 80%;}
+							}
+					
+					}
+			}
+}
 
 }
 //===============================================================================

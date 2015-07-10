@@ -90,7 +90,7 @@ function store_register() {
       'capability_type' => 'post',
       'hierarchical' => true,
       'menu_position' => 5,
-      'supports'      => array( 'title'),
+      'supports'      => array( 'title', 'editor', 'thumbnail'),
   );
   register_post_type( 'store' , $args );
 }
@@ -121,7 +121,7 @@ function career_register() {
       'capability_type' => 'post',
       'hierarchical' => true,
       'menu_position' => 6,
-      'supports'      => array( 'title'),
+      'supports'      => array( 'title', 'editor'),
   );
   register_post_type( 'career' , $args );
 }

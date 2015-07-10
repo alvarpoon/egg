@@ -42,7 +42,7 @@
 
 .home-banner{
 	.container{
-		margin: 45px auto;
+		margin: 45px auto 85px;
 			h3{
 				text-transform: uppercase;
 				color:#664400;
@@ -119,11 +119,11 @@
 	
 	.slick-prev {
 	  background: url(../img/arrow-left-brown.png) no-repeat transparent center;
-	  left:-3px;
+	  left:-15px;
 	}
 	.slick-next{
 	  background: url(../img/arrow-right-brown.png) no-repeat transparent center;
-	  right: -3px;
+	  right: -15px;
 	}
 	
 		
@@ -132,10 +132,11 @@
 	  z-index: 100;
 	  text-indent: -9999px;
 	  position: absolute;
-	  top: 45%;
+	  top: 50%;
 	  background-size: cover;
-	  width: 23px;
-	  height: 23px;
+	  width: 30px;
+	  height: 30px;
+	  margin-top: -15px;
 	}
 
 	
@@ -323,7 +324,11 @@
 							  padding: 25px 11px;
 								color: #000;
 								display: inline-block;
-							&:hover{text-decoration:none;}
+							&:hover{
+								text-decoration:none;
+								background-color:#998761;
+								color:#fff;
+								}
 							}
 				}
 		}
@@ -452,15 +457,17 @@
 		padding: 0;
 	}
 
+	.slick-prev ,.slick-next{
+		/*width: 46px;
+	  height: 46px;*/
+	  margin-top: -33px
+	}
+
 	.slick-prev {
-	  width: 50px;
-	  height: 49px;
-	  left:-7%;
+	  left:-67px;
 	}
 	.slick-next{
-	  width: 50px;
-	  height: 49px;
-	  right:-7%;
+	  right:-67px;
 	}
 	
 }
