@@ -7,14 +7,14 @@
 	position:relative;
 }
 .navbar-fixed-top{
-  position: absolute;
-
+  position: relative;
  }
- .main{
+/*.main{
    position: relative;
    top: 64px;
    padding-bottom: 64px;
 }
+*/
 .navbar-default {
     background-color: rgba(42, 28, 0, 0.9);
     border: none;
@@ -171,9 +171,15 @@
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-sm-min) {
-.main{
+/*.main{
    position: initial;
-   padding-bottom: 0;
+   top: 0px;
+}
+*/
+
+
+.navbar-fixed-top {
+  position: absolute;
 }
 
 .navbar-default {
@@ -212,6 +218,11 @@
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-md-min) {
+/*.main{
+   position: initial;
+   top: 0px;
+}
+*/
 .navbar-fixed-top{
   position: fixed;
  }
@@ -280,7 +291,11 @@
 //===============================================================================
 @media (min-width: @screen-lg-min) {
 
-
+/*.main{
+   position: initial;
+   top: 0px;
+}
+*/
 .navbar-default {	
 	.nav-social {
 		position: absolute;
