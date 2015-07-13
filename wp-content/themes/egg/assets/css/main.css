@@ -7622,6 +7622,144 @@ figure.alignnone {
   color: #000;
   margin-top: 10px;
 }
+#stores-page section.tab-nav {
+  margin: 65px auto 0px;
+}
+#stores-page section.tab-nav .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+#stores-page section.tab-nav .nav-tabs {
+  border-bottom: 0px;
+}
+#stores-page section.tab-nav .nav-tabs li {
+  width: 100%;
+  text-align: center;
+  margin-right: 2%;
+}
+#stores-page section.tab-nav .nav-tabs li:last-child {
+  margin-right: 0;
+}
+#stores-page section.tab-nav .nav-tabs li a {
+  border: 1px solid #dddddd;
+  border-bottom: 0px;
+  text-transform: uppercase;
+  font-size: 22px;
+  letter-spacing: 1px;
+  border-radius: 0;
+  margin-right: 0;
+  padding: 5px;
+  color: #000;
+}
+#stores-page section.tab-nav .nav-tabs li a:hover {
+  background-color: #e6e4e0;
+  color: #664400;
+}
+#stores-page section.tab-nav .nav-tabs li.active a {
+  background-color: #e6e4e0;
+  color: #664400;
+}
+#stores-page section.tab-container {
+  background-color: #e6e4e0;
+  padding-bottom: 63px;
+}
+#stores-page section.tab-container .sectionIntro {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#stores-page section.tab-container .tab-pane h3.district {
+  text-align: center;
+  letter-spacing: 1px;
+  margin-top: 50px;
+  margin-bottom: 22px;
+}
+#stores-page section.tab-container .store-slider {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+#stores-page section.tab-container .store-slider .single-store {
+  background-color: #fff;
+  padding: 10px;
+  min-height: 412px;
+}
+#stores-page section.tab-container .store-slider .single-store p.item-title {
+  margin-bottom: 0;
+}
+#stores-page section.tab-container .store-slider .single-store img {
+  width: 100%;
+}
+#stores-page section.tab-container .store-slider a.map-btn {
+  width: 100%;
+  background-color: #96928d;
+  display: block;
+  text-align: center;
+  color: #fff;
+  padding: 8px;
+  text-transform: uppercase;
+}
+#stores-page section.tab-container .store-slider a.map-btn:hover {
+  text-decoration: none;
+}
+#stores-page section.tab-container .store-slider .slick-prev {
+  background: url(../img/arrow-left-brown.png) no-repeat transparent center;
+  left: -15px;
+}
+#stores-page section.tab-container .store-slider .slick-next {
+  background: url(../img/arrow-right-brown.png) no-repeat transparent center;
+  right: -15px;
+}
+#stores-page section.tab-container .store-slider .slick-prev,
+#stores-page section.tab-container .store-slider .slick-next {
+  border: none;
+  z-index: 100;
+  text-indent: -9999px;
+  position: absolute;
+  top: 50%;
+  -webkit-background-size: cover;
+          background-size: cover;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+}
+@media (min-width: 768px) {
+  #stores-page section.tab-nav .nav-tabs li {
+    width: 32%;
+  }
+  #stores-page section.tab-container {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+@media (min-width: 992px) {
+  #stores-page section.tab-container .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  #stores-page section.tab-container .sectionIntro {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  #stores-page section.tab-container .sectionIntro .store-slider {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  #stores-page section.tab-container .sectionIntro .store-slider .slick-prev {
+    left: -67px;
+  }
+  #stores-page section.tab-container .sectionIntro .store-slider .slick-next {
+    right: -67px;
+  }
+}
+@media (min-width: 1200px) {
+  #stores-page section.tab-container .sectionIntro {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  #stores-page section.tab-container .sectionIntro .store-slider {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
 .container {
   position: relative;
 }
@@ -7668,6 +7806,10 @@ figure.alignnone {
   letter-spacing: 1px;
 }
 .navbar-default .nav-container li:hover a {
+  background: none;
+  color: #f8b03a;
+}
+.navbar-default .nav-container li:hover a:hover {
   background: none;
   color: #f8b03a;
 }

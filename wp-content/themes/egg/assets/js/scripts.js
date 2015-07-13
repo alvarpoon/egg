@@ -4675,10 +4675,11 @@ var Roots = {
 	  
     }
   },
+  
+  
   // News page
   news: {
     init: function() {
-      // JavaScript to be fired on the home page
       
 	$(document).ready(function(){
 		
@@ -4734,12 +4735,9 @@ var Roots = {
   // Product Content page
   single_product: {
     init: function() {
-      // JavaScript to be fired on the home page
       
 	$(document).ready(function(){
 		
-	
-	  
 	   $('.product-left-container').slick({
 		  slidesToShow: 1,
 		  slidesToScroll: 1,
@@ -4802,6 +4800,59 @@ var Roots = {
 
 
 
+	  });
+	  
+    }
+  },
+  
+  
+  
+  
+  // Our Stores page
+  our_stores: {
+    
+    init: function() {
+      
+	$(document).ready(function(){
+		
+	$('.store-slider').slick({
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 3,
+		  slidesToScroll: 3,
+		  responsive: [
+			{
+			  breakpoint: 9999,
+			  settings: {
+				slidesToShow: 3,
+				slidesToScroll: 3,
+				infinite: true
+			  }
+			},
+			{
+			  breakpoint: 992,
+			  settings: {
+				slidesToShow: 2,
+				slidesToScroll: 2,
+				infinite: true
+			  }
+			},
+			{
+			  breakpoint: 768,
+			  settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1,
+				infinite: true
+			  }
+			}
+			// You can unslick at a given breakpoint now by adding:
+			// settings: "unslick"
+			// instead of a settings object
+		  ]
+	  });
+		
+   
+  
 	  });
 	  
     }

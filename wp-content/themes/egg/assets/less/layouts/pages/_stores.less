@@ -1,0 +1,178 @@
+//===============================================================================
+//===============================================================================
+// Base
+//===============================================================================
+//===============================================================================
+
+#stores-page{
+
+	section.tab-nav{
+		.container{padding-left:0;padding-right:0;}
+		margin: 65px auto 0px;
+			.nav-tabs {
+			  border-bottom: 0px;
+				li{
+					  width: 100%;
+					  text-align: center;
+					  margin-right: 2%;
+						&:last-child{margin-right: 0;}
+						a{
+							border: 1px solid #dddddd;
+							border-bottom:0px;
+							text-transform: uppercase;
+							font-size: 22px;
+							letter-spacing: 1px;
+							border-radius: 0;
+							margin-right: 0;
+							padding: 5px;
+							color: #000;
+								&:hover{
+									background-color:rgb(230, 228, 224);
+									color: rgb(102, 68, 0);
+									}
+							}
+						&.active a	{
+							background-color:rgb(230, 228, 224);
+							color: rgb(102, 68, 0);}
+						
+					} 
+			}
+		
+		}
+	section.tab-container{
+		background-color: #e6e4e0;
+		padding-bottom:63px;
+			.sectionIntro{
+				padding-left: 20px;
+  				padding-right: 20px;}
+  				
+			.tab-pane h3.district{
+				text-align:center;
+				letter-spacing: 1px;
+				margin-top: 50px;
+				margin-bottom: 22px;}
+			
+			.store-slider{
+				padding-left: 20px;
+				padding-right: 20px;
+				
+				.single-store {
+				  background-color: #fff;
+				  padding: 10px;				
+				  min-height: 412px;
+					p.item-title {
+					  margin-bottom: 0;
+					}
+					img{width:100%}
+				}
+				a.map-btn {
+				  width: 100%;
+				  background-color: rgb(150, 146, 141);
+				  display: block;
+				  text-align: center;
+				  color: #fff;
+				  padding: 8px;
+				  text-transform: uppercase;
+					&:hover{text-decoration:none;}
+				}
+				
+				.slick-prev {
+				  background: url(../img/arrow-left-brown.png) no-repeat transparent center;
+				  left:-15px;
+				}
+				.slick-next{
+				  background: url(../img/arrow-right-brown.png) no-repeat transparent center;
+				  right: -15px;
+				}
+	
+		
+				.slick-prev, .slick-next {
+				  border: none;
+				  z-index: 100;
+				  text-indent: -9999px;
+				  position: absolute;
+				  top: 50%;
+				  background-size: cover;
+				  width: 30px;
+				  height: 30px;
+				  margin-top: -15px;
+				}
+			}
+		}
+}
+//===============================================================================
+//===============================================================================
+// tablet
+//===============================================================================
+//===============================================================================
+@media (min-width: @screen-sm-min) {
+
+#stores-page{
+
+	section.tab-nav{
+			.nav-tabs {
+				li{
+					width: 32%;}
+			}
+		}		
+					  
+	section.tab-container{
+			padding-left: 0px;
+			padding-right: 0px;
+		}
+}
+			
+}
+//===============================================================================
+//===============================================================================
+// Desktop
+//===============================================================================
+//===============================================================================
+@media (min-width: @screen-md-min) {
+
+#stores-page{
+	section.tab-container{
+		.container{padding-left:15px;padding-right:15px;}
+		.sectionIntro{
+			padding-left: 0px;
+			padding-right: 0px;
+			.store-slider{
+				padding-left: 0px;
+				padding-right: 0px;
+				.slick-prev {
+				  left:-67px;
+				}
+				.slick-next{
+				  right:-67px;
+				}
+			}
+		}
+	}
+}
+
+
+}
+
+//===============================================================================
+//===============================================================================
+// Wide desktop
+//===============================================================================
+//===============================================================================
+@media (min-width: @screen-lg-min) {
+
+
+#stores-page{
+	section.tab-container{
+		.sectionIntro{
+			padding-left: 0px;
+			padding-right: 0px;
+			.store-slider{
+				padding-left: 0px;
+				padding-right: 0px;
+				}
+			
+		}
+	}
+}
+
+}
