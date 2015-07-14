@@ -7151,7 +7151,7 @@ figure.alignnone {
   width: 100%;
 }
 #news-page .container .news-container .right-content-container {
-  padding: 0px 20px;
+  padding: 0px 20px 34px;
 }
 #news-page .container .news-container .right-content-container h4 {
   margin-top: 3px;
@@ -7176,7 +7176,7 @@ figure.alignnone {
 }
 @media (min-width: 768px) {
   #news-page .container .row .right-content-container {
-    padding: 20px 30px;
+    padding: 20px 30px 34px;
   }
 }
 .single-product .main {
@@ -7509,19 +7509,22 @@ figure.alignnone {
   padding-bottom: 50px;
   text-align: center;
 }
-#contact-page .contact-info i {
-  border: 1px solid #664400;
-  padding: 20px;
-  width: 100%;
-  margin-bottom: 11px;
-  color: #664400;
-}
 #contact-page .contact-info a {
   display: block;
   color: #664400;
   font-size: 16px;
   word-wrap: break-word;
   margin-bottom: 20px;
+}
+#contact-page .contact-info a i {
+  border: 1px solid #664400;
+  padding: 20px;
+  width: 100%;
+  margin-bottom: 11px;
+  color: #664400;
+}
+#contact-page .contact-info a:hover i {
+  background-color: #fff;
 }
 #contact-page .contact-form {
   background-color: #fff;
@@ -7699,6 +7702,7 @@ figure.alignnone {
 }
 #stores-page section.tab-container .store-slider a.map-btn:hover {
   text-decoration: none;
+  background-color: #664400;
 }
 #stores-page section.tab-container .store-slider .slick-prev {
   background: url(../img/arrow-left-brown.png) no-repeat transparent center;
@@ -8023,7 +8027,7 @@ figure.alignnone {
   .navbar-default .nav-social {
     position: absolute;
     right: 15px;
-    bottom: 16px;
+    top: 57px;
   }
   .lang-switcher {
     right: 15px;

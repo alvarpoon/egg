@@ -94,7 +94,10 @@ var Roots = {
 		
 		$('.no-excerpt .news-content-container').show();
 		$('.no-excerpt .news-excerpt-container').hide();
-
+		
+		
+		
+		
 	 	if(hash !== ''){
 	 		var $thisexcerpt = $(hash).parent().find('.news-excerpt-container');
 			var $thiscontent = $(hash).parent().find('.news-content-container');
@@ -105,11 +108,16 @@ var Roots = {
 			$(hash).find('.expend-btn').addClass('expended');
 			
 			
+			$('html,body').animate({
+				scrollTop: $(hash).offset().top - 100
+			}, 800);
+			
 	 	}else{
 	 	
+			$('.first-news  .expend-btn').addClass('expended');
 			$('.first-news .have-excerpt .news-content-container').show();
 			$('.first-news .have-excerpt .news-excerpt-container').hide();
-			$('.first-news .have-excerpt .expend-btn').addClass('expended');
+			
 			
 		}
 		

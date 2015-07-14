@@ -20,7 +20,7 @@ function roots_scripts() {
    * Read the asset names from assets-manifest.json
    */
    
-	wp_enqueue_style('font_awesome', '//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css', false, '90912b55a3d6b2070ca68c801a5ef6bb');
+	wp_enqueue_style('font_awesome', '//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css', false, '90912b55a3d6b2070ca68c801a5ef6bb');
   if (WP_ENV === 'development') {
     $assets = array(
       'css'       => '/assets/css/main.css',
