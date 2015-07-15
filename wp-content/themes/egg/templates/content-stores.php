@@ -88,7 +88,7 @@
 														<?=apply_filters('the_content', $store->post_content); ?>
 														
 													</div>
-													<a target="_blank" class="map-btn" href="https://www.google.com/maps/place/<?=$location['address']?>/@<?=$location['lat']?>,<?=$location['lng']?>,16z?hl=<?=$google_map_url[ICL_LANGUAGE_CODE]?>">map</a>
+													<a target="_blank" class="map-btn" href="https://www.google.com/maps/place/<?=$location['address']?>/@<?=$location['lat']?>,<?=$location['lng']?>,16z?hl=<?=$google_map_url[ICL_LANGUAGE_CODE]?>"><?_e('map');?></a>
 												</div>
 						<?
 											}
