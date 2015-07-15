@@ -50,7 +50,7 @@
                     echo '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
                     echo '<div class="news-slider">';
                         echo '<div class="post-img"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news/#'. $slug .'"><img src="'. $url.'" /></a></div>';
-                        echo '<div class="post-title"><a href="/news">'.$post_title.'</a></div>';
+                        echo '<div class="post-title"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news/#'. $slug .'">'.$post_title.'</a></div>';
                     echo '</div></div>';
                     
                 }
