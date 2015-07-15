@@ -8030,8 +8030,7 @@ figure.alignnone {
   .navbar-default .nav-social {
     position: absolute;
     right: 0;
-    top: initial;
-    bottom: 16px;
+    top: 57px;
   }
   .content-info .nav-social {
     text-align: right;
