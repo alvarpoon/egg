@@ -49,8 +49,10 @@
                     
                     echo '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">';
                     echo '<div class="news-slider">';
+                    if($url){
                         echo '<div class="post-img"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news/#'. $slug .'"><img src="'. $url.'" /></a></div>';
-                        echo '<div class="post-title"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news/#'. $slug .'">'.$post_title.'</a></div>';
+                    }
+                    echo '<div class="post-title"><a href="/'.(ICL_LANGUAGE_CODE=='en'?"":ICL_LANGUAGE_CODE.'/').'news/#'. $slug .'">'.$post_title.'</a></div>';
                     echo '</div></div>';
                     
                 }
@@ -76,8 +78,8 @@
 						'tax_query' => array(
 										  array(
 											'taxonomy' => 'collection',
-											'field'    => 'slug',
-											'terms'    => $new_collection_name->slug
+											'field'    => 'term_id',
+											'terms'    => $new_collection_name
 										  )
 										),
 						'post_status' 		=> 'publish',
@@ -86,11 +88,12 @@
 						'numberposts' 		=> 1,
 						'suppress_filters' => 0
 					);
+                    //echo  '<p>'.$new_collection_name.'</p>';
 					$results = get_posts( $args );
                     if( $new_collection){
                         foreach( $new_collection as $index => $new_product ){
+                            $product_image_url = wp_get_attachment_url( get_post_thumbnail_id($new_product->ID) );
                             if($index%3==0){
-                            	$product_image_url = wp_get_attachment_url( get_post_thumbnail_id($new_product->ID) );
                 ?>
                             <div class="row">
                 <?
@@ -109,7 +112,7 @@
                     }
                 ?>
 
-                <div class="view-all-btn"><a href="<?=get_permalink($results[0]->ID); ?>"><?_e('All in New Collection');?> ></a></div>
+                <div class="view-all-btn"><a href="<?=get_permalink($results[0]); ?>"><?_e('All in New Collection');?> ></a></div>
             </div>
         </div>
     </div>
@@ -165,7 +168,7 @@
                     }
                 ?>
                 </div>
-                <div class="view-all-btn"><a href="/collections"><?_e('All Collections');?> ></a></div>
+                <div class="view-all-btn"><a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/collections"><?_e('All Collections');?> ></a></div>
             </div>
 	</div>
 </div>
@@ -176,8 +179,8 @@
 	<div class="row">
         <div class="col-md-10 col-md-push-1  sectionIntro">
             <div class="section-title">
-                <div class="find-store-btn"><h2><a href="/our-stores/"><?_e('Find a EGG Store');?></a></h2></div>
-                <a href="/our-stores/"><img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-line-brown.png"  /></a>
+                <div class="find-store-btn"><h2><a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/our-stores/"><?_e('Find a EGG Store');?></a></h2></div>
+                <a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/our-stores/"><img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-line-brown.png"  /></a>
             </div>
             
         </div>

@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: EGG website\n"
+"POT-Creation-Date: 2015-07-15 01:13+0800\n"
+"PO-Revision-Date: 2015-07-21 02:02+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: ../themes/egg/templates\n"
+
+#: ../themes/egg/templates/comments.php:19
+msgid "&larr; Older comments"
+msgstr ""
+
+#: ../themes/egg/templates/comments.php:22
+msgid "Newer comments &rarr;"
+msgstr ""
+
+#: ../themes/egg/templates/comments.php:31
+msgid "Comments are closed."
+msgstr ""
+
+#: ../themes/egg/templates/content-collection.php:36
+msgid "SEE THE COLLECTION"
+msgstr "浏览系列"
+
+#: ../themes/egg/templates/content-home.php:33
+msgid "News"
+msgstr "最新消息"
+
+#: ../themes/egg/templates/content-home.php:59
+msgid "All News"
+msgstr "全部消息"
+
+#: ../themes/egg/templates/content-home.php:69
+msgid "New Collection"
+msgstr "最新系列"
+
+#: ../themes/egg/templates/content-home.php:112
+msgid "All in New Collection"
+msgstr "新系列其他款式"
+
+#: ../themes/egg/templates/content-home.php:123
+msgid "Collections"
+msgstr "眼镜系列"
+
+#: ../themes/egg/templates/content-home.php:168
+msgid "All Collections"
+msgstr "全部眼镜系列"
+
+#: ../themes/egg/templates/content-home.php:179
+msgid "Find a EGG Store"
+msgstr "分店网络"
+
+#: ../themes/egg/templates/content-product.php:14
+msgid "Back to all collections"
+msgstr "返回所有眼镜系列"
+
+#: ../themes/egg/templates/content-product.php:105
+msgid "Others in this collection"
+msgstr "同系列其他款式"
+
+#: ../themes/egg/templates/content-single.php:11
+msgid "Pages:"
+msgstr ""
+
+#: ../themes/egg/templates/content-stores.php:91
+msgid "map"
+msgstr "地图"
+
+#: ../themes/egg/templates/entry-meta.php:2
+msgid "By"
+msgstr ""
+
+#: ../themes/egg/templates/searchform.php:2
+msgid "Search for:"
+msgstr "搜寻："
+
+#: ../themes/egg/templates/searchform.php:4
+#: ../themes/egg/templates/searchform.php:6
+msgid "Search"
+msgstr "搜寻"
+
+#~ msgid "All in"
+#~ msgstr "全部"

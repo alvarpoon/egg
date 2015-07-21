@@ -29,7 +29,14 @@
 				<div class="row news-container" id="<? echo $slug ?>">
 
                 	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 left-content-container">
-						<div class="post-img"><img src="<? echo $url; ?>" /></div>
+                        <?
+                            if($url){
+                        ?>
+                            <div class="post-img"><img src="<? echo $url; ?>" /></div>
+                        <?
+                            }
+                        ?>
+						
                     </div>
 					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 right-content-container">
                         <div class="post-title"><h4><? echo $post_title; ?></h4></div>
