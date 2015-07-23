@@ -92,7 +92,16 @@
 					$results = get_posts( $args );
                     if( $new_collection){
                         foreach( $new_collection as $index => $new_product ){
-                            $product_image_url = wp_get_attachment_url( get_post_thumbnail_id($new_product->ID) );
+                            if($index==6){
+                                break;
+                            }
+                            if(ICL_LANGUAGE_CODE!=en){
+                                $new_product_id = icl_object_id($new_product->ID,'post',false,'en');
+                            }
+                            else{
+                                $new_product_id = $new_product->ID;
+                            }
+                            $product_image_url = wp_get_attachment_url( get_post_thumbnail_id($new_product_id) );
                             if($index%3==0){
                 ?>
                             <div class="row">

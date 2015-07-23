@@ -6626,7 +6626,8 @@ button.close {
 body {
   font-family: 'Lato', sans-serif;
 }
-body.zh-hant {
+body.zh-hant,
+body.zh-hans {
   font-family: 'Heiti TC Medium', MHeiHK, '微軟正黑體', 'Microsoft JhengHei', SimHei, sans-serif !important;
 }
 .content-container h3 {
@@ -6684,6 +6685,10 @@ body.zh-hant {
 #contact-page .container,
 #default-page .container {
   padding: 70px 15px;
+}
+.zh-hant .page-head-container .page-title h2,
+.zh-hans .page-head-container .page-title h2 {
+  font-weight: bold;
 }
 @media (min-width: 768px) {
   .page-head-container .page-title h2 {

@@ -42,7 +42,14 @@
 	<?
 		$product = $post;
 		$current_product_id = $product->ID;
-		$product_image_url = wp_get_attachment_url( get_post_thumbnail_id($current_product_id) );
+        //if current lang is not english, find the eng version to get its images
+        if(ICL_LANGUAGE_CODE!=en){
+            $image_post_id = icl_object_id($current_product_id,'post',false,'en');
+        }
+        else{
+            $image_post_id = $current_product_id;
+        }
+		$product_image_url = wp_get_attachment_url( get_post_thumbnail_id($image_post_id) );
 
 	?>
 		
@@ -57,7 +64,7 @@
                                     'post_type' => 'attachment',
                                     'numberposts' => -1,
                                     'post_status' => null,
-                                    'post_parent' => $current_product_id,
+                                    'post_parent' => $image_post_id,
                                     'order' => 'ASC',
                                     'orderby' => 'menu_order'
                                 );
@@ -133,7 +140,13 @@
                         foreach( $products as $product ){ 
                         $product_id = $product->ID;
                         if($product_id!=$current_product_id){
-                            $product_image_url = wp_get_attachment_url( get_post_thumbnail_id($product_id) );
+                            if(ICL_LANGUAGE_CODE!=en){
+                                $image_post_id = icl_object_id($product_id,'post',false,'en');
+                            }
+                            else{
+                                $image_post_id = $product_id;
+                            }
+                            $product_image_url = wp_get_attachment_url( get_post_thumbnail_id($image_post_id) );
         ?>
                             <div class="collection-slider-item">
                                 <a href="<?=get_permalink($product_id)?>"><img src="<?=$product_image_url ?>" /></a>
