@@ -4762,7 +4762,7 @@ var Roots = {
 		  ]
 		});
 		$('#product-slider').slick({
-		  slidesToShow: 3,
+		  slidesToShow: 2,
 		  slidesToScroll: 1,
 		  asNavFor: '.product-left-container',
 		  centerMode: true,

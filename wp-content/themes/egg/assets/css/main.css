@@ -7003,7 +7003,7 @@ figure.alignnone {
   /*background-color:#fff;*/
   margin: 0;
   text-align: center;
-  font-size: 20px;
+  font-size: 17px;
 }
 .home-collections .section-contents .single-collection .single-collection-title h3 a {
   color: #000;
@@ -7094,6 +7094,9 @@ figure.alignnone {
     /*padding-left: 0;
   		padding-right: 0;*/
   }
+  .home-news .news-slider {
+    height: 290px;
+  }
   .home-find-store .section-title .find-store-btn {
     width: initial;
   }
@@ -7120,6 +7123,9 @@ figure.alignnone {
   .home-news .section-title h2 {
     font-size: 30px;
   }
+  .home-news .news-slider {
+    height: 250px;
+  }
   .home-news .slick-slider {
     padding: 0;
   }
@@ -7134,6 +7140,11 @@ figure.alignnone {
   }
   .home-news .slick-next {
     right: -67px;
+  }
+}
+@media (min-width: 1200px) {
+  .home-news .news-slider {
+    height: 270px;
   }
 }
 #news-page {
@@ -7376,7 +7387,8 @@ figure.alignnone {
 }
 @media (min-width: 992px) {
   #product-content-page .product-container .product-right-container {
-    padding: 37px 40px;
+    /*padding: 37px 40px;*/
+    padding: 29px 40px;
   }
   #product-content-page .product-container #product-slider .slick-prev,
   #product-content-page .product-container #product-slider .slick-next {
@@ -7616,7 +7628,8 @@ figure.alignnone {
   margin-bottom: 24px;
   margin-top: 24px;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 0;
+  font-size: 18px;
 }
 #career-page p {
   color: #664400;
@@ -7795,6 +7808,9 @@ figure.alignnone {
     padding-left: 0px;
     padding-right: 0px;
   }
+  #stores-page section.tab-container .sectionIntro .store-slider .single-store {
+    min-height: 430px;
+  }
 }
 .container {
   position: relative;
@@ -7863,7 +7879,8 @@ figure.alignnone {
   color: #f8b03a;
 }
 .navbar-default .nav-container #menu-primary-navigation,
-.navbar-default .nav-container #menu-primary-navigation-chinese-traditional {
+.navbar-default .nav-container #menu-primary-navigation-chinese-traditional,
+.navbar-default .nav-container #menu-primary-navigation-chinese-simplified {
   float: none;
   text-align: center;
   margin: 0 auto;
