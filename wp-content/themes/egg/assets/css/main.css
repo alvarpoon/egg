@@ -7442,7 +7442,7 @@ figure.alignnone {
   color: #000;
   display: block;
   padding: 15px 10px;
-  font-size: 20px;
+  font-size: 17px;
 }
 #collection-content-page .collection-box .single-collection-title h3 a:hover {
   text-decoration: none;
@@ -7640,9 +7640,12 @@ figure.alignnone {
   color: #666666;
 }
 #career-page .career-post h3 {
-  color: #000;
   margin-top: 10px;
   text-transform: none;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: #333333;
+  margin-bottom: 20px;
 }
 #stores-page section.tab-nav {
   margin: 65px auto 0px;
@@ -7712,6 +7715,7 @@ figure.alignnone {
 }
 #stores-page section.tab-container .store-slider .single-store h4 {
   font-weight: bold;
+  margin-bottom: 20px;
 }
 #stores-page section.tab-container .store-slider a.map-btn {
   width: 100%;
