@@ -6637,6 +6637,24 @@ body.zh-hans {
   color: #333333;
   text-decoration: underline;
 }
+.left-content-container p,
+.right-content-container p,
+.content-container p,
+.section-contents p,
+.product-info p,
+.news-content-container p,
+.single-store p,
+.career-post p,
+.left-content-container li,
+.right-content-container li,
+.content-container li,
+.section-contents li,
+.product-info li,
+.news-content-container li,
+.single-store li,
+.career-post li {
+  letter-spacing: 1px;
+}
 .noPadding {
   padding-left: 0;
   padding-right: 0;
@@ -7633,7 +7651,7 @@ figure.alignnone {
   margin-bottom: 24px;
   margin-top: 24px;
   font-weight: bold;
-  letter-spacing: 0;
+  letter-spacing: 1px;
   font-size: 18px;
 }
 #career-page p {
@@ -7661,7 +7679,7 @@ figure.alignnone {
   margin-top: 10px;
   text-transform: none;
   font-size: 18px;
-  letter-spacing: 0;
+  letter-spacing: 1px;
   color: #333333;
   margin-bottom: 20px;
 }
@@ -7795,7 +7813,7 @@ figure.alignnone {
     padding-right: 0px;
   }
   #stores-page section.tab-container .sectionIntro .store-slider .single-store {
-    min-height: 420px;
+    min-height: 450px;
   }
   #stores-page section.tab-container .sectionIntro .store-slider .slick-prev {
     left: -40px;
@@ -7860,12 +7878,12 @@ figure.alignnone {
   float: none;
 }
 .navbar-default .nav-container li a {
-  color: #fff;
+  color: #fff!important;
   letter-spacing: 1px;
 }
 .navbar-default .nav-container li:hover a {
   background: none;
-  color: #f8b03a;
+  color: #f8b03a!important;
 }
 .navbar-default .nav-container li:hover a:hover {
   background: none;
@@ -7873,15 +7891,15 @@ figure.alignnone {
 }
 .navbar-default .nav-container li:focus {
   background: none;
-  color: #f8b03a;
+  color: #f8b03a!important;
 }
 .navbar-default .nav-container li.active a {
-  color: #f8b03a;
+  color: #f8b03a!important;
   background: none;
 }
 .navbar-default .nav-container li.active a:hover {
   background: none;
-  color: #f8b03a;
+  color: #f8b03a!important;
 }
 .navbar-default .nav-container #menu-primary-navigation,
 .navbar-default .nav-container #menu-primary-navigation-chinese-traditional,
