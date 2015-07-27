@@ -24,7 +24,7 @@ switch ($_SERVER['SERVER_NAME']) {
     define( 'WP_SITEURL',  'http://local.egg.com' );
     define( 'WP_HOME', 'http://local.egg.com' );
     define( 'DB_USER',     'root' );
-    define( 'DB_PASSWORD', 'root' );
+    define( 'DB_PASSWORD', '' );
     define( 'DB_HOST',     'localhost' );
 
   case "egg-v2.nowwhat.hk":

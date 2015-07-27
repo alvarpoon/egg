@@ -36,7 +36,7 @@
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
 		</span></a>
-        <a href="#" target="_blank"><span class="fa-stack fa-lg">
+        <a class="fancybox" rel="group" href="http://egg-v2.nowwhat.hk/wp-content/uploads/2015/07/qrcode_for_gh_80b589dedf95_430.jpg" ><span class="fa-stack fa-lg">
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
 		</span></a>
@@ -65,6 +65,28 @@
 
 			?>
 		</nav>
+		
+		<nav class="collapse navbar-collapse  mobile-language-selector-wrapper" role="navigation">
+		<?
+            $lang_arr = icl_get_languages('skip_missing=0&orderby=id&order=asc');
+            $lang_len = sizeof($lang_arr);
+            $i = 0;
+            foreach( $lang_arr as $lang ){
+              if ($lang['active'] == 0){
+                if ($i == $lang_len - 1) {
+                  $lang_class = "last";
+                }
+                else{
+                  $lang_class = "";
+                }
+                echo '<a class="'.$lang_class.'" href="'.$lang['url'].'">'.$lang['tag'].'</a>';
+              }
+              $i++;
+            }
+      ?>
+      
+		</nav>
+		
 	  </div>
       
       
