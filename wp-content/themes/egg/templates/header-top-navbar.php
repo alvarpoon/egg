@@ -36,7 +36,7 @@
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
 		</span></a>
-        <a class="fancybox" rel="group" href="http://egg-v2.nowwhat.hk/wp-content/uploads/2015/07/qrcode_for_gh_80b589dedf95_430.jpg" ><span class="fa-stack fa-lg">
+        <a class="fancybox" rel="group" href="/wp-content/uploads/2015/07/qrcode_for_gh_80b589dedf95_430.jpg" ><span class="fa-stack fa-lg">
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-wechat fa-stack-1x fa-inverse"></i>
 		</span></a>
