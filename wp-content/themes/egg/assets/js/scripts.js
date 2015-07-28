@@ -6641,7 +6641,9 @@ var Roots = {
       // JavaScript to be fired on all pages
       
     $(document).ready(function() {
-		$(".fancybox").fancybox();
+		$(".fancybox").fancybox({
+			arrows :false
+		});
 	}); 
 		
     }
