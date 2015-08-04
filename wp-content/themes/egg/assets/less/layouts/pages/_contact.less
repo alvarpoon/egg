@@ -59,8 +59,27 @@
 							  letter-spacing: 2px;
 							  font-size: 16px;
 							}
-						input, textarea {border:1px solid #999999;padding:5px;width:100%}
-						span.wpcf7-form-control-wrap{  width: 100%;display: inline-block;}
+							input, textarea {
+								border:1px solid #999999;
+								padding:5px;
+								width:100%;
+							}
+							input[type=radio]{
+								 width: inherit;
+							}
+							span.wpcf7-list-item{
+								margin-left: 0;
+   								display: block;
+
+   								.wpcf7-list-item-label{
+   									top: -3px;
+    								position: relative;
+   								}
+							}
+							span.wpcf7-form-control-wrap{
+								width: 100%;
+								display: inline-block;
+							}
 						}
 					.submit-btn{
 						text-align:right;
@@ -93,7 +112,6 @@
 
 #contact-page{
 	.contact-form{ 
-			
 				.form-wrapper{
 					width:65%;
 						.form-group {
@@ -101,12 +119,21 @@
 								width: 20%;
 								line-height: 32px;
 								}
-							span.wpcf7-form-control-wrap{  width: 80%;}
+								span.wpcf7-form-control-wrap{
+									width: 80%;
+									&.radio-574,&.radio-962,&.radio-557 {
+										position: relative;
+    									top: 5px;
+									}
+								}
+								span.wpcf7-list-item{
+									margin-right: 20px;
+	    							display: inherit;
+								}
 							}
-					
 					}
 			}
-}
+	}
 
 }
 //===============================================================================

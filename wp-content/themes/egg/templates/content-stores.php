@@ -78,7 +78,13 @@
 										$size = sizeof($stores);
 										foreach( $stores as $store ){ 
 											$url = wp_get_attachment_url( get_post_thumbnail_id($store->ID));
-											$location = get_field('google_map_address',$store->ID);
+											$baidu_map_webpage_address = get_field('baidu_map_webpage_address',$store->ID);
+											if($baidu_map_webpage_address){
+												$location = get_field('baidu_map_webpage_address',$store->ID);
+											}
+											else{
+												$location = get_field('google_map_address',$store->ID);
+											}
 						?>
 										
 												<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -88,7 +94,18 @@
 														<?=apply_filters('the_content', $store->post_content); ?>
 														
 													</div>
-													<a target="_blank" class="map-btn" href="https://www.google.com/maps/place/<?=$location['address']?>/@<?=$location['lat']?>,<?=$location['lng']?>,16z?hl=<?=$google_map_url[ICL_LANGUAGE_CODE]?>"><?_e('map');?></a>
+						<?
+													if($baidu_map_webpage_address){
+						?>
+														<a target="_blank" class="map-btn" href="<?=$location?>"><?_e('map');?></a>
+						<?
+													}
+													else{
+						?>
+														<a target="_blank" class="map-btn" href="https://www.google.com/maps/place/<?=$location['address']?>/@<?=$location['lat']?>,<?=$location['lng']?>,16z?hl=<?=$google_map_url[ICL_LANGUAGE_CODE]?>"><?_e('map');?></a>
+						<?
+													}
+						?>
 												</div>
 						<?
 											}

@@ -80,9 +80,17 @@
 								?>
 							
                     </div>
-                    
                     <div class="col-sm-12 col-md-6 product-right-container">
-                            <div class="product-info"><?=apply_filters('the_content', $product->post_content); ?></div>
+                            <div class="product-info">
+                            <?
+                                if($product->post_content!=""){
+                                    echo apply_filters('the_content', $product->post_content);
+                                }
+                                else{
+                                    echo apply_filters('the_content',term_description($term->term_id,"collection"));
+                                }
+                            ?>
+                            </div>
                             <?
                                 if(sizeof($images)>1){
                             ?>
