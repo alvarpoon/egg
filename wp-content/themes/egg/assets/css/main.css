@@ -7815,6 +7815,9 @@ figure.alignnone {
   height: 30px;
   margin-top: -15px;
 }
+.slick-slide {
+  outline: none!important;
+}
 @media (min-width: 768px) {
   #stores-page section.tab-nav .nav-tabs li {
     width: 32%;
@@ -7824,7 +7827,7 @@ figure.alignnone {
     padding-right: 0px;
   }
   #stores-page section.tab-container .store-slider .single-store {
-    min-height: 450px;
+    min-height: 470px;
   }
 }
 @media (min-width: 992px) {

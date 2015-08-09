@@ -260,7 +260,7 @@ var Roots = {
 			  settings: {
 				slidesToShow: 1,
 				slidesToScroll: 1,
-				infinite: true
+				infinite: true,
 			  }
 			}
 			// You can unslick at a given breakpoint now by adding:
@@ -268,7 +268,11 @@ var Roots = {
 			// instead of a settings object
 		  ]
 	  });
-		
+	
+	  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	  	//console.log($(e.target).attr('href'));
+	  	$('.store-slider').slick('setPosition');
+	  });
    
   
 	  });

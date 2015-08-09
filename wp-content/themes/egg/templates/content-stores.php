@@ -17,13 +17,13 @@
 						$args = array(
 							'hide_empty'               => false,
 							'hierarchical'             => false,
-							'parent'				   => 0,
+							'parent'				   => 0
 							//'parent'      		   	   => $cat[ICL_LANGUAGE_CODE]
 						);
 						$categories = get_terms('region', $args );
 						foreach ($categories as $index => $category){
 					?>
-							<li role="region" class="<?=($index==0?"active":"")?>"><a href="#<?=$category->slug?>" aria-controls="<?=$category->slug?>" role="tab" data-toggle="tab" ><?=$category->name?></a></li>
+							<li role="region" class="<?=($index==2?"active":"")?>"><a href="#<?=$category->slug?>" aria-controls="<?=$category->slug?>" role="tab" data-toggle="tab" ><?=$category->name?></a></li>
 					<?
 						}
 					?> 
@@ -44,7 +44,7 @@
 					<?
 						foreach ($categories as $index => $category){
 					?>
-							<div role="tabpanel" class="tab-pane <?=($index==0?"active":"")?>" id="<?=$category->slug?>">
+							<div role="tabpanel" class="tab-pane <?=($index==2?"active":"")?>" id="<?=$category->slug?>">
 					<?
 								$args2 = array(
 									'hide_empty'               => false,
