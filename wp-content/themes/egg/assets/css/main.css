@@ -6680,7 +6680,8 @@ body.zh-hans {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -23px;
+  /*bottom: -23px;*/
+  bottom: -69px;
 }
 .page-head-container .page-title h2 {
   color: #664400;
@@ -6696,19 +6697,25 @@ body.zh-hans {
   /*font-family: 'Lato', sans-serif;*/
   font-weight: 900;
 }
+.navbar-toggle {
+  margin-top: 15px;
+}
 #news-page .container,
 #collection-content-page,
 #services-page .container,
 #career-page .container,
 #contact-page .container,
 #default-page .container {
-  padding: 70px 15px;
+  padding: 90px 15px;
 }
 .zh-hant .page-head-container .page-title h2,
 .zh-hans .page-head-container .page-title h2 {
   font-weight: bold;
 }
 @media (min-width: 768px) {
+  .page-head-container .page-title {
+    bottom: -23px;
+  }
   .page-head-container .page-title h2 {
     padding: 10px 80px;
   }
@@ -7712,7 +7719,7 @@ figure.alignnone {
   margin-bottom: 20px;
 }
 #stores-page section.tab-nav {
-  margin: 65px auto 0px;
+  margin: 90px auto 0px;
 }
 #stores-page section.tab-nav .container {
   padding-left: 0;
@@ -7827,7 +7834,7 @@ figure.alignnone {
     padding-right: 0px;
   }
   #stores-page section.tab-container .store-slider .single-store {
-    min-height: 470px;
+    min-height: 519px;
   }
 }
 @media (min-width: 992px) {
@@ -7844,7 +7851,7 @@ figure.alignnone {
     padding-right: 0px;
   }
   #stores-page section.tab-container .sectionIntro .store-slider .single-store {
-    min-height: 450px;
+    min-height: 485px;
   }
   #stores-page section.tab-container .sectionIntro .store-slider .slick-prev {
     left: -40px;
@@ -7863,7 +7870,7 @@ figure.alignnone {
     padding-right: 0px;
   }
   #stores-page section.tab-container .sectionIntro .store-slider .single-store {
-    min-height: 430px;
+    min-height: 512px;
   }
 }
 .container {
