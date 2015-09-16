@@ -303,11 +303,18 @@
 	text-align: center;
 	left: 0;
 	right: 0;
-	top: -67px;
+	top: -27px;
+	position: relative;
 		.find-store-btn{
 			border: 1px solid #664400;
 			padding: 5px;
-			display: inline-block;
+			/*display: inline-block;*/
+			position: absolute;
+	        top: 50%;
+		    left: 50%;
+		    width: 300px;
+		    margin-left: -150px;
+		    margin-top: -43px;
 				h2{
 					margin-top: 0;
 					margin-bottom: 0;
@@ -321,10 +328,13 @@
 					margin-bottom: 0;
 					display: inline-block;
 					font-size:20px;
+					width: 100%;
+					    background-color: #fff;
 						a{
 							  padding: 25px 11px;
 								color: #000;
 								display: inline-block;
+								    width: 100%;
 							&:hover{
 								text-decoration:none;
 								background-color:#998761;
@@ -333,11 +343,11 @@
 							}
 				}
 		}
-		.find-store-arrow{
+		/*.find-store-arrow{
 			position: absolute;
 			  top: 20px;
 			  padding-left: 5px;
-		}
+		}*/
 		
 	}
    
@@ -422,16 +432,18 @@
 .home-find-store{
   .section-title{
 	.find-store-btn{
-			width: initial;
+			    width: 450px;
+    margin-left: -225px;
+    margin-top: -50px;
 				h2{
-					font-size:30px;
-					a{padding: 25px 60px;}
+					font-size:24px;
+					a{    padding: 20px 30px;}
 				}
 		}
-		.find-store-arrow{
+		/*.find-store-arrow{
 			  top: 23px;
 			  padding-left: 16px;
-		}
+		}*/
 	}
 }
 

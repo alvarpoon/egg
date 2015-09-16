@@ -5,10 +5,20 @@
 	  $results = get_posts( $args );
 	  foreach( $results as $result ) :
 	  	$url = wp_get_attachment_image_src( get_post_thumbnail_id($result->ID), 'full');
-	  	//$page_url = get_field("page_link",$result->ID);
+	  	$page_url = get_field("link",$result->ID);
 	?>
 		<div class="main-banner-item">
+    <?
+        if($page_url){
+            echo '<a href="'.$page_url.'">';
+        }
+    ?>
 			<img src="<?=$url[0]?>" />
+    <?
+        if($page_url){
+            echo '</a>';
+        }
+    ?>
 		</div>
 	<? endforeach;?>
 	</div>
@@ -188,8 +198,8 @@
 	<div class="row">
         <div class="col-md-10 col-md-push-1  sectionIntro">
             <div class="section-title">
+                <img class="img-responsive" src="<?=get_stylesheet_directory_uri()?>/assets/img/store_banner.jpg"  />
                 <div class="find-store-btn"><h2><a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/our-stores/"><?_e('Find a EGG Store');?></a></h2></div>
-                <a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/our-stores/"><img class="find-store-arrow" src="<?=get_stylesheet_directory_uri()?>/assets/img/arrow-right-line-brown.png"  /></a>
             </div>
             
         </div>
