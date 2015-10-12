@@ -23,7 +23,7 @@
 						$categories = get_terms('region', $args );
 						foreach ($categories as $index => $category){
 					?>
-							<li role="region" class="<?=($index==2?"active":"")?>"><a href="#<?=$category->slug?>" aria-controls="<?=$category->slug?>" role="tab" data-toggle="tab" ><?=$category->name?></a></li>
+							<li role="region" class="<?=($index==0?"active":"")?>"><a href="#<?=$category->slug?>" aria-controls="<?=$category->slug?>" role="tab" data-toggle="tab" ><?=$category->name?></a></li>
 					<?
 						}
 					?> 
@@ -44,7 +44,7 @@
 					<?
 						foreach ($categories as $index => $category){
 					?>
-							<div role="tabpanel" class="tab-pane <?=($index==2?"active":"")?>" id="<?=$category->slug?>">
+							<div role="tabpanel" class="tab-pane <?=($index==0?"active":"")?>" id="<?=$category->slug?>">
 					<?
 								$args2 = array(
 									'hide_empty'               => false,
@@ -89,7 +89,13 @@
 										
 												<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 													<div class="single-store">
+														<?
+														if($url){
+														?>
 														<img src="<? echo $url; ?>" class="img-responsive" />
+														<?
+														}
+														?>
 														<h4><?=$store->post_title?></h4>
 														<?=apply_filters('the_content', $store->post_content); ?>
 														
