@@ -9,7 +9,10 @@
 		</div>
 	
 	</div>
-	
+	<div class="row">
+		<div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1 ">
+			<div class="career-list-container clearfix">
+			<ul>
 	<?
 		$args= array(
 			'post_type' 		=> 'career',
@@ -24,20 +27,23 @@
 			$post_title = get_the_title( $result->ID );
 	  ?>
 	
-				<div class="row">
-					<div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1 ">
-						<div class="career-post">
+				
+						<li class="career-post">
 							<h3><? echo $post_title; ?></h3>
 							<?=apply_filters('the_content', $result->post_content); ?>
-						</div>
-					</div>
-				</div>
+						</li>
+					
 			
 			
 			<?
 		}
 	?>
-		 
+		</ul>
+		</div>
+		<div class="career-box-text clearfix"><?=apply_filters('the_content', get_field("box_text",$post->ID)); ?></div>
+	 	<div class="career-text-after-box"><?=apply_filters('the_content', get_field("text_after_box",$post->ID)); ?></div>
+	 	</div>
+	</div>
 
 	
 		

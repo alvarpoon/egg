@@ -12,14 +12,43 @@
   		margin-top: 20px;
   			a{  color: #664400;}
   		}
- 	.career-post{
- 		border:1px solid #640;
- 		padding:  20px;
- 		margin-bottom: 30px;
-  		margin-top: 20px; 
-  			p{color:#666666;}
-  			h3{margin-top: 10px;text-transform: none;  font-size: 18px;  letter-spacing: 1px;color:@gray-dark;margin-bottom: 20px;}
+  	.career-list-container{
+  		background-color: #e6e4e0;
+  		padding: 10px 20px;
+  		ul{
+  			list-style-type: none;
+  			padding-left: 0;
+  			.career-post{
+		 		/* border: 1px solid #640; */
+		    	/* padding: 20px; */
+		    	text-align: center;
+				margin-bottom: 30px;
+				/*margin-top: 20px;*/
+	  			p{color:#666666;}
+	  			h3{/*margin-top: 10px;*/text-transform: none;  font-size: 18px;  letter-spacing: 1px;color:@gray-dark;margin-bottom: 5px;}
+	  		}
   		}
+
+  	}
+ 	.career-box-text{
+		background-color: #979088;
+		padding: 20px;
+		text-align: left;
+		ul{
+			padding-left: 20px;
+			li{
+				color: #fff;
+				margin-bottom: 5px;
+				line-height: 120%;
+			}
+		}
+ 	}
+ 	.career-text-after-box{
+ 		    margin-top: 30px;
+ 		    a{
+ 		    	color:#664400;
+ 		    }
+ 	}
 }
 //===============================================================================
 //===============================================================================
@@ -27,7 +56,31 @@
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-sm-min) {
+	#career-page{
+		.career-list-container{
+	  		padding: 20px 40px;
+	  		ul{
+	  			list-style-type: disc;
+	  			padding-left: 20px;
+	  			.career-post{
+	  				text-align: left;
+	  				padding-right: 40px;
+					/*display: inline-block;*/
+					float: left;
+					width: 50%;
+					height: 80px;
+		  		}
+	  		}
+	  	}
 
+	  	.career-box-text{
+	  		li{
+				float: left;
+				width: 50%;
+				padding-right: 10px;
+	  		}
+	  	}
+	}
 
 }
 //===============================================================================
@@ -45,5 +98,4 @@
 //===============================================================================
 //===============================================================================
 @media (min-width: @screen-lg-min) {
-
 }

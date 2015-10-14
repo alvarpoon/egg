@@ -7715,22 +7715,72 @@ figure.alignnone {
 #career-page .career-content a {
   color: #664400;
 }
-#career-page .career-post {
-  border: 1px solid #640;
-  padding: 20px;
-  margin-bottom: 30px;
-  margin-top: 20px;
+#career-page .career-list-container {
+  background-color: #e6e4e0;
+  padding: 10px 20px;
 }
-#career-page .career-post p {
+#career-page .career-list-container ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+#career-page .career-list-container ul .career-post {
+  /* border: 1px solid #640; */
+  /* padding: 20px; */
+  text-align: center;
+  margin-bottom: 30px;
+  /*margin-top: 20px;*/
+}
+#career-page .career-list-container ul .career-post p {
   color: #666666;
 }
-#career-page .career-post h3 {
-  margin-top: 10px;
+#career-page .career-list-container ul .career-post h3 {
+  /*margin-top: 10px;*/
   text-transform: none;
   font-size: 18px;
   letter-spacing: 1px;
   color: #333333;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+}
+#career-page .career-box-text {
+  background-color: #979088;
+  padding: 20px;
+  text-align: left;
+}
+#career-page .career-box-text ul {
+  padding-left: 20px;
+}
+#career-page .career-box-text ul li {
+  color: #fff;
+  margin-bottom: 5px;
+  line-height: 120%;
+}
+#career-page .career-text-after-box {
+  margin-top: 30px;
+}
+#career-page .career-text-after-box a {
+  color: #664400;
+}
+@media (min-width: 768px) {
+  #career-page .career-list-container {
+    padding: 20px 40px;
+  }
+  #career-page .career-list-container ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  #career-page .career-list-container ul .career-post {
+    text-align: left;
+    padding-right: 40px;
+    /*display: inline-block;*/
+    float: left;
+    width: 50%;
+    height: 80px;
+  }
+  #career-page .career-box-text li {
+    float: left;
+    width: 50%;
+    padding-right: 10px;
+  }
 }
 #stores-page section.tab-nav {
   margin: 90px auto 0px;
