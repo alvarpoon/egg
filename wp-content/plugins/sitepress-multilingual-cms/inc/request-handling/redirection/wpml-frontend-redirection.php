@@ -10,69 +10,67 @@ require ICL_PLUGIN_PATH . '/inc/request-handling/redirection/wpml-redirect-by-pa
  * @return string The language code of the currently requested URL in case no redirection was necessary.
  */
 function wpml_maybe_frontend_redirect() {
+	global $wpml_url_converter;
+
+	$language_code = $wpml_url_converter->get_language_from_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
 	/** @var WPML_Redirection $redirect_helper */
-	list( $redirect_helper, $language_code ) = _wpml_get_redirect_helper (
-		$_SERVER[ 'REQUEST_URI' ],
-		$_SERVER[ 'HTTP_HOST' ]
-	);
-	if ( ( $target = $redirect_helper->get_redirect_target () ) !== false ) {
-		wp_safe_redirect ( $target );
+	$redirect_helper = _wpml_get_redirect_helper();
+	if ( ( $target = $redirect_helper->get_redirect_target() ) !== false ) {
+		wp_safe_redirect( $target );
 		exit;
 	};
 
 	// allow forcing the current language when it can't be decoded from the URL
-	return apply_filters ( 'icl_set_current_language', $language_code );
+	return apply_filters( 'icl_set_current_language', $language_code );
 }
 
 /**
- * @param string $request_uri
- * @param string $http_host
  *
- * @return array (WPML_Redirection|string)[] containing the actual redirect helper object at the 0 index and the language code of the currently
- *               queried url at the 1 index
+ * @return  WPML_Redirection
+ *
  */
-function _wpml_get_redirect_helper( $request_uri, $http_host ) {
-	global $wpml_url_converter;
+function _wpml_get_redirect_helper() {
+	global $wpml_url_converter, $wpml_request_handler, $wpml_language_resolution;
 
-	$lang_neg_type = icl_get_setting ( 'language_negotiation_type' );
-	$language_code = $wpml_url_converter->get_language_from_url ( $http_host . $request_uri );
+	$lang_neg_type = wpml_get_setting_filter( false, 'language_negotiation_type' );
 	switch ( $lang_neg_type ) {
 		case 1:
-
 			global $wpml_url_filters;
-			if ( $wpml_url_filters->frontend_uses_root () !== false
-			) {
+			if ( $wpml_url_filters->frontend_uses_root() !== false ) {
 				require ICL_PLUGIN_PATH . '/inc/request-handling/redirection/wpml-rootpage-redirect-by-subdir.class.php';
 				$redirect_helper = new WPML_RootPage_Redirect_By_Subdir(
-					icl_get_setting ( 'urls' ),
-					$request_uri,
-					$http_host
+						wpml_get_setting_filter( array(), 'urls' ),
+						$wpml_request_handler,
+						$wpml_url_converter,
+						$wpml_language_resolution
 				);
 			} else {
 				require ICL_PLUGIN_PATH . '/inc/request-handling/redirection/wpml-redirect-by-subdir.class.php';
 				$redirect_helper = new WPML_Redirect_By_Subdir(
-					icl_get_setting ( 'urls' ),
-					$request_uri,
-					$http_host
+						$wpml_url_converter,
+						$wpml_request_handler,
+						$wpml_language_resolution
 				);
 			}
 			break;
 		case 2:
 			require ICL_PLUGIN_PATH . '/inc/request-handling/redirection/wpml-redirect-by-domain.class.php';
 			$redirect_helper = new WPML_Redirect_By_Domain(
-				icl_get_setting ( 'language_domains' ),
-				$request_uri,
-				$http_host
+					icl_get_setting( 'language_domains' ),
+					$wpml_request_handler,
+					$wpml_url_converter,
+					$wpml_language_resolution
 			);
 			break;
 		case 3:
 		default:
 			$redirect_helper = new WPML_Redirect_By_Param(
-				icl_get_setting ( 'taxonomies_sync_option', array() ),
-				$language_code,
-				$request_uri
+					icl_get_setting( 'taxonomies_sync_option', array() ),
+					$wpml_url_converter,
+					$wpml_request_handler,
+					$wpml_language_resolution
 			);
 	}
 
-	return array( $redirect_helper, $language_code );
+	return $redirect_helper;
 }

@@ -8,7 +8,9 @@ function icl_reset_wpml( $blog_id = false ) {
 	}
 
 	if ( empty( $blog_id ) ) {
-		$blog_id = isset( $_POST['id'] ) ? $_POST['id'] : $wpdb->blogid;
+	    $filtered_id = filter_input( INPUT_POST, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE );
+		$filtered_id = $filtered_id ? $filtered_id : filter_input( INPUT_GET, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE );
+        $blog_id = $filtered_id !== false ? $filtered_id : $wpdb->blogid;
 	}
 
 	if ( $blog_id || ! function_exists( 'is_multisite' ) || ! is_multisite() ) {
@@ -78,12 +80,6 @@ function icl_reset_wpml( $blog_id = false ) {
 			update_option( 'recently_activated', $ra );
 		} else {
 			update_option( '_wpml_inactive', true );
-		}
-
-
-		if ( isset( $_REQUEST['submit'] ) ) {
-			wp_redirect( network_admin_url( 'admin.php?page=' . ICL_PLUGIN_FOLDER . '/menu/network.php&updated=true&action=resetwpml' ) );
-
 		}
 
 		if ( function_exists( 'is_multisite' ) && is_multisite() ) {

@@ -198,10 +198,13 @@ function icl_sitepress_activate() {
                   `type` VARCHAR(40) NOT NULL DEFAULT 'LINE',
                   `title` VARCHAR(160) NULL,
                   `status` TINYINT NOT NULL,
+                  `gettext_context` TEXT NOT NULL,
+                  `domain_name_context_md5` VARCHAR(32) CHARACTER SET LATIN1 NOT NULL,
                   PRIMARY KEY  (`id`),
-                  UNIQUE KEY `context_name` (`context`,`name`),
+                  UNIQUE KEY `uc_domain_name_context_md5` (`domain_name_context_md5`),
                   KEY `language_context` (`language`, `context`)
-                ) {$charset_collate}";
+                  ) {$charset_collate}
+                  ";
 			if ( $wpdb->query( $sql ) === false ) {
 				throw new Exception( $wpdb->last_error );
 			}
@@ -367,9 +370,6 @@ function icl_sitepress_activate() {
 
 	//Set new caps for all administrator role
 	icl_enable_capabilities();
-
-    //Set cron job to update WPML config index file from CDN
-    wp_schedule_event( time(), 'daily', 'update_wpml_config_index' );
 
 	do_action('wpml_activated');
 }

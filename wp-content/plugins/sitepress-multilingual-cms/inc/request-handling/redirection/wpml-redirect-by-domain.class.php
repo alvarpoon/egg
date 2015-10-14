@@ -2,24 +2,25 @@
 
 class WPML_Redirect_By_Domain extends WPML_Redirection {
 
+	/** @var array $domains */
 	private $domains;
-	private $request_uri;
-	private $requested_domain;
 
-	public function __construct( $domains, $request_uri, $requested_domain ) {
-
-		$this->domains          = $domains;
-		$this->request_uri      = $request_uri;
-		$this->requested_domain = $requested_domain;
+	/**
+	 * @param array                    $domains
+	 * @param WPML_URL_Converter       $url_converter
+	 * @param WPML_Request             $request_handler
+	 * @param WPML_Language_Resolution $lang_resolution
+	 */
+	public function __construct( $domains, &$request_handler, &$url_converter, &$lang_resolution ) {
+		parent::__construct( $url_converter, $request_handler, $lang_resolution );
+		$this->domains = $domains;
 	}
 
 	public function get_redirect_target( $language = false ) {
-		global $wpml_language_resolution;
-
-		$target = $wpml_language_resolution->is_language_hidden ( $language )
-		          && strpos ( $_SERVER[ 'REQUEST_URI' ], 'wp-login.php' ) === false
-		          && !user_can ( wp_get_current_user (), 'manage_options' )
-			? trailingslashit ( $this->domains[ $language ] ) . 'wp-login.php' : false;
+		$target = $this->lang_resolution->is_language_hidden( $language )
+		          && strpos( $_SERVER['REQUEST_URI'], 'wp-login.php' ) === false
+		          && ! user_can( wp_get_current_user(), 'manage_options' )
+			? trailingslashit( $this->domains[ $language ] ) . 'wp-login.php' : false;
 
 		return $target;
 	}

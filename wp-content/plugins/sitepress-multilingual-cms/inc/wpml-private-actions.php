@@ -1,8 +1,10 @@
 <?php
 
 function wpml_new_duplicated_terms_filter( $post_ids, $duplicates_only = true ) {
+	global $wpdb, $sitepress;
+
 	require_once ICL_PLUGIN_PATH . '/inc/taxonomy-term-translation/wpml-term-hierarchy-duplication.class.php';
-	$hier_dupl  = new WPML_Term_Hierarchy_Duplication();
+	$hier_dupl = new WPML_Term_Hierarchy_Duplication( $wpdb, $sitepress );
 	$taxonomies = $hier_dupl->duplicates_require_sync( $post_ids, $duplicates_only );
 
 	if ( (bool) $taxonomies ) {

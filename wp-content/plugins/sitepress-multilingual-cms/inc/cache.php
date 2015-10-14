@@ -93,14 +93,24 @@ class icl_cache{
         $this->data = array();
         $this->name = $name;
         $this->cache_to_option = $cache_to_option;
+		$this->cache_needs_saving = false;
         
         if ($cache_to_option) {
             $this->data = icl_cache_get($name.'_cache_class');
             if ($this->data == false){
                 $this->data = array();
             }
+			
+			add_action( 'shutdown', array( $this, 'save_cache_if_requred' ) );
         }
     }
+	
+	function save_cache_if_requred( ) {
+		if( $this->cache_needs_saving ) {
+	        icl_cache_set($this->name.'_cache_class', $this->data);
+			$this->cache_needs_saving = false;
+		}
+	}
     
     function get($key) {
         if(ICL_DISABLE_CACHE){
@@ -120,10 +130,18 @@ class icl_cache{
         if(ICL_DISABLE_CACHE){
             return;
         }
-        $this->data[$key] = $value;
         if ($this->cache_to_option) {
-            icl_cache_set($this->name.'_cache_class', $this->data);
-        }
+			$old_value = null;
+			if ( isset ( $this->data[$key] ) ) {
+				$old_value = $this->data[$key];
+			}
+			if ( $old_value !== $value ) {
+				$this->data[$key] = $value;
+				$this->cache_needs_saving = true;
+			}
+        } else {
+			$this->data[$key] = $value;
+		}
     }
     
     function clear() {

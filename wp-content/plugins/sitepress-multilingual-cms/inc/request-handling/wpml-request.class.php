@@ -9,13 +9,19 @@
  * @abstract
  */
 
-abstract class WPML_Request {
+abstract class WPML_Request extends WPML_URL_Converter_User {
 
 	protected $active_languages;
 	protected $default_language;
 	protected $qs_lang_cache;
 
-	public function __construct( $active_languages, $default_language ) {
+	/**
+	 * @param WPML_URL_Converter $url_converter
+	 * @param array              $active_languages
+	 * @param string             $default_language
+	 */
+	public function __construct( &$url_converter, $active_languages, $default_language ) {
+		parent::__construct( $url_converter );
 		$this->active_languages = $active_languages;
 		$this->default_language = $default_language;
 		add_filter( 'WPML_get_language_cookie', array( $this, 'get_cookie_lang' ), 10, 0 );
@@ -33,16 +39,32 @@ abstract class WPML_Request {
 	public abstract function get_requested_lang();
 
 	/**
+	 * Returns the current REQUEST_URI optionally filtered
+	 *
+	 * @param null|int $filter filter to apply to the REQUEST_URI, takes the same arguments
+	 *                         as filter_var for the filter type.
+	 *
+	 * @return string
+	 */
+	public function get_request_uri( $filter = null ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '/';
+		if ( $filter !== null ) {
+			$request_uri = filter_var( $request_uri, $filter );
+		}
+
+		return $request_uri;
+	}
+
+	/**
 	 * @global $wpml_url_converter
 	 *
 	 * @return string|false language code that can be determined from the currently requested URI.
 	 */
 	public function get_request_uri_lang() {
-		global $wpml_url_converter;
-
 		$req_url = isset($_SERVER[ 'HTTP_HOST' ])
 			? untrailingslashit($_SERVER[ 'HTTP_HOST' ] . $_SERVER[ 'REQUEST_URI' ] ) : "";
-		return $wpml_url_converter->get_language_from_url ( $req_url );
+
+		return $this->url_converter->get_language_from_url ( $req_url );
 	}
 
 	/**

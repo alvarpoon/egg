@@ -4,25 +4,66 @@
  * @package wpml-core
  */
 
+/**
+ * @since      3.2.3
+ * @deprecated Use 'wpml_get_capabilities' instead.
+ */
 function icl_sitepress_get_capabilities() {
-	return array(
-		'wpml_manage_translation_management',
-		'wpml_manage_languages',
-		'wpml_manage_theme_and_plugin_localization',
-		'wpml_manage_support',
-		'wpml_manage_media_translation',
-		'wpml_manage_navigation',
-		'wpml_manage_sticky_links',
-		'wpml_manage_string_translation',
-		'wpml_manage_translation_analytics',
-		'wpml_manage_wp_menus_sync',
-		'wpml_manage_taxonomy_translation',
-		'wpml_manage_troubleshooting',
-		'wpml_manage_translation_options',
-		'wpml_manage_woocommerce_multilingual',
-		'wpml_operate_woocommerce_multilingual',
-	);
+	return wpml_get_capabilities_names();
 }
+
+function wpml_get_capabilities_names() {
+	$capabilities = wpml_get_capabilities();
+
+	return array_keys( $capabilities );
+}
+
+function wpml_get_capabilities_labels() {
+	$capabilities = wpml_get_capabilities();
+
+	return array_values( $capabilities );
+}
+
+function wpml_get_capabilities() {
+	$capabilities = array(
+		'wpml_manage_translation_management'        => __( 'Manage Translation Management', 'sitepress' ),
+		'wpml_manage_languages'                     => __( 'Manage Languages', 'sitepress' ),
+		'wpml_manage_theme_and_plugin_localization' => __( 'Manage Theme and Plugin localization', 'sitepress' ),
+		'wpml_manage_support'                       => __( 'Manage Support', 'sitepress' ),
+		'wpml_manage_woocommerce_multilingual'      => __( 'Manage WooCommerce Multilingual', 'sitepress' ),
+		'wpml_operate_woocommerce_multilingual'     => __( 'Operate WooCommerce Multilingual. Everything on WCML except the settings tab.', 'sitepress' ),
+		'wpml_manage_media_translation'             => __( 'Manage Media translation', 'sitepress' ),
+		'wpml_manage_navigation'                    => __( 'Manage Navigation', 'sitepress' ),
+		'wpml_manage_sticky_links'                  => __( 'Manage Sticky Links', 'sitepress' ),
+		'wpml_manage_string_translation'            => __( 'Manage String Translation', 'sitepress' ),
+		'wpml_manage_translation_analytics'         => __( 'Manage Translation Analytics', 'sitepress' ),
+		'wpml_manage_wp_menus_sync'                 => __( 'Manage WPML Menus Sync', 'sitepress' ),
+		'wpml_manage_taxonomy_translation'          => __( 'Manage Taxonomy Translation', 'sitepress' ),
+		'wpml_manage_troubleshooting'               => __( 'Manage Troubleshooting', 'sitepress' ),
+		'wpml_manage_translation_options'           => __( 'Translation options', 'sitepress' )
+	);
+
+	return apply_filters( 'wpml_capabilities', $capabilities );
+}
+
+function wpml_get_read_only_capabilities_filter( $empty ) {
+	return wpml_get_capabilities();
+}
+
+add_filter( 'wpml_capabilities_read_only', 'wpml_get_read_only_capabilities_filter', 10, 1 );
+
+function wpml_get_roles() {
+	$wp_roles[ 'label' ]        = __( 'WPML capabilities', 'sitepress' );
+	$wp_roles[ 'capabilities' ] = wpml_get_capabilities();
+
+	return apply_filters( 'wpml_roles', $wp_roles );
+}
+
+function wpml_roles_read_only_filter( $empty ) {
+	return wpml_get_roles();
+}
+
+add_filter( 'wpml_roles_read_only', 'wpml_roles_read_only_filter', 10, 1 );
 
 /**
  * @since      unknown
@@ -94,8 +135,9 @@ function icl_get_languages( $a = '' ) {
  * @use \SitePress::api_hooks
  */
 function wpml_get_active_languages_filter( $empty_value, $args = '' ) {
-	$args = wp_parse_args( $args );
 	global $sitepress;
+
+	$args = wp_parse_args( $args );
 	$langs = $sitepress->get_ls_languages( $args );
 
 	return $langs;
@@ -341,39 +383,10 @@ add_filter( 'translate_object_id', 'icl_object_id', 10, 4 );
  * @use \SitePress::api_hooks
  */
 function wpml_object_id_filter( $element_id, $element_type = 'post', $return_original_if_missing = false, $language_code = null ) {
-	global $sitepress, $wp_post_types, $wp_taxonomies;
-
-	$ret_element_id = null;
-
-	$language_code = $language_code ? $language_code : $sitepress->get_current_language();
-
-	if ( $element_type == 'any' ) {
-		$post_type = get_post_type( $element_id );
-		if ( $post_type ) {
-			$element_type = $post_type;
-		} else {
-			$element_type = null;
-		}
-	}
-
-	if($element_type) {
-		if ( isset( $wp_taxonomies[ $element_type ] ) ) {
-			/** @var WPML_Term_Translation $wpml_term_translations */
-			global $wpml_term_translations;
-			$ret_element_id = is_taxonomy_translated( $element_type ) ? $wpml_term_translations->term_id_in( $element_id, $language_code ) : $element_id;
-		} elseif ( isset( $wp_post_types[ $element_type ] ) ) {
-			/** @var WPML_Post_Translation $wpml_post_translations */
-			global $wpml_post_translations;
-			$ret_element_id = is_post_type_translated( $element_type ) ? $wpml_post_translations->element_id_in( $element_id, $language_code ) : $element_id;
-		} else {
-			$ret_element_id = null;
-		}
-
-		$ret_element_id = $ret_element_id ? $ret_element_id : ( $return_original_if_missing && ! $ret_element_id ? $element_id : null );
-	}
-
-	return $ret_element_id;
+	global $sitepress;
+	return $sitepress->get_object_id( $element_id, $element_type, $return_original_if_missing, $language_code );
 }
+
 /**
  * @since      unknown
  * @deprecated 3.2 use 'wpml_translated_language_name' filter instead
@@ -631,7 +644,7 @@ function wpml_cf_translation_preferences( $id, $custom_field = false, $class = '
 		$class = @strval( $class );
 		if ( $fieldset ) {
 			$output .= '
-<fieldset id="wpml_cf_translation_preferences_fieldset_' . $id . '" class="wpml_cf_translation_preferences_fieldset ' . $class . '-form-fieldset form-fieldset fieldset">' . '<legend>' . __( 'Translation preferences', 'wpml' ) . '</legend>';
+<fieldset id="wpml_cf_translation_preferences_fieldset_' . $id . '" class="wpml_cf_translation_preferences_fieldset ' . $class . '-form-fieldset form-fieldset fieldset">' . '<legend>' . __( 'Translation preferences', 'sitepress' ) . '</legend>';
 		}
 		$actions  = array( 'ignore' => 0, 'copy' => 1, 'translate' => 2 );
 		$action   = isset( $actions[ @strval( $default_value ) ] ) ? $actions[ @strval( $default_value ) ] : 0;
@@ -649,19 +662,19 @@ function wpml_cf_translation_preferences( $id, $custom_field = false, $class = '
 				if ( $xml_override ) {
 					$output .=
 						'<div style="color:Red;font-style:italic;margin: 10px 0 0 0;">'
-						. __( 'The translation preference for this field are being controlled by a language configuration XML file. If you want to control it manually, remove the entry from the configuration file.', 'wpml' )
+						. __( 'The translation preference for this field are being controlled by a language configuration XML file. If you want to control it manually, remove the entry from the configuration file.', 'sitepress' )
 						. '</div>';
 				}
 			} else if ( ! $suppress_error ) {
-				$output .= '<span style="color:#FF0000;">' . __( "To synchronize values for translations, you need to enable WPML's Translation Management module.", 'wpml' ) . '</span>';
+				$output .= '<span style="color:#FF0000;">' . __( "To synchronize values for translations, you need to enable WPML's Translation Management module.", 'sitepress' ) . '</span>';
 				$disabled = true;
 			}
 		} else if ( ! $suppress_error ) {
-			$output .= '<span style="color:#FF0000;">' . __( 'Error: Something is wrong with field value. Translation preferences can not be set.', 'wpml' ) . '</span>';
+			$output .= '<span style="color:#FF0000;">' . __( 'Error: Something is wrong with field value. Translation preferences can not be set.', 'sitepress' ) . '</span>';
 			$disabled = true;
 		}
 		//$disabled = !empty($disabled) ? ' readonly="readonly" disabled="disabled"' : '';
-		$output .= '<div class="description ' . $class . '-form-description ' . $class . '-form-description-fieldset description-fieldset">' . __( 'Choose what to do when translating content with this field:', 'wpml' ) . '</div>';
+		$output .= '<div class="description ' . $class . '-form-description ' . $class . '-form-description-fieldset description-fieldset">' . __( 'Choose what to do when translating content with this field:', 'sitepress' ) . '</div>';
 
 		$input_attributes = array(
 			'name'  => 'wpml_cf_translation_preferences[' . $id . ']',
@@ -681,11 +694,11 @@ function wpml_cf_translation_preferences( $id, $custom_field = false, $class = '
 		);
 
 		$output .= '<ul><li>';
-		$output .= wpml_translation_preference_input_helper( $args, 'wpml_cf_translation_preferences_option_ignore_', '0', __( 'Do nothing', 'wpml' ) );
+		$output .= wpml_translation_preference_input_helper( $args, 'wpml_cf_translation_preferences_option_ignore_', '0', __( 'Do nothing', 'sitepress' ) );
 		$output .= '</li><li>';
-		$output .= wpml_translation_preference_input_helper( $args, 'wpml_cf_translation_preferences_option_copy_', '1', __( 'Copy from original', 'wpml' ) );
+		$output .= wpml_translation_preference_input_helper( $args, 'wpml_cf_translation_preferences_option_copy_', '1', __( 'Copy from original', 'sitepress' ) );
 		$output .= '</li><li>';
-		$output .= wpml_translation_preference_input_helper( $args, 'wpml_cf_translation_preferences_option_translate_', '2', __( 'Translate', 'wpml' ) );
+		$output .= wpml_translation_preference_input_helper( $args, 'wpml_cf_translation_preferences_option_translate_', '2', __( 'Translate', 'sitepress' ) );
 		$output .= '</li></ul>';
 
 		if ( $custom_field && $ajax ) {
@@ -840,13 +853,13 @@ function wpml_get_language_information( $empty_value = null, $post_id = null ) {
 	$language_information = $sitepress->get_language_details( $language );
 
 	$current_language = $sitepress->get_current_language();
-	$info             = array(
+	$info = array(
+		'language_code'      => $language,
 		'locale'             => $sitepress->get_locale( $language ),
 		'text_direction'     => $sitepress->is_rtl( $language ),
 		'display_name'       => $sitepress->get_display_language_name( $language, $current_language ),
 		'native_name'        => $language_information[ 'display_name' ],
 		'different_language' => $language != $current_language
-
 	);
 
 	return $info;
@@ -922,7 +935,7 @@ function icl_template_paged( $template ) {
 	}
 
 	// seems WPML overwrite 'page' param too early, let's fix this
-	if ( $sitepress->get_setting( 'language_negotiation_type' ) == 3 ) {
+	if ( ( is_home() || is_front_page() ) && $sitepress->get_setting( 'language_negotiation_type' ) == 3 ) {
 		set_query_var( 'page', get_query_var( 'paged' ) );
 	}
 
@@ -1316,4 +1329,115 @@ function wpml_element_type_filter( $element_type ) {
 	}
 
 	return $wpml_element_type;
+}
+
+/**
+ * Retrieves language information for a translatable element
+ * Checks icl_translations db table and returns an object with the element's
+ * trid, source language code and language code
+ * @since                             3.2.2
+ *
+ * @param mixed $element_object       A WordPress object. Defaults to null
+ * @param array $args                 {
+ *                                    Required An array of arguments to be used
+ *
+ * @type int    $element_id           Use term_taxonomy_id for taxonomies, post_id for posts
+ * @type string $element_type         Can be a post type: post, page, attachment, nav_menu_item, {custom post key}
+ *                                    or taxonomy: category, post_tag, nav_menu {custom taxonomy key}
+ *                                    }
+ * @return object
+ * @use \SitePress::api_hooks
+ */
+function wpml_element_language_details_filter($element_object = null, $args) {
+	global $sitepress;
+	if(isset($sitepress)) {
+		$element_type   = apply_filters( 'wpml_element_type', $args[ 'element_type' ] );
+		$element_object = $sitepress->get_element_language_details( $args[ 'element_id' ], $element_type );
+	}
+
+	return $element_object;
+}
+
+/**
+ * Retrieves the language code for a translatable element
+ * Checks icl_translations db table and returns the element's language code
+ * @since                             3.2.2
+ *
+ * @param mixed $language_code        A 2-letter language code. Defaults to null
+ * @param array $args                 {
+ *                                    Required An array of arguments to be used
+ *
+ * @type int    $element_id           Use term_taxonomy_id for taxonomies, post_id for posts
+ * @type string $element_type         Can be a post type: post, page, attachment, nav_menu_item, {custom post key}
+ *                                    or taxonomy: category, post_tag, nav_menu {custom taxonomy key}
+ *                                    }
+ * @return string
+ * @use \SitePress::api_hooks
+ */
+function wpml_element_language_code_filter($language_code = null, $args) {
+	global $sitepress;
+	if(isset($sitepress)) {
+		$element_type = apply_filters( 'wpml_element_type', $args[ 'element_type' ] );
+
+		$language_code =  $sitepress->get_language_for_element( $args[ 'element_id' ], $element_type );
+	}
+
+	return $language_code;
+}
+
+/**
+ * Retrieves the elements without translations
+ * Queries the database and returns an array with ids
+ * @since                             3.2.2
+ *
+ * @param array $element_ids          An array of element ids. Defaults to an empty array
+ * @param array $args                 {
+ *                                    Required An array of arguments to be used
+ *
+ * @type string $target_language      The target language code
+ * @type string $source_language      The source language code
+ * @type string $element_type         Can be a post type: post, page, attachment, nav_menu_item, {custom post key}
+ *                                    or taxonomy: category, post_tag, nav_menu {custom taxonomy key}
+ *                                    }
+ * @return array
+ * @use \SitePress::api_hooks
+ */
+function wpml_elements_without_translations_filter($element_ids = array(), $args) {
+	global $sitepress;
+	if(isset($sitepress)) {
+		$element_type = apply_filters( 'wpml_element_type', $args[ 'element_type' ] );
+		$element_ids  = $sitepress->get_elements_without_translations( $element_type, $args[ 'target_language' ], $args[ 'source_language' ] );
+	}
+	return $element_ids;
+}
+
+/**
+ * Filters a WordPress permalink and converts it to a language specific permalink based on plugin settings
+ * @since            3.2.2
+ * @type string      $url The WordPress generated url to filter
+ * @type null|string $language_code
+ *                   (if null, it falls back to default language for root page, or current language in all other cases)
+ * @return string
+ * @use \SitePress::api_hooks
+ */
+function wpml_permalink_filter($permalink, $language_code = null) {
+	global $sitepress;
+	if(isset($sitepress)) {
+		$permalink = $sitepress->convert_url( $permalink, $language_code );
+	}
+	return $permalink;
+}
+
+/**
+ * Switches WPML's query language
+ * @since                           3.2.2
+ * @type null|string $language_code The language code to switch  to
+ *                                  If set to null it restores the original language
+ *                                  If set to 'all' it will query content from all active languages
+ *                                  Defaults to null
+ * @use \SitePress::api_hooks
+ */
+function wpml_switch_language_action($language_code = null) {
+	global $sitepress;
+	$sitepress->switch_lang( $language_code, true );
 }

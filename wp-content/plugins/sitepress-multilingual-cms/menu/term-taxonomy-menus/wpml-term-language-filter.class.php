@@ -1,22 +1,24 @@
 <?php
-require ICL_PLUGIN_PATH . '/menu/wpml-language-filter-bar.class.php';
+require_once ICL_PLUGIN_PATH . '/menu/wpml-language-filter-bar.class.php';
 
 class WPML_Term_Language_Filter extends WPML_Language_Filter_Bar {
 
-	public function terms_language_filter() {
+	function terms_language_filter( $echo = true ) {
 		$this->init();
 		$requested_data  = $this->sanitize_request();
-		$taxonomy        = $requested_data[ 'req_tax' ] !== '' ? $requested_data[ 'req_tax' ] : 'post_tag';
-		$post_type       = $requested_data[ 'req_ptype' ] !== '' ? $requested_data[ 'req_ptype' ] : '';
+		$taxonomy        = $requested_data['req_tax'] !== '' ? $requested_data['req_tax'] : 'post_tag';
+		$post_type       = $requested_data['req_ptype'] !== '' ? $requested_data['req_ptype'] : '';
 		$languages       = $this->get_counts( $taxonomy );
 		$languages_links = array();
 		foreach ( $this->active_languages as $code => $lang ) {
-			$languages_links[ ] = $this->lang_element( $languages, $code, $taxonomy, $post_type );
+			$languages_links[] = $this->lang_element( $languages, $code, $taxonomy, $post_type );
 		}
 		$all_languages_links = join( ' | ', $languages_links );
 
 		$html = '<span id="icl_subsubsub" style="display: none;">' . $all_languages_links . '</span>';
-		echo $html;
+		if ( $echo !== false ) {
+			echo $html;
+		}
 
 		return $html;
 	}
@@ -32,22 +34,20 @@ class WPML_Term_Language_Filter extends WPML_Language_Filter_Bar {
 			$sx = '</a>' . $this->lang_span( $code, $count );
 		}
 
-		return $px . esc_js( $this->active_languages[ $code ][ 'display_name' ] ) . $sx;
+		return $px . $this->active_languages[ $code ][ 'display_name' ] . $sx;
 	}
 
 	protected function get_count_data( $taxonomy ) {
-		global $wpdb;
-
 		$res_query = "	SELECT language_code, COUNT(tm.term_id) AS c
-						FROM {$wpdb->prefix}icl_translations t
-						JOIN {$wpdb->term_taxonomy} tt
+						FROM {$this->wpdb->prefix}icl_translations t
+						JOIN {$this->wpdb->term_taxonomy} tt
 							ON t.element_id = tt.term_taxonomy_id
 							AND t.element_type = CONCAT('tax_', tt.taxonomy)
-						JOIN {$wpdb->terms} tm
+						JOIN {$this->wpdb->terms} tm
 							ON tt.term_id = tm.term_id
 						WHERE tt.taxonomy = %s
 						" . $this->extra_conditions_snippet();
 
-		return $wpdb->get_results ( $wpdb->prepare ( $res_query, $taxonomy ) );
+		return $this->wpdb->get_results ( $this->wpdb->prepare ( $res_query, $taxonomy ) );
 	}
 }

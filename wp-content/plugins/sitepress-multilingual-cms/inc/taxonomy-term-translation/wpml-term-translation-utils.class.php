@@ -2,11 +2,33 @@
 
 class WPML_Term_Translation_Utils {
 
-	public function sync_terms( $original_post_id, $lang ) {
+	/**
+	 * Duplicates all terms, that exist in the given target language,
+	 * from the original post to the translation in that language.
+	 *
+	 * @param int $original_post_id
+	 * @param string $lang
+	 */
+	function sync_terms( $original_post_id, $lang ) {
 		$this->synchronize_terms ( $original_post_id, $lang, false );
-		clean_object_term_cache ( $original_post_id, get_post_type ( $original_post_id ) );
 	}
 
+	/**
+	 * Duplicates all terms on the original post to its translation in the given target language.
+	 * Missing terms are created with the same name as their originals.
+	 *
+	 * @param int $original_post_id
+	 * @param string $lang
+	 */
+	function duplicate_terms( $original_post_id, $lang ) {
+		$this->synchronize_terms ( $original_post_id, $lang, true );
+	}
+
+	/**
+	 * @param int $original_post_id
+	 * @param string $lang
+	 * @param bool $duplicate sets whether missing terms should be created by duplicating the original term
+	 */
 	private function synchronize_terms( $original_post_id, $lang, $duplicate ) {
 		global $wpml_post_translations;
 
@@ -22,19 +44,28 @@ class WPML_Term_Translation_Utils {
 				wp_set_object_terms ( $translated_post_id, $translated_terms, $tax );
 			}
 		}
+		clean_object_term_cache ( $original_post_id, get_post_type ( $original_post_id ) );
 	}
 
+	/**
+	 * @param object[] $terms
+	 * @param string $lang
+	 * @param string $taxonomy
+	 * @param bool $duplicate sets whether missing terms should be created by duplicating the original term
+	 *
+	 * @return array
+	 */
 	private function get_translated_term_ids( $terms, $lang, $taxonomy, $duplicate ) {
 		/** @var WPML_Term_Translation $wpml_term_translations */
 		global $wpml_term_translations;
 
+		$term_utils = new WPML_Terms_Translations();
 		$wpml_term_translations->reload ();
 		$translated_terms = array();
 		foreach ( $terms as $orig_term ) {
 			$translated_id = (int) $wpml_term_translations->term_id_in ( $orig_term->term_id, $lang );
-
 			if ( !$translated_id && $duplicate ) {
-				$translation   = WPML_Terms_Translations::create_automatic_translation (
+				$translation   = $term_utils->create_automatic_translation (
 					array(
 						'lang_code'       => $lang,
 						'taxonomy'        => $taxonomy,
@@ -45,7 +76,6 @@ class WPML_Term_Translation_Utils {
 					)
 				);
 				$translated_id = isset( $translation[ 'term_id' ] ) ? $translation[ 'term_id' ] : false;
-
 			}
 			if ( $translated_id ) {
 				$translated_terms[ ] = $translated_id;
@@ -53,10 +83,5 @@ class WPML_Term_Translation_Utils {
 		}
 
 		return $translated_terms;
-	}
-
-	public function duplicate_terms( $original_post_id, $lang ) {
-		$this->synchronize_terms ( $original_post_id, $lang, true );
-		clean_object_term_cache ( $original_post_id, get_post_type ( $original_post_id ) );
 	}
 }

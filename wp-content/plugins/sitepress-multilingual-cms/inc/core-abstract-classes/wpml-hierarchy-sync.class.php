@@ -1,6 +1,6 @@
 <?php
 
-abstract class WPML_Hierarchy_Sync {
+abstract class WPML_Hierarchy_Sync extends WPML_WPDB_User{
 
 	protected $original_elements_table_alias            = 'org';
 	protected $translated_elements_table_alias          = 'tra';
@@ -18,38 +18,37 @@ abstract class WPML_Hierarchy_Sync {
 	protected $elements_table;
 	protected $lang_info_table;
 
-	public function __construct() {
-		global $wpdb;
-
+	/**
+	 * @param wpdb $wpdb
+	 */
+	public function __construct( &$wpdb ) {
+		parent::__construct( $wpdb );
 		$this->lang_info_table = $wpdb->prefix . 'icl_translations';
 	}
 
 	public function get_unsynced_elements( $element_types, $ref_lang_code = false ) {
-		global $wpdb;
-
 		$element_types = (array) $element_types;
-
-		$results = array();
-
+		$results       = array();
 		if ( $element_types ) {
 			$results_sql_parts = array();
 
-			$results_sql_parts[ 'source_element_table' ]           = $this->get_source_element_table();
-			$results_sql_parts[ 'source_element_join' ]            = $this->get_source_element_join();
-			$results_sql_parts[ 'join_translation_language_data' ] = $this->get_join_translation_language_data( $ref_lang_code );
-			$results_sql_parts[ 'translated_element_join' ]        = $this->get_translated_element_join();
-			$results_sql_parts[ 'original_parent_join' ]           = $this->get_original_parent_join();
-			$results_sql_parts[ 'original_parent_language_join' ]  = $this->get_original_parent_language_join();
-			$results_sql_parts[ 'correct_parent_language_join' ]   = $this->get_correct_parent_language_join();
-			$results_sql_parts[ 'correct_parent_element_join' ]    = $this->get_correct_parent_element_join();
-			$results_sql_parts[ 'where_statement' ]                = $this->get_where_statement( $element_types, $ref_lang_code );
+			$results_sql_parts['source_element_table']           = $this->get_source_element_table();
+			$results_sql_parts['source_element_join']            = $this->get_source_element_join();
+			$results_sql_parts['join_translation_language_data'] = $this->get_join_translation_language_data( $ref_lang_code );
+			$results_sql_parts['translated_element_join']        = $this->get_translated_element_join();
+			$results_sql_parts['original_parent_join']           = $this->get_original_parent_join();
+			$results_sql_parts['original_parent_language_join']  = $this->get_original_parent_language_join();
+			$results_sql_parts['correct_parent_language_join']   = $this->get_correct_parent_language_join();
+			$results_sql_parts['correct_parent_element_join']    = $this->get_correct_parent_element_join();
+			$results_sql_parts['where_statement']                = $this->get_where_statement( $element_types,
+			                                                                                   $ref_lang_code );
 
 			$results_sql = $this->get_select_statement();
 			$results_sql .= " FROM ";
-
 			$results_sql .= implode( ' ', $results_sql_parts );
-			$results = $wpdb->get_results( $results_sql );
+			$results = $this->wpdb->get_results( $results_sql );
 		}
+
 		return $results;
 	}
 
@@ -62,22 +61,18 @@ abstract class WPML_Hierarchy_Sync {
 	}
 
 	private final function update_hierarchy_for_element( $row ) {
-		global $wpdb;
-
 		$update = $this->validate_parent_synchronization( $row );
 
 		if ( $update ) {
 			$target_element_id = $row->translated_id;
 			$new_parent        = (int) $row->correct_parent;
-			$wpdb->update( $this->elements_table, array( $this->parent_id_column => $new_parent ), array( $this->element_id_column => $target_element_id ) );
+			$this->wpdb->update( $this->elements_table, array( $this->parent_id_column => $new_parent ), array( $this->element_id_column => $target_element_id ) );
 		}
 	}
 
 	private function validate_parent_synchronization( $row ) {
-		global $wpdb;
-
 		$is_valid     = false;
-		$is_for_posts = ( $this->elements_table == $wpdb->posts );
+		$is_for_posts = ( $this->elements_table === $this->wpdb->posts );
 		if ( ! $is_for_posts ) {
 			$is_valid = true;
 		}
@@ -86,7 +81,6 @@ abstract class WPML_Hierarchy_Sync {
 			global $sitepress;
 
 			$target_element_id = $row->translated_id;
-
 			$target_post                = get_post( $target_element_id );
 			if ( $target_post ) {
 				$parent_must_empty = false;
@@ -198,10 +192,9 @@ abstract class WPML_Hierarchy_Sync {
 	}
 
 	private final function get_where_statement( $element_types, $ref_lang_code ) {
-		global $wpdb;
 
 		$filter_originals_snippet = $ref_lang_code
-			? $wpdb->prepare( " AND {$this->original_elements_language_table_alias}.language_code = %s ", $ref_lang_code)
+			? $this->wpdb->prepare( " AND {$this->original_elements_language_table_alias}.language_code = %s ", $ref_lang_code)
 			:  " AND {$this->translated_elements_language_table_alias}.source_language_code IS NOT NULL ";
 
 		return " WHERE {$this->original_elements_table_alias}.{$this->element_type_column}

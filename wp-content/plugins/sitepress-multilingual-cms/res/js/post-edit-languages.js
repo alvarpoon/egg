@@ -61,6 +61,8 @@ function build_how_to_button(data, $, container) {
 	}
 }
 function build_language_links(data, $, container) {
+	var queryString;
+	var urlData;
 	if (data.hasOwnProperty('language_links')) {
 		var languages_container = $('<ul></ul>');
 		languages_container.appendTo(container);
@@ -87,11 +89,16 @@ function build_language_links(data, $, container) {
 				current = $('<strong></strong>');
 			} else if (language_count >= 0) {
 				current = $('<a></a>');
-				if (statuses) {
-					current.attr('href', '?post_type=' + type + '&post_status=' + statuses.join(',') + '&lang=' + language_code);
-				} else {
-					current.attr('href', '?post_type=' + type + '&lang=' + language_code);
+				urlData = {
+					post_type: type,
+					lang:      language_code
+				};
+
+				if (statuses && statuses.length) {
+					urlData.post_status = statuses.join(',');
 				}
+				queryString = $.param(urlData);
+				current.attr('href', '?' + queryString);
 			} else {
 				current = $('<span></span>');
 			}
@@ -110,12 +117,11 @@ jQuery(document).ready(
 		var data = post_edit_languages_data;
 		var how_to_link = data['how_to_link'];
 		var container = $('<div></div>');
-		container.addClass('subsubsub');
 		container.addClass('icl_subsubsub');
 		container.css('clear', 'both');
 
 		build_language_links(data, $, container);
 		build_how_to_button(data, $, container);
-		$(".subsubsub").after(container);
+		$(".subsubsub").append(container);
 	}
 );

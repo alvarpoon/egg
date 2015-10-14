@@ -79,16 +79,30 @@ class WPML_Post_Edit_Ajax {
 		if ( ! empty( $post ) ) {
 			foreach ( $fields_to_copy as $editor_key => $editor_field ) { //loops over the three fields to be inserted into the array
 				if ( $editor_key === 'content' || $editor_key === 'excerpt' ) { //
+					$editor_var = 'rich';
 					if ( $editor_key === 'content' ) {
 						$editor_var = $content_type; //these variables are supplied by a javascript call in scripts.js icl_copy_from_original(lang, trid)
 					} elseif ( $editor_key === 'excerpt' ) {
 						$editor_var = $excerpt_type;
 					}
-					if ( $editor_var === 'rich' ) {
-						$html_pre = wp_richedit_pre( $post->$editor_field );
+					
+					if ( function_exists( 'format_for_editor' ) ) {
+						// WordPress 4.3 uses format_for_editor
+						$html_pre = $post->$editor_field;
+						if($editor_var == 'rich') {
+							$html_pre = convert_chars( $html_pre );
+							$html_pre = wpautop( $html_pre );
+						}
+						$html_pre = format_for_editor( $html_pre, $editor_var );
 					} else {
-						$html_pre = wp_htmledit_pre( $post->$editor_field );
+						// Backwards compatible for WordPress < 4.3
+						if ( $editor_var === 'rich' ) {
+							$html_pre = wp_richedit_pre( $post->$editor_field );
+						} else {
+							$html_pre = wp_htmledit_pre( $post->$editor_field );
+						}
 					}
+					
 					$fields_contents[$editor_key] = htmlspecialchars_decode( $html_pre );
 				} elseif ( $editor_key === 'title' ) {
 					$fields_contents[ $editor_key ] = strip_tags( $post->$editor_field );

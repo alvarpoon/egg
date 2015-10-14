@@ -1,6 +1,6 @@
 <?php
 
-class WPML_Lang_URL_Validator {
+class WPML_Lang_URL_Validator extends WPML_SP_User {
 
 	/** @var WP_Http $http_client */
 	private $http_client;
@@ -11,15 +11,16 @@ class WPML_Lang_URL_Validator {
 	/** @var  string $validation_url */
 	private $posted_url;
 
-	public function __construct( $client, $wpml_url_converter, $posted_url ) {
-		$this->url_converter = $wpml_url_converter;
-		$this->http_client   = $client;
-	}
-
-	public function get_sample_url( $sample_lang_code ) {
-		$abs_home = $this->url_converter->get_abs_home ();
-
-		return untrailingslashit( trailingslashit ( $abs_home ) . $sample_lang_code );
+	/**
+	 * @param  WP_Http            $client
+	 * @param  WPML_URL_Converter $wpml_url_converter
+	 * @param  string             $posted_url
+	 * @param  SitePress          $sitepress
+	 */
+	public function __construct( &$client, &$wpml_url_converter, $posted_url, &$sitepress ) {
+		parent::__construct( $sitepress );
+		$this->url_converter = &$wpml_url_converter;
+		$this->http_client   = &$client;
 	}
 
 	public function get_validation_url( $sample_lang_code ) {
@@ -28,18 +29,7 @@ class WPML_Lang_URL_Validator {
 		return $this->get_sample_url ( $sample_lang_code ) . $url_glue . '____icl_validate_directory=1';
 	}
 
-	private function do_request( $validation_url ) {
-
-		$this->response = $this->http_client->request (
-			$validation_url,
-			array( 'timeout' => 15, 'decompress' => false )
-		);
-
-		return $this->response;
-	}
-
 	public function validate_langs_in_dirs( $sample_lang ) {
-
 		$response = $this->do_request ( $this->get_validation_url ( $sample_lang ) );
 		if ( ( !is_wp_error ( $response )
 		       && ( $response[ 'response' ][ 'code' ] == '200' )
@@ -58,9 +48,7 @@ class WPML_Lang_URL_Validator {
 	}
 
 	public function print_error_response() {
-
 		$response = $this->response;
-
 		$output = '';
 		if ( is_wp_error ( $response ) ) {
 			$output .= '<strong>';
@@ -82,22 +70,36 @@ class WPML_Lang_URL_Validator {
 		return $output;
 	}
 
-	public function print_explanation( $def_lang_code, $sample_lang_code, $root = false ) {
-		global $sitepress;
+	public function print_explanation( $sample_lang_code, $root = false ) {
+		$def_lang_code = $this->sitepress->get_default_language();
+		$sample_lang   = $this->sitepress->get_language_details( $sample_lang_code );
+		$def_lang      = $this->sitepress->get_language_details( $def_lang_code );
+		$output        = '<span class="explanation-text">(';
 
-		$sample_lang = $sitepress->get_language_details ( $sample_lang_code );
-		$def_lang    = $sitepress->get_language_details ( $def_lang_code );
-		$output      = '<span class="explanation-text">(';
-
-		$output .= sprintf (
+		$output .= sprintf(
 			'%s - %s, %s - %s',
-			trailingslashit ( $this->get_sample_url ( $root ? $def_lang_code : '' ) ),
-			$def_lang[ 'display_name' ],
-			trailingslashit ( $this->get_sample_url ( $sample_lang_code ) ),
-			$sample_lang[ 'display_name' ]
+			trailingslashit( $this->get_sample_url( $root ? $def_lang_code : '' ) ),
+			$def_lang['display_name'],
+			trailingslashit( $this->get_sample_url( $sample_lang_code ) ),
+			$sample_lang['display_name']
 		);
 		$output .= ')</span>';
 
 		return $output;
+	}
+
+	private function do_request( $validation_url ) {
+		$this->response = $this->http_client->request (
+			$validation_url,
+			array( 'timeout' => 15, 'decompress' => false )
+		);
+
+		return $this->response;
+	}
+
+	private function get_sample_url( $sample_lang_code ) {
+		$abs_home = $this->url_converter->get_abs_home ();
+
+		return untrailingslashit( trailingslashit ( $abs_home ) . $sample_lang_code );
 	}
 }

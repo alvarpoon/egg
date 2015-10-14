@@ -1,20 +1,19 @@
 <?php
 
-class WPML_Post_Status {
+class WPML_Post_Status extends WPML_WPDB_User {
 
 	private $needs_update = array();
 	private $status       = array();
 
 	public function needs_update( $post_id ) {
-
 		if ( !isset( $this->needs_update[ $post_id ] ) ) {
-			global $wpdb, $wpml_post_translations;
+			global $wpml_post_translations;
 
-			$this->needs_update[ $post_id ] = (bool) $wpdb->get_var (
-				$wpdb->prepare (
+			$this->needs_update[ $post_id ] = (bool) $this->wpdb->get_var (
+				$this->wpdb->prepare (
 					"SELECT ts.needs_update
-                     FROM {$wpdb->prefix}icl_translation_status ts
-		             JOIN {$wpdb->prefix}icl_translations it
+                     FROM {$this->wpdb->prefix}icl_translation_status ts
+		             JOIN {$this->wpdb->prefix}icl_translations it
 						ON it.translation_id = ts.translation_id
 					 WHERE it.trid = %d AND it.language_code = %s",
 					$wpml_post_translations->get_element_trid ( $post_id ),
@@ -32,15 +31,14 @@ class WPML_Post_Status {
 	}
 
 	public function set_update_status( $post_id, $update ) {
-		global $wpdb, $wpml_post_translations;
+		global $wpml_post_translations;
 
 		$update = (bool) $update;
-
-		$translation_id = $wpdb->get_var (
-			$wpdb->prepare (
+		$translation_id = $this->wpdb->get_var (
+			$this->wpdb->prepare (
 				"SELECT ts.translation_id
-                     FROM {$wpdb->prefix}icl_translations it
-		             JOIN {$wpdb->prefix}icl_translation_status ts
+                     FROM {$this->wpdb->prefix}icl_translations it
+		             JOIN {$this->wpdb->prefix}icl_translation_status ts
 						ON it.translation_id = ts.translation_id
 					 WHERE it.trid = %d AND it.language_code = %s",
 				$wpml_post_translations->get_element_trid ( $post_id ),
@@ -49,8 +47,8 @@ class WPML_Post_Status {
 		);
 
 		if ( $translation_id ) {
-			$res = $wpdb->update (
-				$wpdb->prefix . 'icl_translation_status',
+			$res = $this->wpdb->update (
+				$this->wpdb->prefix . 'icl_translation_status',
 				array( 'needs_update' => $update ),
 				array( 'translation_id' => $translation_id )
 			);
@@ -62,17 +60,17 @@ class WPML_Post_Status {
 	}
 
 	public function set_status( $post_id, $status ) {
-		global $wpdb, $wpml_post_translations;
+		global $wpml_post_translations;
 
 		if ( !$post_id ) {
 			return false;
 		}
 
-		$translation_id = $wpdb->get_row (
-			$wpdb->prepare (
+		$translation_id = $this->wpdb->get_row (
+			$this->wpdb->prepare (
 				"SELECT it.translation_id AS transid, ts.translation_id AS status_id
-                     FROM {$wpdb->prefix}icl_translations it
-		             LEFT JOIN {$wpdb->prefix}icl_translation_status ts
+                     FROM {$this->wpdb->prefix}icl_translations it
+		             LEFT JOIN {$this->wpdb->prefix}icl_translation_status ts
 						ON it.translation_id = ts.translation_id
 					 WHERE it.trid = %d AND it.language_code = %s
 					 LIMIT 1",
@@ -82,15 +80,15 @@ class WPML_Post_Status {
 		);
 
 		if ( $translation_id->status_id && $translation_id->transid ) {
-			$res                      = $wpdb->update (
-				$wpdb->prefix . 'icl_translation_status',
+			$res                      = $this->wpdb->update (
+				$this->wpdb->prefix . 'icl_translation_status',
 				array( 'status' => $status ),
 				array( 'translation_id' => $translation_id->transid )
 			);
 			$this->status[ $post_id ] = $status;
 		} else {
-			$res = $wpdb->insert (
-				$wpdb->prefix . 'icl_translation_status',
+			$res = $this->wpdb->insert (
+				$this->wpdb->prefix . 'icl_translation_status',
 				array( 'status' => $status, 'translation_id' => $translation_id->transid )
 			);
 		}
@@ -103,9 +101,7 @@ class WPML_Post_Status {
 
 		$trid      = $trid !== false ? $trid : $wpml_post_translations->get_element_trid ( $post_id );
 		$lang_code = $lang_code !== false ? $lang_code : $wpml_post_translations->get_element_lang_code ( $post_id );
-
 		$post_id = $post_id ? $post_id : $wpml_post_translations->get_element_id ( $lang_code, $trid );
-
 		if ( !$post_id ) {
 			$status  = ICL_TM_NOT_TRANSLATED;
 			$post_id = $lang_code . $trid;
@@ -113,7 +109,6 @@ class WPML_Post_Status {
 			$status = get_post_meta ( $post_id, '_icl_lang_duplicate_of', true )
 				? ICL_TM_DUPLICATE : ( $this->needs_update ( $post_id ) ? ICL_TM_NEEDS_UPDATE : ICL_TM_COMPLETE );
 		}
-
 		$status = apply_filters (
 			'wpml_translation_status',
 			$status,
@@ -121,7 +116,6 @@ class WPML_Post_Status {
 			$lang_code,
 			true
 		);
-
 		$this->status[ $post_id ] = $status;
 
 		return $status;

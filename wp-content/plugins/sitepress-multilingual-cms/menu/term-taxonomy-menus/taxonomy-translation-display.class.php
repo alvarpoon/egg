@@ -209,7 +209,7 @@ class WPML_Taxonomy_Translation_Table_Display {
 											   FILTER_SANITIZE_FULL_SPECIAL_CHARS,
 											   FILTER_NULL_ON_FAILURE );
 		if ( $request_post_taxonomy ) {
-			$taxonomy = $request_post_taxonomy;
+			$taxonomy = html_entity_decode( $request_post_taxonomy );
 		}
 
 		do_action( 'wpml_st_load_label_menu' );

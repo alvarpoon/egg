@@ -95,8 +95,15 @@ if ( $icl_menus_sync->is_preview ) {
 			$icl_menu_sync_submit_disabled = 'disabled="disabled"';
 		}
 		?>
-		<input id="icl_msync_submit" class="button-primary" type="submit" value="<?php _e( 'Apply changes' ) ?>" <?php echo $icl_menu_sync_submit_disabled; ?> />&nbsp;
+		<input id="icl_msync_submit"
+			   class="button-primary"
+			   type="button"
+			   value="<?php _e( 'Apply changes' ) ?>"
+			   data-message="<?php _e( 'Syncing menus %1 of %2', 'sitepress' ) ?>"
+			   data-message-complete="<?php _e( 'The selected menus have been synchonized.', 'sitepress' ) ?>"
+			   <?php echo $icl_menu_sync_submit_disabled; ?> />&nbsp;
 		<input id="icl_msync_cancel" class="button-secondary" type="button" value="<?php _e( 'Cancel' ) ?>"/>
+		<span id="icl_msync_message"></span>
 	</p>
         <?php wp_nonce_field( '_icl_nonce_menu_sync', '_icl_nonce_menu_sync' ); ?>
 	</form>
@@ -176,6 +183,13 @@ if ( $icl_menus_sync->is_preview ) {
 			if ( $need_sync ) {
 				?>
 				<input id="icl_msync_sync" type="submit" class="button-primary" value="<?php _e( 'Sync', 'sitepress' ); ?>"<?php if ( !$need_sync ): ?> disabled="disabled"<?php endif; ?> />
+				&nbsp;&nbsp;
+				<span id="icl_msync_max_input_vars"
+					  style="display:none"
+					  class="icl-admin-message-warning"
+					  data-max_input_vars="<?php echo ini_get( 'max_input_vars' ); ?>">
+					<?php _e( 'The menus on this page may not sync because it requires more input variables. Please modify the <strong>max_input_vars</strong> setting in your php.ini or .htaccess files to <strong>!NUM!</strong> or more.', 'siteprss'); ?>
+				</span>
 			<?php
 			} else {
 				?>

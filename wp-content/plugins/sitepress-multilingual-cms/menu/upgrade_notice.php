@@ -1,7 +1,7 @@
 <?php 
 $upgrade_lines =  array(
     '3.2'   => array(
-                     'message' => __('This version of WPML includes major updates and improvements.', 'siteress' ),
+                     'message' => __('This version of WPML includes major updates and improvements.', 'sitepress' ),
                      'link'    => '<a href="https://wpml.org/version/wpml-3-2/">' . __('WPML 3.2 release notes', 'sitepress') . '</a>',
                      'dismiss' => false
                      )

@@ -440,11 +440,19 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle implements CFDBDateFormatter {
                 }
             }
         }
+
         if (!$user) {
             $user = !empty($_REQUEST['username']) ? $_REQUEST['username'] : null;
         }
+        if (!$user) {
+            $user = !empty($_REQUEST['user_login']) ? $_REQUEST['user_login'] : null;
+        }
+
         if (!$password) {
             $password = !empty($_REQUEST['password']) ? $_REQUEST['password'] : null;
+        }
+        if (!$password) {
+            $password = !empty($_REQUEST['user_password']) ? $_REQUEST['user_password'] : null;
         }
 
         $creds['user_login'] = $user;
@@ -462,7 +470,7 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle implements CFDBDateFormatter {
             switch ($_REQUEST['cfdb-action']) {
                 case 'cfdb-export':
                     if (!$this->canUserDoRoleOption('CanSeeSubmitData')) {
-                        echo '<strong>ERROR</strong>: user ' . $_REQUEST['username'] . ' is not authorized to export CFDB data';
+                        echo '<strong>ERROR</strong>: user ' . $creds['user_login'] . ' is not authorized to export CFDB data';
                         die;
                     }
                     $this->ajaxExport();
@@ -501,6 +509,9 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle implements CFDBDateFormatter {
         require_once('CFDBMimeTypeExtensions.php');
         $mimeMap = new CFDBMimeTypeExtensions();
         $mimeType = $mimeMap->get_type_by_filename($fileInfo[0]);
+        if (ob_get_contents()) {
+            ob_clean(); // Fix bug where download files can be corrupted
+        }
         if ($mimeType) {
             header('Content-Type: ' . $mimeType);
             header("Content-Disposition: inline; filename=\"$fileInfo[0]\"");
@@ -852,12 +863,21 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle implements CFDBDateFormatter {
     public function createAdminMenu() {
         $roleAllowed = 'Administrator';
         $displayName = $this->getPluginDisplayName();
-        if ('false' == $this->getOption('HideAdminPanelFromNonAdmins', 'false')) {
+
+        $hideFromNonAdmins = $this->getOption('HideAdminPanelFromNonAdmins', 'false') != 'false';
+        if ($hideFromNonAdmins) {
+            $roleAllowed = 'Administrator';
+        } else {
             $roleAllowed = $this->getRoleOption('CanSeeSubmitData');
             if (!$roleAllowed) {
                 $roleAllowed = 'Administrator';
             }
         }
+
+        if (! $this->isUserRoleEqualOrBetterThan($roleAllowed)) {
+            return;
+        }
+
         $menuSlug = $this->getDBPageSlug();
 
         //create new top-level menu
@@ -916,7 +936,7 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle implements CFDBDateFormatter {
                          $this->getShortCodeBuilderPageSlug(),
                          array(&$this, 'showShortCodeBuilderPage'));
 
-        if ($this->isEditorActive()) {
+        if ($this->isEditorActive() && $this->canUserDoRoleOption('CanSeeSubmitData')) {
             add_submenu_page($menuSlug,
                     $displayName . ' Import',
                 __('Import', 'contact-form-7-to-database-extension'),
@@ -1238,7 +1258,7 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle implements CFDBDateFormatter {
         if (!$this->isEditorActive()) {
             return;
         }
-        $requiredEditorVersion = '1.4';
+        $requiredEditorVersion = '1.4.1';
         $editorData = $this->getEditorPluginData();
         if (isset($editorData['Version'])) {
             if (version_compare($editorData['Version'], $requiredEditorVersion) == -1) {

@@ -414,7 +414,7 @@ function icl_make_translatable(){
     jQuery('.icl_mcs_cfs:checked').each(function(){
         if(!jQuery(this).attr('disabled')){
             cfnames.push(jQuery(this).attr('name').replace(/^icl_mcs_cf_/,''));
-            cfvals.push(jQuery(this).val())
+            cfvals.push(jQuery(this).val());
         }
     });
 
@@ -431,27 +431,19 @@ function icl_make_translatable(){
                 '_icl_nonce' : jQuery('#_icl_nonce_imi').val()
 
         },
-
         function(data) {
             that.removeAttr('disabled');
             if(translate){
                 var iclDiv = jQuery('#icl_div');
-                var iclDivUpdate;
-                if(iclDivUpdate = iclDiv.length > 0){
+                if (iclDiv.length > 0) {
                     iclDiv.remove();
                 }
-
                 var prependTo = jQuery('#side-sortables');
                 prependTo = prependTo.html() ? prependTo : jQuery('#normal-sortables');
                 prependTo.prepend(
                     '<div id="icl_div" class="postbox">' + jQuery(data).find('#icl_div').html() + '</div>'
                 );
-
                 jQuery('#icl_mcs_details').html(jQuery(data).find('#icl_mcs_details').html());
-
-                if (!iclDivUpdate) {
-                    location.href = '#icl_div';
-                }
             }else{
                 jQuery('#icl_div').hide();
                 jQuery('#icl_mcs_details').html('');
@@ -459,7 +451,6 @@ function icl_make_translatable(){
             jQuery('#icl_div_config').find('.icl_form_success').fadeIn();
 			
 			WPML_core.post_edit_duplicates.initialize_dulicates_click_handler();
-			
         }
     );
 

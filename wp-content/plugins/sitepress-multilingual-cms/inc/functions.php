@@ -30,23 +30,10 @@ function wpml_site_uses_icl() {
  * @deprecated 3.2 use 'wpml_setting' filter instead
  */
 function icl_get_setting( $key, $default = false ) {
-	global $sitepress;
+    global $sitepress_settings;
+    $sitepress_settings = isset($sitepress_settings) ? $sitepress_settings : get_option('icl_sitepress_settings');
 
-	if ( isset( $sitepress ) ) {
-		return $sitepress->get_setting( $key, $default );
-	} else {
-		//We don't have an instance of SitePress class: let's try with $sitepress_settings
-		global $sitepress_settings;
-
-		if ( ! isset( $sitepress_settings ) ) {
-			//We don't have an instance of $sitepress_settings variable.
-			//This means that probably we are in a stage where this instance can't be created
-			//Therefore, let's directly read the settings from the DB
-			$sitepress_settings = get_option( 'icl_sitepress_settings' );
-		}
-
-		return isset( $sitepress_settings[ $key ] ) ? $sitepress_settings[ $key ] : $default;
-	}
+    return isset( $sitepress_settings[ $key ] ) ? $sitepress_settings[ $key ] : $default;
 }
 
 /**
@@ -67,18 +54,9 @@ function icl_get_setting( $key, $default = false ) {
  * @use \SitePress::api_hooks
  */
 function wpml_get_setting_filter( $default, $key, $deprecated = null ) {
-	global $sitepress;
+    $default = $deprecated !== null  && !$default ? $deprecated : $default;
 
-	$default = $deprecated !== null  && !$default ? $deprecated : $default;
-
-	if ( isset( $sitepress ) ) {
-		$wpml_setting = $sitepress->get_setting( $key, $default );
-	} else {
-		$wpml_settings = get_option( 'icl_sitepress_settings' );
-		$wpml_setting  = isset( $wpml_settings[ $key ] ) ? $wpml_settings[ $key ] : $default;
-	}
-
-	return $wpml_setting;
+    return icl_get_setting($key, $default);
 }
 
 /**
@@ -126,24 +104,13 @@ function wpml_get_sub_setting_filter( $default, $key, $sub_key, $deprecated = nu
  * @param bool   $save_now Must call icl_save_settings() to permanently store the value
  */
 function icl_set_setting( $key, $value, $save_now = false ) {
-	global $sitepress;
-	if ( isset( $sitepress ) ) {
-		$sitepress->set_setting( $key, $value, $save_now );
-	} else {
-		//We don't have an instance of SitePress class: let's try with $sitepress_settings
-		global $sitepress_settings;
+	global $sitepress_settings;
 
-		if ( ! isset( $sitepress_settings ) ) {
-			//We don't have an instance of $sitepress_settings variable.
-			//This means that probably we are in a stage where this instance can't be created
-			//Therefore, let's directly read the settings from the DB
-			$sitepress_settings = get_option( 'icl_sitepress_settings' );
-		}
-		$sitepress_settings[ $key ] = $value;
+	$sitepress_settings[ $key ] = $value;
 
+	if ( $save_now === true ) {
 		//We need to save settings anyway, in this case
 		update_option( 'icl_sitepress_settings', $sitepress_settings );
-
 		do_action( 'icl_save_settings', $sitepress_settings );
 	}
 }
@@ -326,17 +293,6 @@ function icl_pop_info( $message, $icon = 'info', $args = array() ) {
 <?php
 }
 
-function icl_is_post_edit() {
-	static $is;
-	if ( is_null( $is ) ) {
-		global $pagenow;
-		$filtered_action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE );
-		$is              = ( $pagenow == 'post-new.php' || ( $pagenow == 'post.php' && ( 0 === strcmp( $filtered_action, 'edit' ) ) ) );
-	}
-
-	return $is;
-}
-
 /**
  * Build or update duplicated posts from a master post.
  *
@@ -501,32 +457,6 @@ function icl_convert_to_user_time( $time ) {
 }
 
 /**
- * Helper function to tell if $lang_code should be marked as selected in post language chooser
- * @global sitepress $sitepress
- *
- * @param string     $lang_code         2 letters language code
- * @param string     $selected_language 2 letters language code
- *
- * @return boolean
- */
-function icl_is_selected_post_language( $lang_code, $selected_language ) {
-	global $sitepress;
-
-	if ( $lang_code == $selected_language ) {
-		return true;
-	}
-
-	if ( ! icl_is_language_active( $selected_language ) ) {
-		$default_language = $sitepress->get_default_language();
-		if ( $lang_code == $default_language ) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-/**
  * Check if given language is activated
  * @global sitepress $sitepress
  *
@@ -662,8 +592,8 @@ function wpml_set_plugin_as_inactive() {
 	$icl_plugin_inactive = true;
 }
 
-function wpml_version_is( $version_to_check ) {
-	return version_compare( ICL_SITEPRESS_VERSION, $version_to_check, '==' ) && function_exists( 'wpml_site_uses_icl' );
+function wpml_version_is( $version_to_check, $comparison = '==' ) {
+	return version_compare( ICL_SITEPRESS_VERSION, $version_to_check, $comparison ) && function_exists( 'wpml_site_uses_icl' );
 }
 
 function wpml_site_uses_icl_message_notice() {

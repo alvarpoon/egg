@@ -162,6 +162,39 @@ abstract class WPML_URL_Converter {
 		return $lang;
 	}
 
+	/**
+	 * Adjusts the CPT archive slug for possible slug translations from ST.
+	 *
+	 * @param string $link
+	 * @param string $post_type
+	 * @param null|string $language_code
+	 *
+	 * @return string
+	 */
+	function adjust_cpt_in_url( $link, $post_type, $language_code = null ) {
+
+		$post_type_object = get_post_type_object( $post_type );
+
+		if ( isset( $post_type_object->rewrite ) ) {
+			$slug = trim( $post_type_object->rewrite['slug'], '/' );
+		} else {
+			$slug = $post_type_object->name;
+		}
+
+		$translated_slug = apply_filters( 'wpml_get_translated_slug',
+											$slug,
+											$language_code );
+
+		if ( is_string( $translated_slug ) ) {
+			$link_new = trailingslashit(
+				preg_replace( "/" . preg_quote( $slug, "/" ) . "/", $translated_slug, $link, 1 )
+			);
+			$link = $this->fix_trailing_slash($link_new, $link);
+		}
+
+		return $link;
+	}
+
 	protected function validate_language( $language, $url ) {
 		return in_array ( $language, $this->active_languages, true )
 		       || $language === 'all' && $this->is_url_admin ( $url ) ? $language : $this->default_language ();

@@ -1,26 +1,31 @@
 <?php
 
-class WPML_Tax_Menu_Loader{
+class WPML_Tax_Menu_Loader extends WPML_WPDB_And_SP_User {
 
+	/** @var string $taxonomy  */
 	private $taxonomy;
 
-	public function __construct( $taxonomy ) {
+	/**
+	 * @param wpdb      $wpdb
+	 * @param SitePress $sitepress
+	 * @param string    $taxonomy
+	 */
+	public function __construct( &$wpdb, &$sitepress, $taxonomy ) {
+		parent::__construct( $wpdb, $sitepress );
 		$this->taxonomy = $taxonomy;
-		add_action ( 'init', array( $this, 'init' ) );
+		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'after-category-table', array( $this, 'category_display_action' ), 1, 0 );
-		add_filter ( 'wp_redirect', array( $this, 'preserve_lang_param' ) );
+		add_filter( 'wp_redirect', array( $this, 'preserve_lang_param' ) );
 	}
 
 	public function init(){
-		global $sitepress;
-
 		$tax_get = filter_input(INPUT_GET, 'taxonomy');
 		require ICL_PLUGIN_PATH . '/menu/term-taxonomy-menus/wpml-term-language-filter.class.php';
 		if ( ( $trid = filter_input ( INPUT_GET, 'trid' ) )
 		     && ( $source_lang = filter_input ( INPUT_GET, 'source_lang' ) )
 		     && get_taxonomy ( $tax_get ) !== false
 		) {
-			$translations = $sitepress->get_element_translations ( $trid, 'tax_' . $this->taxonomy );
+			$translations = $this->sitepress->get_element_translations ( $trid, 'tax_' . $this->taxonomy );
 			if ( isset( $translations[ $_GET[ 'lang' ] ] ) && !empty( $translations[ $_GET[ 'lang' ] ]->term_id ) ) {
 				wp_redirect ( get_edit_term_link ( $translations[ $_GET[ 'lang' ] ]->term_id, $tax_get ) );
 				exit;
@@ -28,7 +33,7 @@ class WPML_Tax_Menu_Loader{
 				add_action ( 'admin_notices', array( $this, '_tax_adding' ) );
 			}
 		}
-		$term_lang_filter = new WPML_Term_Language_Filter( icl_get_setting ( 'default_language' ) );
+		$term_lang_filter = new WPML_Term_Language_Filter( $this->wpdb, $this->sitepress );
 		if ( $this->taxonomy === 'category' ) {
 			add_action ( 'edit_category_form', array( $this, 'wpml_edit_term_form' ) );
 		} else {
@@ -37,7 +42,7 @@ class WPML_Tax_Menu_Loader{
 		}
 		add_action ( 'admin_print_scripts-edit-tags.php', array( $this, 'js_scripts_tags' ) );
 		add_filter ( 'wp_dropdown_cats', array( $this, 'wp_dropdown_cats_select_parent' ), 10, 2 );
-		add_action ( 'admin_footer', array( $term_lang_filter, 'terms_language_filter' ) );
+		add_action ( 'admin_footer', array( $term_lang_filter, 'terms_language_filter' ), 0 );
 	}
 
 	/**
@@ -66,15 +71,16 @@ class WPML_Tax_Menu_Loader{
 	}
 
 	function wp_dropdown_cats_select_parent( $html, $args ) {
-		global $wpdb, $sitepress;
 		if ( ( $trid = filter_input( INPUT_GET, 'trid', FILTER_SANITIZE_NUMBER_INT ) ) ) {
 			$element_type     = $taxonomy = isset( $args[ 'taxonomy' ] ) ? $args[ 'taxonomy' ] : 'post_tag';
 			$icl_element_type = 'tax_' . $element_type;
-			$source_lang      = isset( $_GET[ 'source_lang' ] ) ? filter_input ( INPUT_GET, 'source_lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) : $sitepress->get_default_language();
-			$parent           = $wpdb->get_var( $wpdb->prepare("
+			$source_lang      = isset( $_GET[ 'source_lang' ] )
+				? filter_input ( INPUT_GET, 'source_lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS )
+				: $this->sitepress->get_default_language();
+			$parent           = $this->wpdb->get_var( $this->wpdb->prepare("
 				SELECT parent
-				FROM {$wpdb->term_taxonomy} tt
-					JOIN {$wpdb->prefix}icl_translations tr ON tr.element_id=tt.term_taxonomy_id
+				FROM {$this->wpdb->term_taxonomy} tt
+					JOIN {$this->wpdb->prefix}icl_translations tr ON tr.element_id=tt.term_taxonomy_id
                     AND tr.element_type=%s AND tt.taxonomy=%s
 				WHERE trid=%d AND tr.language_code=%s
 			", $icl_element_type, $taxonomy, $trid, $source_lang ) );
@@ -95,12 +101,10 @@ class WPML_Tax_Menu_Loader{
 	}
 
 	function _tax_adding() {
-		global $sitepress;
-
 		$trid         = filter_input ( INPUT_GET, 'trid', FILTER_SANITIZE_NUMBER_INT );
 		$taxonomy     = filter_input ( INPUT_GET, 'taxonomy' );
 		$translations = $trid && $taxonomy ?
-			$sitepress->get_element_translations ( $trid, 'tax_' . $taxonomy ) : array();
+			$this->sitepress->get_element_translations ( $trid, 'tax_' . $taxonomy ) : array();
 		$name         = isset( $translations[ $_GET[ 'source_lang' ] ] ) ? $translations[ filter_input ( INPUT_GET, 'source_lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) ]
 			: false;
 		$name         = isset( $name->name ) ? $name->name : false;

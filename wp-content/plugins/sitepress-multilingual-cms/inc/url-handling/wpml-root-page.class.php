@@ -1,20 +1,23 @@
 <?php
-if ( WPML_Root_Page::uses_html_root ()
-     || WPML_Root_Page::get_root_id () > 0
-     || strpos ( (string) filter_var ( $_SERVER[ 'REQUEST_URI' ] ), 'wpml_root_page=1' ) !== false
-     || (bool) filter_input ( INPUT_POST, '_wpml_root_page' ) === true
+if ( WPML_Root_Page::uses_html_root()
+     || WPML_Root_Page::get_root_id() > 0
+     || strpos( (string) filter_var( $_SERVER['REQUEST_URI'] ), 'wpml_root_page=1' ) !== false
+     || (bool) filter_input( INPUT_POST, '_wpml_root_page' ) === true
 ) {
-	$root_page_actions = wpml_get_root_page_actions_obj ();
-	add_action ( 'init', array( $root_page_actions, 'wpml_home_url_init' ), 0 );
-	add_filter ( 'wp_page_menu_args', array( $root_page_actions, 'wpml_home_url_exclude_root_page_from_menus' ) );
-	add_filter ( 'wp_list_pages_excludes', array( $root_page_actions, 'wpml_home_url_exclude_root_page' ) );
-	add_filter (
-		'page_attributes_dropdown_pages_args',
-		array( $root_page_actions, 'wpml_home_url_exclude_root_page2' )
+	global $wpml_root_page_actions;
+
+	$wpml_root_page_actions = wpml_get_root_page_actions_obj();
+	add_action( 'init', array( $wpml_root_page_actions, 'wpml_home_url_init' ), 0 );
+	add_filter( 'wp_page_menu_args', array( $wpml_root_page_actions, 'wpml_home_url_exclude_root_page_from_menus' ) );
+	add_filter( 'wp_get_nav_menu_items', array( $wpml_root_page_actions, 'exclude_root_page_menu_item' ), 10, 1 );
+	add_filter( 'wp_list_pages_excludes', array( $wpml_root_page_actions, 'wpml_home_url_exclude_root_page' ) );
+	add_filter(
+			'page_attributes_dropdown_pages_args',
+			array( $wpml_root_page_actions, 'wpml_home_url_exclude_root_page2' )
 	);
-	add_filter ( 'get_pages', array( $root_page_actions, 'wpml_home_url_get_pages' ) );
-	add_action ( 'save_post', array( $root_page_actions, 'wpml_home_url_save_post_actions' ), 0, 2 );
-	WPML_Root_Page::init ();
+	add_filter( 'get_pages', array( $wpml_root_page_actions, 'wpml_home_url_get_pages' ) );
+	add_action( 'save_post', array( $wpml_root_page_actions, 'wpml_home_url_save_post_actions' ), 0, 2 );
+	WPML_Root_Page::init();
 }
 
 class WPML_Root_Page {

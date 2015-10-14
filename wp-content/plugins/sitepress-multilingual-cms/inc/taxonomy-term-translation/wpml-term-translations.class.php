@@ -57,24 +57,6 @@ class WPML_Terms_Translations {
 	}
 
 	/**
-	 * Returns all post types to which a taxonomy is linked.
-	 *
-	 * @param $taxonomy string
-	 *
-	 * @return array
-	 */
-	public static function get_taxonomy_post_types( $taxonomy ) {
-		global $wp_taxonomies;
-
-		$post_types = array();
-		if ( isset( $wp_taxonomies[ $taxonomy ] ) && isset( $wp_taxonomies[ $taxonomy ]->object_type ) ) {
-			$post_types = $wp_taxonomies[ $taxonomy ]->object_type;
-		}
-
-		return $post_types;
-	}
-
-	/**
 	 * @param $slug
 	 * @param $taxonomy
 	 * @param $lang
@@ -235,43 +217,6 @@ class WPML_Terms_Translations {
 
 			do_action( 'icl_save_term_translation', $original_tax, $translated_term );
 		}
-	}
-
-
-
-	/**
-	 * @param $cat
-	 * @param $tt_id
-	 * @param $taxonomy
-	 */
-	public static function delete_term_filter( $cat, $tt_id, $taxonomy )
-	{
-		global $wpdb, $sitepress;
-		$icl_el_type = 'tax_' . $taxonomy;
-
-		static $recursion;
-		if ( $sitepress->get_setting( 'sync_delete_tax' ) && empty( $recursion ) ) {
-
-			// only for translated
-			$lang_details = $sitepress->get_element_language_details( $tt_id, $icl_el_type );
-			if ( empty( $lang_details->source_language_code ) ) {
-
-				// get translations
-				$trid         = $sitepress->get_element_trid( $tt_id, $icl_el_type );
-				$translations = $sitepress->get_element_translations( $trid, $icl_el_type );
-
-				$recursion = true;
-				// delete translations
-				foreach ( $translations as $translation ) {
-					if ( $translation->element_id != $tt_id ) {
-						wp_delete_term( $translation->term_id, $taxonomy );
-					}
-				}
-				$recursion = false;
-			}
-		}
-
-		$wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->prefix}icl_translations WHERE element_type =%s AND element_id=%d LIMIT 1", array($icl_el_type, $tt_id) ) );
 	}
 
 	/**
@@ -463,6 +408,7 @@ class WPML_Terms_Translations {
 	 * write or false on error.
 	 */
 	public static function create_new_term( $args ) {
+		global $wpdb, $sitepress;
 
 		/** @var string $taxonomy */
 		$taxonomy = false;
@@ -482,7 +428,7 @@ class WPML_Terms_Translations {
 
 		require_once 'wpml-update-term-action.class.php';
 
-		$new_term_action = new WPML_Update_Term_Action( $args );
+		$new_term_action = new WPML_Update_Term_Action( $wpdb, $sitepress, $args );
 		$new_term        = $new_term_action->execute();
 
 		if ( $sync && $new_term && $taxonomy && $lang_code ) {
@@ -498,7 +444,7 @@ class WPML_Terms_Translations {
 	 *
 	 * @return array|bool
 	 */
-	public static function create_automatic_translation( $args ) {
+	public function create_automatic_translation( $args ) {
 		global $sitepress;
 
 		$term                = false;
@@ -514,7 +460,7 @@ class WPML_Terms_Translations {
 		extract( $args, EXTR_OVERWRITE );
 
 		if ( $trid && ! $original_id ) {
-			$original_tax_id = SitePress::get_original_element_id_by_trid( $trid );
+			$original_tax_id = $sitepress->get_original_element_id_by_trid( $trid );
 			$original_term = get_term_by( 'term_taxonomy_id', $original_tax_id, $taxonomy, OBJECT, 'no' );
 		}
 
@@ -685,116 +631,25 @@ class WPML_Terms_Translations {
 	 * @param array  $old_tt_ids Old array of term taxonomy IDs.
 	 */
 	public static function set_object_terms_action( $post_id, $terms, $tt_ids, $taxonomy, $append, $old_tt_ids ) {
+		global $sitepress;
+
 		//TODO: [WPML 3.2] We have a better way to check if the post is an external type (e.g. Package).
 		if ( get_post( $post_id ) ) {
 			$bulk = false;
 
-			if ( isset( $_REQUEST[ 'bulk_edit' ] ) ) {
+			if ( isset( $_REQUEST['bulk_edit'] ) ) {
 				$bulk = true;
 			}
 			if ( $bulk ) {
 				$tt_ids = array_merge( $tt_ids, $old_tt_ids );
 				self::quick_edited_post_terms( $post_id, $taxonomy, $tt_ids, $bulk );
 			}
-			self::added_term_relationships( $post_id );
-		}
-	}
-
-	/**
-	 * Copies taxonomy terms from original posts to their translation, if the translations of these terms exist
-	 * and the option 'sync_post_taxonomies' is set.
-	 *
-	 * @param $object_id int ID of the object, that terms have just been added to.
-	 */
-	public static function added_term_relationships( $object_id) {
-		global $sitepress, $wpdb;
-
-		//TODO: [WPML 3.2] We have a better way to check if the post is an external type (e.g. Package).
-		if ( $sitepress->get_setting( 'sync_post_taxonomies' ) ) {
-			$i         = $wpdb->prefix . 'icl_translations';
-			$current_ttids_sql =
-				$wpdb->prepare("SELECT
-									ctt.taxonomy,
-									ctt.term_id,
-									p.ID
-								FROM {$wpdb->posts} p
-								JOIN {$i} i
-								  ON p.ID = i.element_id
-								     AND i.element_type = CONCAT('post_', p.post_type)
-								JOIN {$i} it
-								JOIN {$wpdb->term_taxonomy} tt
-								    ON tt.term_taxonomy_id = it.element_id
-								       AND CONCAT('tax_', tt.taxonomy) = it.element_type
-								JOIN {$wpdb->term_relationships} objrel
-								  ON objrel.object_id = p.ID
-								    AND objrel.term_taxonomy_id = tt.term_taxonomy_id
-								JOIN {$i} itt
-								  ON itt.trid = it.trid
-								    AND itt.language_code = i.language_code
-								JOIN {$wpdb->term_taxonomy} ctt
-								  ON ctt.term_taxonomy_id = itt.element_id
-								WHERE  p.ID = %d", $object_id);
-			$corrections       = $wpdb->get_results( $current_ttids_sql );
-
-			$changes = array();
-
-			foreach ( $corrections as $correction ) {
-				if ( !$sitepress->is_translated_taxonomy ( $correction->taxonomy ) ) {
-					continue;
-				}
-				if ( ! isset( $changes[ $correction->taxonomy ] ) ) {
-					$changes[ $correction->ID ][ $correction->taxonomy ] = array();
-				}
-				$changes[ $correction->taxonomy ][ ] = (int) $correction->term_id;
-			}
-
-			foreach ( $changes as $taxonomy => $term_ids ) {
-				remove_action('set_object_terms', array( 'WPML_Terms_Translations', 'set_object_terms_action' ), 10 );
-				wp_set_object_terms( $object_id, $term_ids, $taxonomy, false );
-				add_action( 'set_object_terms', array( 'WPML_Terms_Translations', 'set_object_terms_action' ), 10, 6 );
+			if ( $sitepress->get_setting( 'sync_post_taxonomies' ) ) {
+				$term_actions_helper = $sitepress->get_term_actions_helper();
+				$term_actions_helper->added_term_relationships( $post_id );
 			}
 		}
 	}
-
-	/**
-	 * This action is hooked to the 'deleted_term_relationships' hook.
-	 * It removes terms from translated posts as soon as they are removed from the original post.
-	 * It only fires, if the setting 'sync_post_taxonomies' is activated.
-	 *
-	 * @param $object_id int ID of the post the deleted terms were attached to
-	 * @param $delete_terms array Array of term taxonomy id's for those terms that were deleted from the post.
-	 */
-	public static function deleted_term_relationships( $object_id, $delete_terms ) {
-		global $sitepress, $wpdb;
-		if ( $sitepress->get_setting( 'sync_post_taxonomies' ) ) {
-			$post = get_post( $object_id );
-			$trid = $sitepress->get_element_trid( $object_id, 'post_' . $post->post_type );
-			if ( $trid ) {
-				$translations = $sitepress->get_element_translations( $trid, 'post_' . $post->post_type );
-				foreach ( $translations as $translation ) {
-					if ( $translation->original == 1 && $translation->element_id == $object_id ) {
-						$taxonomies = get_object_taxonomies( $post->post_type );
-						foreach ( $taxonomies as $taxonomy ) {
-							foreach ( $delete_terms as $delete_term ) {
-								$trid = $sitepress->get_element_trid( $delete_term, 'tax_' . $taxonomy );
-								if ( $trid ) {
-									$tags = $sitepress->get_element_translations( $trid, 'tax_' . $taxonomy );
-									foreach ( $tags as $tag ) {
-										if ( ! $tag->original && isset( $translations[ $tag->language_code ] ) ) {
-											$translated_post = $translations[ $tag->language_code ];
-											$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->term_relationships WHERE object_id = %d AND term_taxonomy_id = %d ",
-											                              $translated_post->element_id, $tag->element_id ) );
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 
 	/**
 	 * @param int    $post_id

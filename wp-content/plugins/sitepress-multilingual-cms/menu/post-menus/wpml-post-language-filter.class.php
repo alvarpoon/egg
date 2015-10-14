@@ -1,5 +1,5 @@
 <?php
-require ICL_PLUGIN_PATH . '/menu/wpml-language-filter-bar.class.php';
+require_once ICL_PLUGIN_PATH . '/menu/wpml-language-filter-bar.class.php';
 
 class WPML_Post_Language_Filter extends WPML_Language_Filter_Bar {
 
@@ -7,7 +7,6 @@ class WPML_Post_Language_Filter extends WPML_Language_Filter_Bar {
 	private $post_type;
 
 	protected function sanitize_request() {
-
 		$request_data    = parent::sanitize_request ();
 		$this->post_type = $request_data[ 'req_ptype' ] ? $request_data[ 'req_ptype' ] : 'post';
 		$post_statuses   = array_keys ( get_post_stati () );
@@ -24,20 +23,18 @@ class WPML_Post_Language_Filter extends WPML_Language_Filter_Bar {
 	}
 
 	public function post_language_filter() {
-		global $sitepress;
-
 		$this->sanitize_request();
 		$this->init();
 		$type = $this->post_type;
 
-		if ( !$sitepress->is_translated_post_type ( $type ) ) {
+		if ( !$this->sitepress->is_translated_post_type ( $type ) ) {
 			return '';
 		}
 
 		$post_edit_languages = array();
 		$post_edit_languages['language_links'] = $this->language_links( $type );
 
-		if(! $sitepress->get_setting( 'hide_how_to_translate' ) && $type === 'page') {
+		if(! $this->sitepress->get_setting( 'hide_how_to_translate' ) && $type === 'page') {
 			$post_edit_languages['how_to_link'] = $this->get_how_to_link();
 		}
 
@@ -46,6 +43,33 @@ class WPML_Post_Language_Filter extends WPML_Language_Filter_Bar {
 		wp_enqueue_script( 'post-edit-languages' );
 
 		return $post_edit_languages;
+	}
+
+	protected function extra_conditions_snippet(){
+		$extra_conditions = "";
+		if ( !empty( $this->post_status ) ) {
+			$status_snippet  = " AND post_status IN (" .wpml_prepare_in($this->post_status) . ") ";
+			$extra_conditions .= apply_filters( '_icl_posts_language_count_status', $status_snippet );
+		}
+
+		$extra_conditions .= $this->post_status != array( 'trash' ) ? " AND post_status <> 'trash'" : '';
+		$extra_conditions .= " AND post_status <> 'auto-draft' ";
+		$extra_conditions .= parent::extra_conditions_snippet();
+
+		return $extra_conditions;
+	}
+
+	protected function get_count_data( $type ) {
+		$extra_conditions = $this->extra_conditions_snippet();
+
+		return $this->wpdb->get_results( $this->wpdb->prepare("
+				SELECT language_code, COUNT(p.ID) AS c
+				FROM {$this->wpdb->prefix}icl_translations t
+				JOIN {$this->wpdb->posts} p
+					ON t.element_id=p.ID
+						AND t.element_type = CONCAT('post_', p.post_type)
+				WHERE p.post_type=%s {$extra_conditions}
+				", $type, 'post_' . $type ) );
 	}
 
 	private function get_how_to_link() {
@@ -78,36 +102,5 @@ class WPML_Post_Language_Filter extends WPML_Language_Filter_Bar {
 		}
 
 		return $lang_links;
-	}
-
-	protected function extra_conditions_snippet(){
-
-
-		$extra_conditions = "";
-		if ( !empty( $this->post_status ) ) {
-			$status_snippet  = " AND post_status IN (" .wpml_prepare_in($this->post_status) . ") ";
-			$extra_conditions .= apply_filters( '_icl_posts_language_count_status', $status_snippet );
-		}
-
-		$extra_conditions .= $this->post_status != array( 'trash' ) ? " AND post_status <> 'trash'" : '';
-		$extra_conditions .= " AND post_status <> 'auto-draft' ";
-		$extra_conditions .= parent::extra_conditions_snippet();
-
-		return $extra_conditions;
-	}
-
-	protected function get_count_data( $type ) {
-		global $wpdb;
-
-		$extra_conditions = $this->extra_conditions_snippet();
-
-		return $wpdb->get_results( $wpdb->prepare("
-				SELECT language_code, COUNT(p.ID) AS c
-				FROM {$wpdb->prefix}icl_translations t
-				JOIN {$wpdb->posts} p
-					ON t.element_id=p.ID
-						AND t.element_type = CONCAT('post_', p.post_type)
-				WHERE p.post_type=%s {$extra_conditions}
-				", $type, 'post_' . $type ) );
 	}
 }

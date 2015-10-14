@@ -386,7 +386,7 @@ $theme_wpml_config_file = WPML_Config::get_theme_wpml_config_file();
                                         <span class="explanation-text">
                                         (<?php
 	                                        $root = !empty( $setting_urls['directory_for_default_language']);
-                                            echo $validator->print_explanation($default_language, $sample_lang['code'], $root);
+                                            echo $validator->print_explanation( $sample_lang['code'], $root );
 											?>)
                                         </span>
                                     </label>

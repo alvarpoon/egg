@@ -14,11 +14,23 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 	protected $settings;
 	protected $post_translation_sync;
 
-	public function __construct( &$settings ) {
-		parent::__construct ();
+	/**
+	 * @var int[] $filtered_sticky_posts
+	 * @used-by \WPML_Post_Translation::pre_option_sticky_posts_filter to store sticky post_ids that were filtered
+	 *                                                                 for display but might have to be added back
+	 *                                                                 to an update of the option
+	 */
+	private $filtered_sticky_posts = array();
+
+	/**
+	 * @param array $settings
+	 * @param wpdb  $wpdb
+	 */
+	public function __construct( &$settings, &$wpdb ) {
+		parent::__construct( $wpdb );
 		$this->settings = $settings;
 	}
-	
+
 	protected function is_setup_complete( ) {
 		return isset( $this->settings[ 'setup_complete' ]) && $this->settings[ 'setup_complete' ];
 	}
@@ -26,17 +38,76 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 	public function init() {
 		if ( $this->is_setup_complete() ) {
 			add_action ( 'save_post', array( $this, 'save_post_actions' ), 100, 2 );
+			add_filter( 'pre_update_option_sticky_posts', array( $this, 'pre_update_option_sticky_posts' ), 10, 1 );
 		}
+	}
+
+	/**
+	 * Filters the sticky posts option. If synchronization of sticky posts is activated it will translated
+	 * wrong language values, if deactivated filter out wrong language values.
+	 *
+	 * @param int[]     $posts
+	 * @param SitePress $sitepress
+	 *
+	 * @used-by \SitePress::option_sticky_posts which uses this function to filter the sticky posts array after
+	 *                                          having removed WPML per-language filtering on the sticky posts option.
+	 *
+	 * @return int[]
+	 */
+	public function pre_option_sticky_posts_filter( $posts, &$sitepress ) {
+		$posts                       = $posts ? $posts : get_option( 'sticky_posts' );
+		$this->filtered_sticky_posts = array();
+		if ( $posts ) {
+			$current_lang = $sitepress->get_current_language();
+			$this->prefetch_ids( $posts );
+			if ( $sitepress->get_setting( 'sync_sticky_flag' ) ) {
+				$unfiltered = $posts;
+				foreach ( $posts as $index => $sticky_post_id ) {
+					$posts[ $index ] = $this->element_id_in(
+							$sticky_post_id,
+							$current_lang
+					);
+				}
+				if ( $unfiltered != $posts ) {
+					update_option( 'sticky_posts',
+					               array_values( array_unique( array_filter( array_merge( $posts, $unfiltered ) ) ) ) );
+				}
+			} else {
+				foreach ( $posts as $index => $sticky_post_id ) {
+					if ( $this->get_element_lang_code( $sticky_post_id ) !== $current_lang ) {
+						$this->filtered_sticky_posts[] = $sticky_post_id;
+						unset( $posts[ $index ] );
+					}
+				}
+			}
+			$posts = array_values( array_unique( array_filter( $posts ) ) );
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * @param int[] $posts updated sticky posts option
+	 *
+	 * @uses \WPML_Post_Translation::$filtered_sticky_posts to retrieve those sticky post ids that might have been
+	 *                                                      filtered at option retrieval by \WPML_Post_Translation::pre_option_sticky_posts_filter but need to be
+	 *                                                      in the updated option, as it stores sticky posts for all languages
+	 *
+	 * @return array sticky posts option with previously filtered values added
+	 *
+	 * @hook pre_update_option_sticky_posts
+	 */
+	public function pre_update_option_sticky_posts( $posts ) {
+		$updated_sticky_list         = array_values( array_unique( array_filter( array_merge( $posts,
+		                                                                                      $this->filtered_sticky_posts ) ) ) );
+		$this->filtered_sticky_posts = array();
+
+		return $updated_sticky_list;
 	}
 
 	public function get_original_post_status( $trid, $source_lang_code = null ) {
 
 		return $this->get_original_post_attr ( $trid, 'post_status', $source_lang_code );
-	}
-
-	public function get_original_post_date( $trid, $source_lang_code = null ) {
-
-		return $this->get_original_post_attr ( $trid, 'post_date', $source_lang_code );
 	}
 
 	public function get_original_post_ID( $trid, $source_lang_code = null ) {
@@ -73,37 +144,29 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 	public abstract function save_post_actions( $pidd, $post );
 
 	public function trash_translation ( $trans_id ) {
-		if ( WPML_WordPress_Actions::is_bulk_trash( $trans_id ) ) {
-			// Do nothing as the translation is part of the bulk trash.
-		} else {
+		if ( !WPML_WordPress_Actions::is_bulk_trash( $trans_id ) ) {
 			wp_trash_post( $trans_id );
 		}
 	}
 
-	public function untrash_translation ( $trans_id ) {
-
-		if ( WPML_WordPress_Actions::is_bulk_untrash( $trans_id ) ) {
-			// Do nothing as the translation is part of the bulk untrash.
-		} else {
+	public function untrash_translation( $trans_id ) {
+		if ( ! WPML_WordPress_Actions::is_bulk_untrash( $trans_id ) ) {
 			wp_untrash_post( $trans_id );
 		}
 	}
 
 	function untrashed_post_actions( $post_id ) {
 		$translation_sync = $this->get_sync_helper ();
-
 		$translation_sync->untrashed_post_actions ( $post_id );
 	}
 
 	public function delete_post_translation_entry( $post_id ) {
-		global $wpdb;
-
-		$sql = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}icl_translations
+		$sql = $this->wpdb->prepare( "DELETE FROM {$this->wpdb->prefix}icl_translations
 								WHERE element_id = %d
 									AND element_type LIKE 'post%%'
 								LIMIT 1",
 		                       $post_id );
-		$res = $wpdb->query( $sql );
+		$res = $this->wpdb->query( $sql );
 
 		return $res;
 	}
@@ -123,9 +186,16 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 	 */
 	public function delete_post_actions( $post_id, $keep_db_entries = false ) {
 		$translation_sync = $this->get_sync_helper ();
-
 		$translation_sync->delete_post_actions ( $post_id, $keep_db_entries );
 	}
+
+	/**
+	 * @param int    $post_id
+	 * @param string $post_status
+	 *
+	 * @return int|null
+	 */
+	abstract function get_save_post_trid( $post_id, $post_status );
 
 	/**
 	 * @param integer $post_id
@@ -151,16 +221,32 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 	protected abstract function get_save_post_source_lang( $trid, $language_code, $default_language );
 
 	/**
-	 * @param int    $post_id
-	 * @param string $post_status
+	 * Sets a posts language details, invalidates caches relating to the post and triggers
+	 * synchronisation actions across translations of the just saved post.
 	 *
-	 * @return int|null
+	 * @param int    $trid
+	 * @param array  $post_vars
+	 * @param string $language_code
+	 * @param string $source_language
+	 *
+	 * @used-by \WPML_Post_Translation::save_post_actions as final step of the WPML Core save_post actions
 	 */
-	protected abstract function get_save_post_trid( $post_id, $post_status );
+	protected function after_save_post( $trid, $post_vars, $language_code, $source_language ) {
+		$this->maybe_set_elid( $trid, $post_vars['post_type'], $language_code, $post_vars['ID'], $source_language );
+		$translation_sync = $this->get_sync_helper();
+		$original_id      = $this->get_original_element( $post_vars['ID'] );
+		if ( $original_id ) {
+			$translation_sync->sync_with_translations( $original_id, $post_vars );
+		}
+		require_once ICL_PLUGIN_PATH . '/inc/cache.php';
+		icl_cache_clear( $post_vars['post_type'] . 's_per_language', true );
+		wp_defer_term_counting( false );
+		if ( $post_vars['post_type'] !== 'nav_menu_item' ) {
+			do_action( 'wpml_tm_save_post', $post_vars['ID'], get_post( $post_vars['ID'] ), false );
+		}
+	}
 
 	private function get_original_post_attr( $trid, $attribute, $source_lang_code ) {
-		global $wpdb;
-
 		$legal_attributes = array(
 			'post_status',
 			'post_date',
@@ -174,9 +260,9 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 			$attribute      = 'p.' . $attribute;
 			$source_snippet = $source_lang_code === null
 				? " AND t.source_language_code IS NULL "
-				: $wpdb->prepare ( " AND t.language_code = %s ", $source_lang_code );
-			$res            = $wpdb->get_var (
-				$wpdb->prepare (
+				: $this->wpdb->prepare ( " AND t.language_code = %s ", $source_lang_code );
+			$res            = $this->wpdb->get_var (
+				$this->wpdb->prepare (
 					"SELECT {$attribute}
 					 {$this->element_join}
 					 WHERE t.trid=%d
@@ -206,18 +292,10 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 		               && $_GET[ 'action' ] === 'untrash' ) );
 	}
 
-	public function get_sync_helper() {
-		$this->post_translation_sync = $this->post_translation_sync
-			? $this->post_translation_sync : new WPML_Post_Synchronization( $this->settings, $this );
-
-		return $this->post_translation_sync;
-	}
-
 	protected function get_element_join() {
-		global $wpdb;
 
-		return "FROM {$wpdb->prefix}icl_translations t
-				JOIN {$wpdb->posts} p
+		return "FROM {$this->wpdb->prefix}icl_translations t
+				JOIN {$this->wpdb->posts} p
 					ON t.element_id = p.ID
 						AND t.element_type = CONCAT('post_', p.post_type)";
 	}
@@ -273,5 +351,17 @@ abstract class WPML_Post_Translation extends WPML_Element_Translation {
 			$language_code,
 			$source_language
 		);
+	}
+
+	/**
+	 * @return WPML_Post_Synchronization
+	 */
+	private function get_sync_helper() {
+		global $sitepress;
+
+		$this->post_translation_sync = $this->post_translation_sync
+			? $this->post_translation_sync : new WPML_Post_Synchronization( $this->settings, $this, $sitepress );
+
+		return $this->post_translation_sync;
 	}
 }

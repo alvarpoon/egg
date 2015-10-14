@@ -8,9 +8,11 @@ class WPML_Term_Hierarchy_Sync extends WPML_Hierarchy_Sync {
 	protected $element_type_column      = 'taxonomy';
 	protected $element_type_prefix      = 'tax_';
 
-	public function __construct() {
-		global $wpdb;
-		parent::__construct();
+	/**
+	 * @param wpdb $wpdb
+	 */
+	public function __construct( &$wpdb ) {
+		parent::__construct( $wpdb );
 
 		$this->elements_table = $wpdb->term_taxonomy;
 	}

@@ -15,17 +15,15 @@ class SitePressLanguageSwitcher {
 	private $current_language_color_selector_item;
 
 	function __construct() {
-
 		$this->widget_preview     = false;
 		$this->color_schemes = $this->get_default_color_schemes();
 		$this->widget_css_defaults = $this->color_schemes[ 'White' ];
 		$this->footer_css_defaults = $this->color_schemes[ 'White' ];
 
-		add_action( 'wpml_loaded', array( $this, 'init' ) );
+		add_action( 'plugins_loaded', array( $this, 'init' ) );
 	}
 
 	function init() {
-
 		global $sitepress_settings;
 		$this->settings = $sitepress_settings;
 		if ( ! empty( $this->settings[ 'icl_lang_sel_footer' ] ) ) {
@@ -619,10 +617,10 @@ class SitePressLanguageSwitcher {
 	 * @return string
 	 */
 	private function get_menu_ls_html( $args ) {
-		global $sitepress;
+		global $sitepress, $wpml_post_translations, $wpml_term_translations;
 
 		$current_language = $sitepress->get_current_language();
-		$languages_helper = new WPML_Languages();
+		$languages_helper = new WPML_Languages( $wpml_term_translations, $sitepress, $wpml_post_translations );
 		$languages        = $sitepress->get_ls_languages();
 
 		$items = '';

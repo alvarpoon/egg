@@ -1,24 +1,10 @@
 <?php
 
-class WPML_Language_Domains{
+class WPML_Language_Domains extends WPML_SP_User {
 
-	private $active_languages;
-	private $default_language;
-	private $current_settings;
+	public function validate_language_per_directory( $language_code ) {
 
-
-	public function __construct($default_language, $icl_settings){
-		global $sitepress;
-
-		$this->current_settings = isset($icl_settings['language_domains']) ? $icl_settings['language_domains'] : false;
-		$this->active_languages = $sitepress->get_active_languages();
-		$this->default_language = $default_language;
-	}
-
-	private function validate_url_string( $url ) {
-		$url_parts = parse_url ( $url );
-
-		return isset( $url_parts[ 'scheme' ] ) && isset( $url_parts[ 'host' ] );
+		return $this->validate_domain_networking ( (string) filter_input ( INPUT_POST, 'url' ), $language_code );
 	}
 
 	public function validate_domain_networking( $posted_url, $code = false ) {
@@ -41,8 +27,8 @@ class WPML_Language_Domains{
 	}
 
 	public function render_domains_options() {
-		$default_language = $this->default_language;
-		$active_languages = $this->active_languages;
+		$default_language = $this->sitepress->get_default_language();
+		$active_languages = $this->sitepress->get_active_languages();
 		$output           = '<table class="language_domains">';
 		foreach ( $active_languages as $lang ) {
 			$home = get_site_url ();
@@ -67,26 +53,28 @@ class WPML_Language_Domains{
 	}
 
 	private function render_suggested_url( $home, $lang ) {
-		$url_parts        = parse_url ( $home );
+		$url_parts        = parse_url( $home );
 		$suggested_url    = $home;
-		$language_domains = $this->current_settings;
-		if ( $lang[ 'code' ] != $this->default_language ) {
-			if ( isset( $language_domains[ $lang[ 'code' ] ] ) ) {
-				$suggested_url = $language_domains[ $lang[ 'code' ] ];
-			} elseif ( isset( $url_parts[ 'scheme' ] ) && isset( $url_parts[ 'host' ] ) ) {
-				$exp           = explode ( '.', $url_parts[ 'host' ] );
-				$suggested_url = $url_parts[ 'scheme' ] . '://' . $lang[ 'code' ] . '.';
-				array_shift ( $exp );
-				$suggested_url .= count ( $exp ) < 2 ? $url_parts[ 'host' ] : join ( '.', $exp );
-				$suggested_url .= isset( $url_parts[ 'path' ] ) ? $url_parts[ 'path' ] : '';
+		$language_domains = $this->sitepress->get_setting( 'language_domains', false );
+		$default_language = $this->sitepress->get_default_language();
+		if ( $lang['code'] !== $default_language ) {
+			if ( isset( $language_domains[ $lang['code'] ] ) ) {
+				$suggested_url = $language_domains[ $lang['code'] ];
+			} elseif ( isset( $url_parts['scheme'] ) && isset( $url_parts['host'] ) ) {
+				$exp           = explode( '.', $url_parts['host'] );
+				$suggested_url = $url_parts['scheme'] . '://' . $lang['code'] . '.';
+				array_shift( $exp );
+				$suggested_url .= count( $exp ) < 2 ? $url_parts['host'] : join( '.', $exp );
+				$suggested_url .= isset( $url_parts['path'] ) ? $url_parts['path'] : '';
 			}
 		}
 
 		return $suggested_url;
 	}
 
-	public function validate_language_per_directory( $language_code ) {
+	private function validate_url_string( $url ) {
+		$url_parts = parse_url ( $url );
 
-		return $this->validate_domain_networking ( (string) filter_input ( INPUT_POST, 'url' ), $language_code );
+		return isset( $url_parts[ 'scheme' ] ) && isset( $url_parts[ 'host' ] );
 	}
 }

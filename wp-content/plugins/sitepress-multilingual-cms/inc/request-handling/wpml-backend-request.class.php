@@ -8,12 +8,17 @@
  */
 class WPML_Backend_Request extends WPML_Request {
 
-	public function __construct( $active_languages, $default_language ) {
-		parent::__construct( $active_languages, $default_language );
+	/**
+	 * @param WPML_URL_Converter $url_converter
+	 * @param array              $active_languages
+	 * @param string             $default_language
+	 */
+	public function __construct( &$url_converter, $active_languages, $default_language ) {
+		parent::__construct( $url_converter, $active_languages, $default_language );
 		global $wpml_url_filters;
 
-		if ( strpos( (string) filter_var( $_SERVER[ 'REQUEST_URI' ] ), 'wpml_root_page=1' ) !== false
-			 || $wpml_url_filters->frontend_uses_root() !== false
+		if ( strpos( (string) filter_var( $_SERVER['REQUEST_URI'] ), 'wpml_root_page=1' ) !== false
+		     || $wpml_url_filters->frontend_uses_root() !== false
 		) {
 			require_once ICL_PLUGIN_PATH . '/inc/url-handling/wpml-root-page.class.php';
 		}
@@ -48,13 +53,11 @@ class WPML_Backend_Request extends WPML_Request {
 	}
 
 	private function get_ajax_request_lang() {
-		global $wpml_url_converter;
-
 		$al   = $this->active_languages;
 		$lang = isset( $_POST[ 'lang' ] ) && isset( $al[ $_POST[ 'lang' ] ] ) ? $_POST[ 'lang' ] : null;
 		$lang = $lang === null ? ( $cookie_lang = $this->get_cookie_lang() ) : $lang;
 		$lang = $lang === null && isset( $_SERVER[ 'HTTP_REFERER' ] )
-			? $wpml_url_converter->get_language_from_url( $_SERVER[ 'HTTP_REFERER' ] ) : $lang;
+			? $this->url_converter->get_language_from_url( $_SERVER[ 'HTTP_REFERER' ] ) : $lang;
 		$lang = $lang ? $lang : ( isset( $cookie_lang ) ? $cookie_lang : $this->get_cookie_lang() );
 		$lang = $lang ? $lang : $this->default_language;
 

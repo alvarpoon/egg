@@ -7,7 +7,7 @@
  *
  */
 
-abstract class WPML_Element_Translation {
+abstract class WPML_Element_Translation extends WPML_WPDB_User {
 	/** @var  String $element_join */
 	protected $element_join;
 	/** @var String[] $element_langs */
@@ -21,13 +21,15 @@ abstract class WPML_Element_Translation {
 	/** @var Array[] $trid_groups */
 	protected $trid_groups = array();
 
-	public function __construct() {
+	/**
+	 * @param wpdb $wpdb
+	 */
+	public function __construct( &$wpdb ) {
+		parent::__construct( $wpdb );
 		$this->element_join = $this->get_element_join();
 	}
 
 	protected abstract function get_element_join();
-
-	public abstract function is_translated_type( $element_type );
 
 	/**
 	 * Clears the cached translations.
@@ -46,10 +48,17 @@ abstract class WPML_Element_Translation {
 			? $this->element_trids[ $element_id ] : null;
 	}
 
-	public function element_id_in( $element_id, $lang ) {
+	/**
+	 * @param int        $element_id
+	 * @param string     $lang
+	 * @param bool|false $original_fallback if true will return input $element_id if no translation is found
+	 *
+	 * @return null|int
+	 */
+	public function element_id_in( $element_id, $lang, $original_fallback = false ) {
 
-		return $this->maybe_populate_cache ( $element_id ) && isset( $this->translations[ $element_id ][ $lang ] )
-			? $this->translations[ $element_id ][ $lang ] : null;
+		return $this->maybe_populate_cache( $element_id ) && isset( $this->translations[ $element_id ][ $lang ] )
+			? $this->translations[ $element_id ][ $lang ] : ( $original_fallback ? $element_id : null );
 	}
 
 	public function get_original_element( $element_id, $root = false ) {
@@ -76,9 +85,38 @@ abstract class WPML_Element_Translation {
 	}
 
 	public function get_element_lang_code( $element_id ) {
+		$result = null;
 
-		return $this->maybe_populate_cache ( $element_id )
-			? $this->element_langs[ $element_id ] : null;
+		if ( $this->maybe_populate_cache( $element_id ) ) {
+			$result = $this->element_langs[ $element_id ];
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param int $element_id
+	 * @param string $output
+	 *
+	 * @return array|null|stdClass
+	 */
+	public function get_element_language_details( $element_id, $output = OBJECT ) {
+		$result = null;
+		if ( $element_id && $this->maybe_populate_cache( $element_id ) ) {
+			$result                       = new stdClass();
+			$result->element_id           = $element_id;
+			$result->trid                 = $this->element_trids[ $element_id ];
+			$result->language_code        = $this->element_langs[ $element_id ];
+			$result->source_language_code = $this->element_source_langs[ $element_id ];
+		}
+
+		if ( $output == ARRAY_A ) {
+			return $result ? get_object_vars( $result ) : null;
+		} elseif ( $output == ARRAY_N ) {
+			return $result ? array_values( get_object_vars( $result ) ) : null;
+		} else {
+			return $result;
+		}
 	}
 
 	public function get_source_lang_code( $element_id ) {
@@ -103,65 +141,65 @@ abstract class WPML_Element_Translation {
 
 	public function prefetch_ids( $element_ids ) {
 		$element_ids = (array) $element_ids;
-		$element_ids = array_diff ( $element_ids, array_keys ( $this->element_trids ) );
+		$element_ids = array_diff( $element_ids, array_keys( $this->element_trids ) );
 		if ( (bool) $element_ids === false ) {
 			return;
 		}
 
-		global $wpdb;
+		$trid_snippet = " tridt.element_id IN (" . wpml_prepare_in( $element_ids, '%d' ) . ")";
+		$sql          = $this->build_sql( $trid_snippet );
+		$elements     = $this->wpdb->get_results( $sql, ARRAY_A );
 
-		$trid_snippet = " tridt.element_id IN (". wpml_prepare_in($element_ids, '%d'). ")";
-		$sql          = $this->build_sql($trid_snippet, $wpdb->prefix);
-		$elements     = $wpdb->get_results ( $sql, ARRAY_A );
-		
-		$this->group_and_populate_cache( $elements);
+		$this->group_and_populate_cache( $elements );
 	}
 
-	private function build_sql(&$trid_snippet, &$prefix){
+	/**
+	 * @param string $trid_snippet
+	 *
+	 * @return string
+	 */
+	private function build_sql( $trid_snippet ) {
 
 		return "SELECT t.element_id, t.language_code, t.source_language_code, t.trid
 				    {$this->element_join}
-				    JOIN {$prefix}icl_translations tridt
+				    JOIN {$this->wpdb->prefix}icl_translations tridt
 				      ON tridt.element_type = t.element_type
 				      AND tridt.trid = t.trid
 				    WHERE {$trid_snippet}";
 	}
 
-	private function maybe_populate_cache($element_id, $trid = false){
-		if ( !$element_id && !$trid ) {
+	private function maybe_populate_cache( $element_id, $trid = false ) {
+		if ( ! $element_id && ! $trid ) {
 			return false;
 		}
-
-		if ( !$element_id && isset( $this->trid_groups [ $trid ] ) ) {
+		if ( ! $element_id && isset( $this->trid_groups [ $trid ] ) ) {
 			return true;
 		}
-		
-		if ( !$element_id || !isset( $this->translations[ $element_id ] ) ) {
-			global $wpdb;
-			if ( !$element_id ) {
-				$trid_snippet = $wpdb->prepare ( " tridt.trid = %d ", $trid );
+		if ( ! $element_id || ! isset( $this->translations[ $element_id ] ) ) {
+			if ( ! $element_id ) {
+				$trid_snippet = $this->wpdb->prepare( " tridt.trid = %d ", $trid );
 			} else {
-				// preload 1000 items to reduce the number of SQL queries
-				// This works on the assumption that the ids tend to be grouped near each other.
-				$start        = (intval((intval( $element_id ) / 1000)) * 1000);
-				$end          = (intval((intval( $element_id ) / 1000)) + 1) * 1000;
-				$trid_snippet = $wpdb->prepare ( " tridt.element_id BETWEEN %d AND %d", $start, $end + 1);
+				$trid_snippet = $this->wpdb->prepare( " tridt.trid = (SELECT trid {$this->element_join} WHERE element_id = %d LIMIT 1)",
+				                                      $element_id );
 			}
-			$sql = $this->build_sql($trid_snippet, $wpdb->prefix);
-
-			$elements = $wpdb->get_results ( $sql, ARRAY_A );
-			
-			$this->group_and_populate_cache($elements);
+			$sql      = $this->build_sql( $trid_snippet );
+			$elements = $this->wpdb->get_results( $sql, ARRAY_A );
+			$this->populate_cache( $elements );
+			if ( $element_id && ! isset( $this->translations[ $element_id ] ) ) {
+				$this->translations[ $element_id ] = array();
+			}
 		}
 
-		return isset( $this->translations[ $element_id ] );
+		return ! empty( $this->translations[ $element_id ] );
 	}
 
 	private function group_and_populate_cache( $elements ) {
 		$trids = array();
 		foreach($elements as $element){
 			$trid = $element['trid'];
-			$trids[$trid] = isset($trids[$trid]) ? $trids[$trid] : array();
+			if ( ! isset( $trids[$trid] ) ) {
+				$trids[$trid] = array();
+			}
 			$trids[$trid][] = $element;
 		}
 		foreach($trids as $trid_group){
@@ -195,23 +233,5 @@ abstract class WPML_Element_Translation {
 		}
 
 		return $res;
-	}
-
-	/**
-	 * @param WP_Post $post
-	 *
-	 * @return string[] all language codes the post can be translated into
-	 */
-	public function get_allowed_target_langs( $post ) {
-		global $sitepress;
-
-		$active_languages = $sitepress->get_active_languages ();
-		$can_translate    = array_keys ( $active_languages );
-		$can_translate    = array_diff (
-			$can_translate,
-			array( $this->get_element_lang_code ( $post->ID ) )
-		);
-
-		return apply_filters ( 'wpml_allowed_target_langs', $can_translate, $post->ID, 'post' );
 	}
 }

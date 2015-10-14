@@ -1,6 +1,7 @@
 <?php
 
-class WPML_Set_Language {
+class WPML_Set_Language extends WPML_Full_Translation_API {
+
 	/**
 	 * @param int           $el_id
 	 * @param string        $el_type
@@ -20,19 +21,9 @@ class WPML_Set_Language {
 		$src_language_code = null,
 		$check_duplicates = true
 	) {
-		global $wpdb;
-
-		icl_cache_clear();
-		// special case for posts and taxonomies
-		// check if a different record exists for the same ID
-		// if it exists don't save the new element and get out
-		if ( $check_duplicates
-			 && $el_id
-			 && $this->check_duplicate( $el_type, $el_id ) === true
-		) {
+		$this->clear_cache();
+		if ( $check_duplicates && $el_id && $this->check_duplicate( $el_type, $el_id ) === true ) {
 			trigger_error( 'Element ID already exists with a different type', E_USER_NOTICE );
-
-			return false;
 		}
 
 		$src_language_code = $src_language_code === $language_code ? null : $src_language_code;
@@ -41,18 +32,18 @@ class WPML_Set_Language {
 			$this->maybe_delete_orphan( $trid, $language_code, $el_id );
 
 			if ( (bool) ( $translation_id = $this->is_language_change( $el_id, $el_type, $trid ) ) === true
-				 && (bool) $this->trid_lang_trans_id( $trid, $language_code ) === false
+			     && (bool) $this->trid_lang_trans_id( $trid, $language_code ) === false
 			) {
-				$wpdb->update(
-					$wpdb->prefix . 'icl_translations',
+				$this->wpdb->update(
+					$this->wpdb->prefix . 'icl_translations',
 					array( 'language_code' => $language_code ),
 					array( 'translation_id' => $translation_id )
 				);
 			} elseif ( (bool) ( $translation_id = $this->is_source_element_change( $el_id, $el_type ) ) === true ) {
 				$this->change_translation_of( $trid, $el_id, $el_type, $language_code, $src_language_code );
 			} elseif ( (bool) ( $translation_id = $this->is_placeholder_update( $trid, $language_code ) ) === true ) {
-				$wpdb->update(
-					$wpdb->prefix . 'icl_translations',
+				$this->wpdb->update(
+					$this->wpdb->prefix . 'icl_translations',
 					array( 'element_id' => $el_id ),
 					array( 'translation_id' => $translation_id )
 				);
@@ -64,7 +55,7 @@ class WPML_Set_Language {
 			$translation_id = $this->insert_new_row( $el_id, false, $el_type, $language_code, $src_language_code );
 		}
 
-		icl_cache_clear();
+		$this->clear_cache();
 		if ( $translation_id && substr( $el_type, 0, 4 ) === 'tax_' ) {
 			$taxonomy = substr( $el_type, 4 );
 			do_action( 'created_term_translation', $taxonomy, $el_id, $language_code );
@@ -83,7 +74,7 @@ class WPML_Set_Language {
 		$rows_fixed = $this->fix_missing_original();
 		$rows_fixed += $this->fix_wrong_source_language();
 		$rows_fixed += $this->fix_broken_type_assignments();
-		icl_cache_clear();
+		$this->clear_cache();
 		wp_cache_init();
 
 		return $rows_fixed;
@@ -98,15 +89,14 @@ class WPML_Set_Language {
 	 * @return null|int
 	 */
 	private function trid_lang_trans_id( $trid, $lang ) {
-		global $wpdb;
 
-		return $wpdb->get_var( $wpdb->prepare( "SELECT translation_id
-												FROM {$wpdb->prefix}icl_translations
-												WHERE trid = %d
-													AND language_code = %s
-												LIMIT 1",
-											   $trid,
-											   $lang ) );
+		return $this->wpdb->get_var( $this->wpdb->prepare( "SELECT translation_id
+															FROM {$this->wpdb->prefix}icl_translations
+															WHERE trid = %d
+																AND language_code = %s
+															LIMIT 1",
+		                                                   $trid,
+		                                                   $lang ) );
 	}
 
 	/**
@@ -119,14 +109,11 @@ class WPML_Set_Language {
 	 * @param string $src_language_code
 	 */
 	private function change_translation_of( $trid, $el_id, $el_type, $language_code, $src_language_code ) {
-		global $sitepress, $wpdb;
-
-		//case of changing the "translation of"
 		$src_language_code = empty( $src_language_code )
-			? $sitepress->get_source_language_by_trid( $trid ) : $src_language_code;
+			? $this->sitepress->get_source_language_by_trid( $trid ) : $src_language_code;
 		if ( $src_language_code !== $language_code ) {
-			$wpdb->update(
-				$wpdb->prefix . 'icl_translations',
+			$this->wpdb->update(
+				$this->wpdb->prefix . 'icl_translations',
 				array(
 					'trid'                 => $trid,
 					'language_code'        => $language_code,
@@ -142,11 +129,9 @@ class WPML_Set_Language {
 	 * @param int    $el_id
 	 */
 	private function delete_existing_row( $el_type, $el_id ) {
-		global $wpdb;
-
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->prefix}icl_translations
+		$this->wpdb->query(
+			$this->wpdb->prepare(
+				"DELETE FROM {$this->wpdb->prefix}icl_translations
 					 WHERE element_type = %s
 				      AND element_id = %d",
 				$el_type,
@@ -165,41 +150,38 @@ class WPML_Set_Language {
 	 * @return int Translation ID of the new row
 	 */
 	private function insert_new_row( $el_id, $trid, $el_type, $language_code, $src_language_code ) {
-		global $sitepress, $wpdb;
 		$new = array(
 			'element_type'  => $el_type,
 			'language_code' => $language_code,
 		);
 
 		if ( $trid === false ) {
-			$trid = 1 + $wpdb->get_var( "SELECT MAX(trid) FROM {$wpdb->prefix}icl_translations" );
+			$trid = 1 + $this->wpdb->get_var( "SELECT MAX(trid) FROM {$this->wpdb->prefix}icl_translations" );
 		} else {
-			$src_language_code             = empty( $src_language_code )
-				? $sitepress->get_source_language_by_trid( $trid ) : $src_language_code;
-			$new[ 'source_language_code' ] = $src_language_code;
+			$src_language_code           = empty( $src_language_code )
+				? $this->sitepress->get_source_language_by_trid( $trid ) : $src_language_code;
+			$new['source_language_code'] = $src_language_code;
 		}
 
-		$new[ 'trid' ] = $trid;
+		$new['trid'] = $trid;
 		if ( $el_id ) {
-			$new[ 'element_id' ] = $el_id;
+			$new['element_id'] = $el_id;
 		}
-		$wpdb->insert( $wpdb->prefix . 'icl_translations', $new );
-		$translation_id = $wpdb->insert_id;
+		$this->wpdb->insert( $this->wpdb->prefix . 'icl_translations', $new );
+		$translation_id = $this->wpdb->insert_id;
 
 		return $translation_id;
 	}
 
 	private function is_language_change( $el_id, $el_type, $trid ) {
-		global $wpdb;
-
 		$translation_id = null;
 		if ( ! is_null( $el_id ) ) {
-			$translation_id = $wpdb->get_var(
-				$wpdb->prepare(
+			$translation_id = $this->wpdb->get_var(
+				$this->wpdb->prepare(
 					"SELECT translation_id
-					 FROM {$wpdb->prefix}icl_translations
-					 WHERE element_type= %s
-					  AND element_id= %d
+					 FROM {$this->wpdb->prefix}icl_translations
+					 WHERE element_type = %s
+					  AND element_id = %d
 					  AND trid = %d",
 					$el_type,
 					$el_id,
@@ -221,31 +203,26 @@ class WPML_Set_Language {
 	 * @return null|string translation id
 	 */
 	private function is_placeholder_update( $trid, $language_code ) {
-		global $wpdb;
 
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT translation_id
-					 FROM {$wpdb->prefix}icl_translations
-					 WHERE trid=%d
-						AND language_code=%s
-						AND element_id IS NULL",
+		return $this->wpdb->get_var(
+			$this->wpdb->prepare( "	SELECT translation_id
+									FROM {$this->wpdb->prefix}icl_translations
+									WHERE trid=%d
+										AND language_code = %s
+										AND element_id IS NULL",
 				$trid,
 				$language_code
 			) );
 	}
 
 	private function is_source_element_change( $el_id, $el_type ) {
-		global $wpdb;
-
 		$translation_id = null;
 		if ( ! is_null( $el_id ) ) {
-			$translation_id = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT translation_id
-	                       FROM {$wpdb->prefix}icl_translations
-	                       WHERE element_type= %s
-	                        AND element_id= %d",
+			$translation_id = $this->wpdb->get_var(
+				$this->wpdb->prepare( "SELECT translation_id
+					                   FROM {$this->wpdb->prefix}icl_translations
+					                   WHERE element_type= %s
+					                    AND element_id= %d",
 					$el_type,
 					$el_id
 				)
@@ -264,16 +241,14 @@ class WPML_Set_Language {
 	 * @param int    $correct_element_id
 	 */
 	private function maybe_delete_orphan( $trid, $language_code, $correct_element_id ) {
-		global $wpdb;
-
-		$translation_id = $wpdb->get_var(
-			$wpdb->prepare(
+		$translation_id = $this->wpdb->get_var(
+			$this->wpdb->prepare(
 				"SELECT translation_id
-					 FROM {$wpdb->prefix}icl_translations
-					 WHERE   trid = %d
-						AND language_code = %s
-						AND element_id <> %d
-						AND source_language_code IS NOT NULL
+				 FROM {$this->wpdb->prefix}icl_translations
+				 WHERE   trid = %d
+					AND language_code = %s
+					AND element_id <> %d
+					AND source_language_code IS NOT NULL
 					",
 				$trid,
 				$language_code,
@@ -282,26 +257,33 @@ class WPML_Set_Language {
 		);
 
 		if ( $translation_id ) {
-			$wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM {$wpdb->prefix}icl_translations WHERE translation_id=%d",
+			$this->wpdb->query(
+				$this->wpdb->prepare(
+					"DELETE FROM {$this->wpdb->prefix}icl_translations WHERE translation_id=%d",
 					$translation_id
 				)
 			);
 		}
 	}
 
+	/**
+	 * Checks if a duplicate element_id already exists with a different than the input type.
+	 * This only applies to posts and taxonomy terms.
+	 *
+	 * @param string $el_type
+	 * @param int    $el_id
+	 *
+	 * @return bool
+	 */
 	private function check_duplicate( $el_type, $el_id ) {
-		global $wpdb;
-
 		$res   = false;
 		$exp   = explode( '_', $el_type );
-		$_type = $exp[ 0 ];
+		$_type = $exp[0];
 		if ( in_array( $_type, array( 'post', 'tax' ) ) ) {
-			$_el_exists = $wpdb->get_var(
-				$wpdb->prepare(
+			$_el_exists = $this->wpdb->get_var(
+				$this->wpdb->prepare(
 					"SELECT translation_id
-                        FROM {$wpdb->prefix}icl_translations
+                        FROM {$this->wpdb->prefix}icl_translations
                         WHERE element_id = %d
                           AND element_type <> %s
                           AND element_type LIKE %s",
@@ -319,44 +301,40 @@ class WPML_Set_Language {
 	}
 
 	private function fix_broken_type_assignments() {
-		global $wpdb;
 
-		return $wpdb->query( "	UPDATE {$wpdb->prefix}icl_translations t
-								JOIN {$wpdb->prefix}icl_translations c
-									ON c.trid = t.trid
-										AND c.language_code != t.language_code
-								SET t.element_type = c.element_type
-								WHERE c.source_language_code IS NULL
-									AND t.source_language_code IS NOT NULL" );
+		return $this->wpdb->query( "UPDATE {$this->wpdb->prefix}icl_translations t
+									JOIN {$this->wpdb->prefix}icl_translations c
+										ON c.trid = t.trid
+											AND c.language_code != t.language_code
+									SET t.element_type = c.element_type
+									WHERE c.source_language_code IS NULL
+										AND t.source_language_code IS NOT NULL" );
 	}
 
 	private function fix_wrong_source_language() {
-		global $wpdb;
 
-		return $wpdb->query( "	UPDATE {$wpdb->prefix}icl_translations
-								SET source_language_code = NULL
-								WHERE source_language_code = ''
-									OR source_language_code = language_code" );
+		return $this->wpdb->query( "UPDATE {$this->wpdb->prefix}icl_translations
+									SET source_language_code = NULL
+									WHERE source_language_code = ''
+										OR source_language_code = language_code" );
 	}
 
 	private function fix_missing_original() {
-		global $wpdb;
-
-		$broken_elements = $wpdb->get_results(
+		$broken_elements = $this->wpdb->get_results(
 			"	SELECT MIN(iclt.element_id) AS element_id, iclt.trid
-				FROM {$wpdb->prefix}icl_translations iclt
-				LEFT JOIN {$wpdb->prefix}icl_translations iclo
+				FROM {$this->wpdb->prefix}icl_translations iclt
+				LEFT JOIN {$this->wpdb->prefix}icl_translations iclo
 					ON iclt.trid = iclo.trid
 					AND iclo.source_language_code IS NULL
 				WHERE iclo.translation_id IS NULL
 				GROUP BY iclt.trid" );
 		$rows_affected   = 0;
 		foreach ( $broken_elements as $element ) {
-			$rows_affected += $wpdb->query(
-				$wpdb->prepare(
-					"	UPDATE {$wpdb->prefix}icl_translations
-						SET source_language_code = NULL
-						WHERE trid = %d AND element_id = %d",
+			$rows_affected += $this->wpdb->query(
+				$this->wpdb->prepare(
+					"UPDATE {$this->wpdb->prefix}icl_translations
+					 SET source_language_code = NULL
+					 WHERE trid = %d AND element_id = %d",
 					$element->trid,
 					$element->element_id
 				)
@@ -364,5 +342,11 @@ class WPML_Set_Language {
 		}
 
 		return $rows_affected;
+	}
+
+	private function clear_cache() {
+		$this->term_translations->reload();
+		$this->post_translations->reload();
+		$this->sitepress->icl_translations_cache->clear();
 	}
 }

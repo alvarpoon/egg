@@ -84,10 +84,12 @@ class WPML_Language_Switcher_Settings {
 	 */
 	private function widget_exists( $prefix, $active_sidebar_widgets ) {
 		$widget_exists = false;
-		foreach ( $active_sidebar_widgets as $index => $active_sidebar_widget ) {
-			if ( strpos ( $active_sidebar_widget, $prefix ) !== false ) {
-				$widget_exists = true;
-				break;
+		if ( $active_sidebar_widgets ) {
+			foreach ( $active_sidebar_widgets as $index => $active_sidebar_widget ) {
+				if ( strpos( $active_sidebar_widget, $prefix ) !== false ) {
+					$widget_exists = true;
+					break;
+				}
 			}
 		}
 

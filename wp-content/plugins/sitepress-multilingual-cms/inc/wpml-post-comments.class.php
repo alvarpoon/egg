@@ -1,7 +1,12 @@
 <?php
 
-class WPML_Post_Comments {
-	public function __construct() {
+class WPML_Post_Comments extends WPML_WPDB_User {
+
+	/**
+	 * @param wpdb $wpdb
+	 */
+	public function __construct( &$wpdb ) {
+		parent::__construct( $wpdb );
 		$this->hooks();
 	}
 
@@ -21,8 +26,6 @@ class WPML_Post_Comments {
 	}
 
 	public function get_orphan_comments( $return_count = false, $limit = 10 ) {
-		global $wpdb;
-
 		if ( $return_count ) {
 			$columns = 'count(c.comment_id)';
 		} else {
@@ -31,25 +34,24 @@ class WPML_Post_Comments {
 
 		$sql = "
 		SELECT {$columns}
-		FROM {$wpdb->prefix}comments c
-		  INNER JOIN {$wpdb->prefix}icl_translations tc
+		FROM {$this->wpdb->prefix}comments c
+		  INNER JOIN {$this->wpdb->prefix}icl_translations tc
 		    ON c.comment_id = tc.element_id
-		  INNER JOIN {$wpdb->posts} p
+		  INNER JOIN {$this->wpdb->posts} p
 		    ON c.comment_post_ID = p.ID
-		  INNER JOIN {$wpdb->prefix}icl_translations tp
+		  INNER JOIN {$this->wpdb->prefix}icl_translations tp
 		    ON p.ID = tp.element_id
 		    AND CONCAT('post_', p.post_type) = tp.element_type
 		WHERE tc.element_type = 'comment'
 		      AND tp.language_code <> tc.language_code
 		LIMIT 0, %d
 		";
-
-		$sql_prepared = $wpdb->prepare( $sql, $limit );
+		$sql_prepared = $this->wpdb->prepare( $sql, $limit );
 		if ( $return_count ) {
-			$results = $wpdb->get_var( $sql_prepared );
+			$results = $this->wpdb->get_var( $sql_prepared );
 		} else {
-			$comments = $wpdb->get_col( $sql_prepared );
-			$num_rows = $wpdb->num_rows;
+			$comments = $this->wpdb->get_col( $sql_prepared );
+			$num_rows = $this->wpdb->num_rows;
 			$results  = array( $comments, $num_rows );
 		}
 
@@ -58,7 +60,6 @@ class WPML_Post_Comments {
 
 	public function delete_orphans_action() {
 		if ( wpml_is_action_authenticated( 'wpml_orphan_comment' ) ) {
-
 			$result   = false;
 			$data     = $_POST[ 'data' ];
 			$how_many = null;
@@ -83,10 +84,7 @@ class WPML_Post_Comments {
 
 	public function troubleshooting_action() {
 		echo PHP_EOL . '<div id="wpml_orphans">';
-
 		echo PHP_EOL . '  <h4>' . __( "Remove comments that don't match the content's language", 'sitepress' ) . '</h4>';
-
-
 		echo PHP_EOL . '  <div id="wpml_orphans_count" style="display:none;">';
 		echo PHP_EOL . '    <p>';
 		echo PHP_EOL . '    ' . sprintf( __( "This will check for comments that have a language different than the content they belong to. If found, we can delete these comments for you. We call these 'orphan comments'.", 'sitepress' ), '<span class="count">0</span>' );
@@ -94,17 +92,14 @@ class WPML_Post_Comments {
 		echo PHP_EOL . '    <p>';
 		echo PHP_EOL . '    <button type="button" class="button-secondary check-orphans">' . __( 'Check for orphan comments', 'sitepress' ) . '</button>';
 		echo PHP_EOL . '    </p>';
-
 		echo PHP_EOL . '    <div class="count-in-progress">';
 		echo PHP_EOL . '      <span class="spinner is-active" style="float:none;"></span>';
 		echo PHP_EOL . '      ' . __( 'Checking...', 'sitepress' );
 		echo PHP_EOL . '    </div>';
-
 		echo PHP_EOL . '    <div class="no_orphans">';
 		echo PHP_EOL . '      <br>';
 		echo PHP_EOL . '      ' . __( 'Good news! Your site has no orphan comments.', 'sitepress' );
 		echo PHP_EOL . '    </div>';
-
 		echo PHP_EOL . '    <div class="orphans-check-results">';
 		echo PHP_EOL . '      <p>';
 		echo PHP_EOL . '      <br>';
@@ -120,27 +115,21 @@ class WPML_Post_Comments {
 		echo PHP_EOL . '        <span class="spinner is-active" style="float:none;"></span>&nbsp;' . __( 'Deleted comments:', 'sitepress' ) . '&nbsp;<span class="deleted">0</span>';
 		echo PHP_EOL . '      </div>';
 		echo PHP_EOL . '    </div>';
-
 		wp_nonce_field('wpml_orphan_comment_nonce','wpml_orphan_comment_nonce');
-
 		echo PHP_EOL . '  </div>';
 		echo PHP_EOL . '</div>';
 	}
 
 	public function delete_orphans( $how_many ) {
 		$results = $this->get_orphan_comments( false, $how_many );
-
 		$comment_ids      = $results[ 0 ];
 		$deleted_comments = 0;
 		if ( $comment_ids ) {
-			global $wpdb;
 			$comment_ids = implode( ',', $comment_ids );
-
 			$post_ids = $this->get_post_ids_from_comments_ids( $comment_ids );
-
-			$deleted_comments += $wpdb->query( "DELETE FROM {$wpdb->comments} WHERE comment_ID IN( {$comment_ids} )" );
-			$wpdb->query( "DELETE FROM {$wpdb->commentmeta} WHERE comment_ID IN( {$comment_ids} )" );
-			$wpdb->query( "DELETE FROM {$wpdb->prefix}icl_translations WHERE element_id IN( {$comment_ids} ) AND element_type = 'comment'" );
+			$deleted_comments += $this->wpdb->query( "DELETE FROM {$this->wpdb->comments} WHERE comment_ID IN( {$comment_ids} )" );
+			$this->wpdb->query( "DELETE FROM {$this->wpdb->commentmeta} WHERE comment_ID IN( {$comment_ids} )" );
+			$this->wpdb->query( "DELETE FROM {$this->wpdb->prefix}icl_translations WHERE element_id IN( {$comment_ids} ) AND element_type = 'comment'" );
 
 			$this->update_comments_count( $post_ids );
 		}
@@ -163,8 +152,6 @@ class WPML_Post_Comments {
 	 * @return mixed
 	 */
 	private function get_post_ids_from_comments_ids( $comment_ids ) {
-		global $wpdb;
-
 		if ( is_numeric( $comment_ids ) ) {
 			$comment_ids = array( $comment_ids );
 		}
@@ -172,8 +159,9 @@ class WPML_Post_Comments {
 			$comment_ids = implode( ',', $comment_ids );
 		}
 
-		return $wpdb->get_col( "SELECT DISTINCT comment_post_ID FROM {$wpdb->comments} WHERE comment_ID IN( {$comment_ids} )" );
+		return $this->wpdb->get_col( "SELECT DISTINCT comment_post_ID FROM {$this->wpdb->comments} WHERE comment_ID IN( {$comment_ids} )" );
 	}
 }
 
-new WPML_Post_Comments();
+global $wpdb;
+new WPML_Post_Comments( $wpdb );

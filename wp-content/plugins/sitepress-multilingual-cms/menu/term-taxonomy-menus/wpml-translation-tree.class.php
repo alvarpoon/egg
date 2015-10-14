@@ -7,7 +7,7 @@
  * @subpackage taxonomy-term-translation
  */
 
-class WPML_Translation_Tree {
+class WPML_Translation_Tree extends WPML_WPDB_And_SP_User {
 
 	private $taxonomy;
 	private $root_trid;
@@ -16,85 +16,128 @@ class WPML_Translation_Tree {
 	private $language_order;
 	private $term_ids;
 
-	//TODO: [WPML 3.2.1] implement the root functionality to improve performance in some situations
+	//TODO: [WPML 3.3] implement the root functionality to improve performance in some situations
 	/**
+	 * @param wpdb         $wpdb
+	 * @param SitePress    $sitepress
 	 * @param string       $element_type
 	 * @param bool         $root
 	 * @param bool | array $terms
 	 */
-	public function __construct ( $element_type, $root = false, $terms = false ) {
-		$this->taxonomy = $element_type;
+	public function __construct( &$wpdb, &$sitepress, $element_type, $root = false, $terms = false ) {
+		parent::__construct( $wpdb, $sitepress );
+		$this->taxonomy  = $element_type;
 		$this->root_trid = $root;
-		$this->tree = false;
+		$this->tree      = false;
 
-		if ( !$terms ) {
-			$terms = $this->get_terms_by_taxonomy ( $element_type );
+		if ( ! $terms ) {
+			$terms = $this->get_terms_by_taxonomy( $element_type );
 		}
 
-		$this->language_order = $this->get_language_order ( $terms );
-		$this->tree = $this->get_tree_from_terms_array ( $terms );
+		$this->language_order = $this->get_language_order( $terms );
+		$this->tree           = $this->get_tree_from_terms_array( $terms );
 	}
 
 	/**
-	 * @param $taxonomy string
-	 *                  Gets all the terms in a taxonomy together with their language information
+	 * @param int    $ttid Taxonomy Term Id of the term in question
+	 * @param string $lang Language of the term. Optional, but using it will improve the performance of this function.
+	 *                     Fetches the correct parent taxonomy_term_id even when it is not correctly assigned in the term_taxonomy wp core database yet.
+	 *
+	 * @return bool|int
+	 */
+	public function get_parent_for_ttid( $ttid, $lang ) {
+		if ( !is_array ( $this->tree ) ) {
+			return false;
+		}
+
+		foreach ( $this->tree as $trid => $element ) {
+			$res = $this->get_parent_from_subtree ( $ttid, $lang, $element );
+			if ( $res ) {
+				return $res;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return array|bool
+	 */
+	public function get_tree(){
+
+		return $this->tree;
+	}
+
+	/**
+	 * Returns all terms in the translation tree, ordered by hierarchy and as well as alphabetically within a level and/or parent term relationship.
+	 *
+	 * @return array
+	 */
+	public function get_alphabetically_ordered_list() {
+		$root_list = $this->tree;
+		$root_list = $this->sort_trids_alphabetically( $root_list );
+		$ordered_list_flattened = array();
+		foreach ( $root_list as $root_trid_group ) {
+			$ordered_list_flattened = $this->get_children_recursively( $root_trid_group, $ordered_list_flattened );
+		}
+
+		return $ordered_list_flattened;
+	}
+
+	/**
+	 * Gets all the terms in a taxonomy together with their language information.
+	 *
+	 * @param string $taxonomy
 	 *
 	 * @return array|bool
 	 */
-	private function get_terms_by_taxonomy ( $taxonomy ) {
-		global $wpdb;
-
-		/* Get all the term objects */
-		$terms_in_taxonomy = $wpdb->get_results (
-            $wpdb->prepare(
-			"SELECT icl_translations.element_id AS term_taxonomy_id,
+	private function get_terms_by_taxonomy( $taxonomy ) {
+		$terms_in_taxonomy = $this->wpdb->get_results(
+			$this->wpdb->prepare(
+				"SELECT icl_translations.element_id AS term_taxonomy_id,
 					icl_translations.trid AS trid,
 					icl_translations.language_code AS language_code,
 					wp_tt.parent,
 					wp_tt.term_id
-			FROM {$wpdb->term_taxonomy} as wp_tt
-			JOIN {$wpdb->prefix}icl_translations AS icl_translations
+			FROM {$this->wpdb->term_taxonomy} as wp_tt
+			JOIN {$this->wpdb->prefix}icl_translations AS icl_translations
 			ON concat('tax_',wp_tt.taxonomy) = icl_translations.element_type
 				AND wp_tt.term_taxonomy_id = icl_translations.element_id
-			WHERE wp_tt.taxonomy = %s", $taxonomy) );
+			WHERE wp_tt.taxonomy = %s",
+				$taxonomy ) );
 
 		return $terms_in_taxonomy;
 	}
 
 	/**
-	 * @param $terms array
+	 * @param array $terms
 	 *
 	 * Generates a tree representation of an array of terms objects
 	 *
 	 * @return array|bool
 	 */
-	private function get_tree_from_terms_array ( $terms ) {
-
-		$trids = $this->generate_trid_groups ( $terms );
-
-		$trid_tree = $this->parse_tree ( $trids, false, 0 );
+	private function get_tree_from_terms_array( $terms ) {
+		$trids     = $this->generate_trid_groups( $terms );
+		$trid_tree = $this->parse_tree( $trids, false, 0 );
 
 		return $trid_tree;
 	}
 
 	/**
-	 * @param $terms array
-	 *
 	 * Groups an array of terms objects by their trid and language_code
+	 *
+	 * @param array $terms
 	 *
 	 * @return array
 	 */
 	private function generate_trid_groups ( $terms ) {
-
 		$trids = array();
-
 		foreach ( $terms as $term ) {
 			$trids [ $term->trid ] [ $term->language_code ] = array(
 				'ttid'    => $term->term_taxonomy_id,
 				'parent'  => $term->parent,
 				'term_id' => $term->term_id,
 			);
-
 			if ( isset( $term->name ) ) {
 				$trids [ $term->trid ] [ $term->language_code ][ 'name' ] = $term->name;
 			}
@@ -106,21 +149,19 @@ class WPML_Translation_Tree {
 	}
 
 	/**
-	 * @param $trids           array
-	 * @param $root_trid_group array| false
-	 * @param $level           int current depth in the tree
-	 *                         Recursively turns an array of unordered trid objects into a tree.
+	 * @param            array $trids
+	 * @param array|bool|false $root_trid_group
+	 * @param int              $level current depth in the tree
+	 *                                Recursively turns an array of unordered trid objects into a tree.
 	 *
 	 * @return array|bool
 	 */
-	private function parse_tree ( $trids, $root_trid_group, $level ) {
-		/* Turn them into  an array of trees */
+	private function parse_tree( $trids, $root_trid_group, $level ) {
 		$return = array();
 
 		foreach ( $trids as $trid => $trid_group ) {
 			if ( $this->is_root ( $trid_group, $root_trid_group ) ) {
 				unset( $trids[ $trid ] );
-
 				if ( !isset( $this->trid_levels[ $trid ] ) ) {
 					$this->trid_levels[ $trid ] = 0;
 				}
@@ -145,13 +186,11 @@ class WPML_Translation_Tree {
 	 * @return bool
      */
     private function is_root( $children, $parent ) {
-
         $root  = !(bool)$parent;
         foreach ( $this->language_order as $c_lang ) {
             if(!isset($children[ $c_lang ])){
                 continue;
             }
-
             $child_in_lang = $children[ $c_lang ];
             if ( $parent === false ) {
                 $root =!( $child_in_lang[ 'parent' ] != 0 || in_array( $child_in_lang[ 'parent' ], $this->term_ids ) );
@@ -169,16 +208,9 @@ class WPML_Translation_Tree {
         return $root;
     }
 
-	public function get_tree(){
-		return $this->tree;
-	}
-
 	private function sort_trids_alphabetically( $trid_groups ) {
-
 		$terms_in_trids = array();
-
 		$ordered_trids = array();
-
 		if ( ! is_array( $trid_groups ) ) {
 			return $ordered_trids;
 		}
@@ -196,26 +228,20 @@ class WPML_Translation_Tree {
 
 		$sorted = array();
 		foreach ( $this->language_order as $lang ) {
-
 			if ( isset( $terms_in_trids[ $lang ] ) ) {
 				$terms_in_lang_and_trids = $terms_in_trids[ $lang ];
-
-				$term_names           = array();
-				$term_names_numerical = array();
+				$term_names              = array();
+				$term_names_numerical    = array();
 				foreach ( $terms_in_lang_and_trids as $trid => $terms_in_lang_and_trid ) {
-
 					if ( in_array( $trid, $sorted ) ) {
 						continue;
 					}
-
 					$term_in_lang_and_trid     = array_pop( $terms_in_lang_and_trid );
 					$term_name                 = $term_in_lang_and_trid[ 'name' ];
 					$term_names [ $term_name ] = $trid;
 					$term_names_numerical [ ]  = $term_name;
 				}
-
 				natsort( $term_names_numerical );
-
 				foreach ( $term_names_numerical as $name ) {
 					$ordered_trids [ ] = $trid_groups[ $term_names[ $name ] ];
 					$sorted[ ]         = $term_names[ $name ];
@@ -224,24 +250,6 @@ class WPML_Translation_Tree {
 		}
 
 		return $ordered_trids;
-	}
-
-	/**
-	 * Returns all terms in the translation tree, ordered by hierarchy and as well as alphabetically within a level and/or parent term relationship.
-	 *
-	 * @return array
-	 */
-	public function get_alphabetically_ordered_list() {
-		$root_list = $this->tree;
-
-		$root_list = $this->sort_trids_alphabetically( $root_list );
-
-		$ordered_list_flattened = array();
-		foreach ( $root_list as $root_trid_group ) {
-			$ordered_list_flattened = $this->get_children_recursively( $root_trid_group, $ordered_list_flattened );
-		}
-
-		return $ordered_list_flattened;
 	}
 
 	/**
@@ -254,9 +262,7 @@ class WPML_Translation_Tree {
 	 * @return array
 	 */
 	private function get_children_recursively ( $trid_group, $existing_list = array() ) {
-
 		$children = $trid_group[ 'children' ];
-
 		unset( $trid_group[ 'children' ] );
 		foreach($existing_list as $existing_item){
 			if($existing_item['trid'] == $trid_group['trid']){
@@ -264,11 +270,8 @@ class WPML_Translation_Tree {
 			}
 		}
 		$existing_list [ ] = $this->add_level_information_to_terms ( $trid_group );
-
 		if ( is_array ( $children ) ) {
-
 			$children = $this->sort_trids_alphabetically ( $children );
-
 			foreach ( $children as $child ) {
 				$existing_list = $this->get_children_recursively ( $child, $existing_list );
 			}
@@ -278,15 +281,14 @@ class WPML_Translation_Tree {
 	}
 
 	/**
-	 * @param $tridgroup array
-	 *
 	 * Adds the hierarchical depth as a variable to all terms.
 	 * 0 means, that the term has no parent.
+	 *
+	 * @param array $tridgroup
 	 *
 	 * @return array
 	 */
 	private function add_level_information_to_terms ( $tridgroup ) {
-
 		foreach ( $tridgroup[ 'elements' ] as $lang => &$term ) {
 			$level = 0;
 			$term_id = $term[ 'term_id' ];
@@ -300,19 +302,16 @@ class WPML_Translation_Tree {
 	}
 
 	/**
-	 * @param $trid | int
-	 * @param $node | array
+	 * @param int              $trid
+	 * @param array|bool|false $node
 	 *
 	 * @return bool|array
 	 */
-	private function trid_to_tridgroup ( $trid, $node = false ) {
-
+	private function trid_to_tridgroup( $trid, $node = false ) {
 		if ( !$node ) {
 			$node = $this->tree;
 		}
-
 		$children = isset( $node[ 'children' ] ) ? $node[ 'children' ] : $node;
-
 		foreach ( (array)$children as $key => $tridgroup ) {
 			if ( $key == $trid ) {
 				return $tridgroup;
@@ -328,22 +327,19 @@ class WPML_Translation_Tree {
 	}
 
 	/**
-	 * @param $terms array
-	 *
 	 * Counts the number of terms per language and returns an array of language codes,
 	 * that is ordered by the number of terms in every language.
 	 *
+	 * @param array $terms
+	 *
 	 * @return array
 	 */
-	private function get_language_order ( $terms ) {
-		global $sitepress;
-
-		$langs = array();
-
-		$default_lang = $sitepress->get_default_language();
+	private function get_language_order( $terms ) {
+		$langs        = array();
+		$default_lang = $this->sitepress->get_default_language();
 		foreach ( $terms as $term ) {
 			$term_lang = $term->language_code;
-			if($term_lang == $default_lang){
+			if ( $term_lang === $default_lang ) {
 				continue;
 			}
 			if ( isset( $langs[ $term_lang ] ) ) {
@@ -352,48 +348,22 @@ class WPML_Translation_Tree {
 				$langs[ $term_lang ] = 1;
 			}
 		}
-
-		natsort ( $langs );
-
-		$return = array_keys($langs);
+		natsort( $langs );
+		$return    = array_keys( $langs );
 		$return [] = $default_lang;
+		$return    = array_reverse( $return );
 
-		$return = array_reverse( $return );
 		return $return;
 	}
 
 	/**
-	 * @param $ttid int Taxonomy Term Id of the term in question
-	 * @param $lang string Language of the term. Optional, but using it will improve the performance of this function.
-	 *              Fetches the correct parent taxonomy_term_id even when it is not correctly assigned in the term_taxonomy wp core database yet.
+	 * @param int    $ttid
+	 * @param string $lang
+	 * @param array  $tree
 	 *
-	 * @return bool|int
+	 * @return int|bool|false
 	 */
-	public function get_parent_for_ttid ( $ttid, $lang ) {
-
-		if ( !is_array ( $this->tree ) ) {
-			return false;
-		}
-
-		foreach ( $this->tree as $trid => $element ) {
-			$res = $this->get_parent_from_subtree ( $ttid, $lang, $element );
-			if ( $res ) {
-				return $res;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param $ttid
-	 * @param $lang
-	 * @param $tree
-	 * Helper function for get_parent_for_ttid.
-	 *
-	 * @return bool
-	 */
-	private function get_parent_from_subtree ( $ttid, $lang, $tree ) {
+	private function get_parent_from_subtree( $ttid, $lang, $tree ) {
 		if ( isset( $tree[ 'children' ] ) && $tree[ 'children' ] ) {
 			$children = $tree[ 'children' ];
 		} else {

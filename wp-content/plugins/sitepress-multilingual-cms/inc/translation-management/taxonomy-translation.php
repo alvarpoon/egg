@@ -179,13 +179,11 @@ require ICL_PLUGIN_PATH . '/menu/term-taxonomy-menus/wpml-translation-tree.class
 		 * @return array
 		 */
 		private static function order_terms_list( $terms, $taxonomy ) {
+			global $wpdb, $sitepress;
 
-			$terms_tree = new WPML_Translation_Tree( $taxonomy, false, $terms );
-
+			$terms_tree    = new WPML_Translation_Tree( $wpdb, $sitepress, $taxonomy, false, $terms );
 			$ordered_terms = $terms_tree->get_alphabetically_ordered_list();
-
 			foreach ( $ordered_terms as $key => $trid_group ) {
-
 				$ordered_terms[ $key ] = self::set_language_information( $trid_group, $terms );
 			}
 
