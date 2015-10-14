@@ -34,6 +34,14 @@ switch ($_SERVER['SERVER_NAME']) {
     define( 'DB_USER',     'nowwhat' );
     define( 'DB_PASSWORD', '20273214' );
     define( 'DB_HOST',     'localhost' );
+
+  case "www.eggoptical.com":
+    define( 'DB_NAME',     'nowwhat_egg_v2' );
+    define( 'WP_SITEURL',  'http://www.eggoptical.com/' );
+    define( 'WP_HOME', 'http://www.eggoptical.com/' );
+    define( 'DB_USER',     'eggoptical_webdb' );
+    define( 'DB_PASSWORD', 'xP2JsB9jYN' );
+    define( 'DB_HOST',     'localhost' ); 
 }
 
 /** Database Charset to use in creating database tables. */
@@ -81,7 +89,7 @@ define('WP_DEBUG', false);
 
 define('WP_MEMORY_LIMIT', '96M');
 
-define('WP_ENV', 'development');
+define('WP_ENV', 'production');
 
 /* That's all, stop editing! Happy blogging. */
 
