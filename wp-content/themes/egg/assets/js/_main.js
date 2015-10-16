@@ -88,7 +88,7 @@ var Roots = {
   
   
   // News page
-  news: {
+  page_template_template_news_php: {
     init: function() {
       
 	$(document).ready(function(){
