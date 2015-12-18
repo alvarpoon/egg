@@ -89,7 +89,7 @@ define('WP_DEBUG', false);
 
 //define('WP_MEMORY_LIMIT', '96M');
 
-define('WP_ENV', 'production');
+define('WP_ENV', 'development');
 
 /* That's all, stop editing! Happy blogging. */
 

@@ -95,18 +95,18 @@ function store_register() {
   register_post_type( 'store' , $args );
 }
 
-// career
+// Shop opening
 add_action('init', 'career_register');
 function career_register() {
   $labels = array(
-      'name' => _x('Career', 'post type general name'),
-      'singular_name' => _x('Career', 'post type singular name'),
-      'add_new' => _x('Add Career', 'rep'),
-      'add_new_item' => __('Add New Career'),
-      'edit_item' => __('Edit Career'),
-      'new_item' => __('New Career'),
-      'view_item' => __('View Career'),
-      'search_items' => __('Search Career'),
+      'name' => _x('Shop Opening', 'post type general name'),
+      'singular_name' => _x('Shop Opening', 'post type singular name'),
+      'add_new' => _x('Add Shop Opening', 'rep'),
+      'add_new_item' => __('Add New Shop Opening'),
+      'edit_item' => __('Edit Shop Opening'),
+      'new_item' => __('New Shop Opening'),
+      'view_item' => __('View Shop Opening'),
+      'search_items' => __('Search Shop Opening'),
       'not_found' =>  __('Nothing found'),
       'not_found_in_trash' => __('Nothing found in Trash'),
       'parent_item_colon' => ''
@@ -124,5 +124,36 @@ function career_register() {
       'supports'      => array( 'title', 'editor'),
   );
   register_post_type( 'career' , $args );
+}
+
+// office opening
+add_action('init', 'career_office_register');
+function career_office_register() {
+  $labels = array(
+      'name' => _x('Office Opening', 'post type general name'),
+      'singular_name' => _x('Office Opening', 'post type singular name'),
+      'add_new' => _x('Add Office Opening', 'rep'),
+      'add_new_item' => __('Add New Office Opening'),
+      'edit_item' => __('Edit Office Opening'),
+      'new_item' => __('New Office Opening'),
+      'view_item' => __('View Office Opening'),
+      'search_items' => __('Search Office Opening'),
+      'not_found' =>  __('Nothing found'),
+      'not_found_in_trash' => __('Nothing found in Trash'),
+      'parent_item_colon' => ''
+  );
+  $args = array(
+      'labels' => $labels,
+      'public' => true,
+      'publicly_queryable' => true,
+      'show_ui' => true,
+      'query_var' => true,
+      'rewrite' => true,
+      'capability_type' => 'post',
+      'hierarchical' => true,
+      'menu_position' => 7,
+      'supports'      => array( 'title', 'editor'),
+  );
+  register_post_type( 'career_office' , $args );
 }
 ?>

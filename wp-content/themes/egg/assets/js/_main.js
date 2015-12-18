@@ -148,7 +148,26 @@ var Roots = {
     }
   },
 
+  careers: {
+    init: function() {
+      // JavaScript to be fired on the about us page
 
+      $(document).ready(function(){
+
+      	$('.expend-btn').click(function(e){
+			e.preventDefault();
+			// hide all span
+			var $thiscontent = $(this).parent().parent().find('.career-details-container');
+
+			$thiscontent.slideToggle(500);
+			
+			$(this).toggleClass('expended');
+
+		});
+      });
+
+    }
+  },
 
   // Product Content page
   single_product: {

@@ -7,6 +7,23 @@
 	text-align:center;
 	h3{color:#999999;text-transform: uppercase;  margin-bottom: 24px; margin-top: 24px;  font-weight: bold;  letter-spacing: 1px;font-size: 18px;}
  	p{color:#664400;font-size: 15px;letter-spacing: 1px;}
+ 	h4{
+ 		font-weight: bold;
+    	text-align: center;
+ 	}
+
+ 	.expend-btn{
+		position: relative;
+		float: none;
+		margin: 0;
+		margin-left: 10px;
+		top: 8px;
+ 	}
+
+ 	.career-section-container{
+ 		margin-bottom: 40px;
+ 	}
+
  	.career-content{
  		margin-bottom: 30px;
   		margin-top: 20px;
@@ -30,10 +47,37 @@
   		}
 
   	}
+
+  	.career-office-list-container{
+  		ul{
+  			list-style-type: none;
+	  		.career-post{
+	  			text-align: left;
+
+	  			h3{
+		  			margin-bottom: 10px;
+		  			text-align: center;
+		  		}
+	  		}
+
+	  		ul{
+	  			list-style-type: disc;
+	  			padding-left: 20px;
+	  			li{
+	  				    margin-bottom: 5px;
+	  			}
+	  		}
+  		}
+  	}
  	.career-box-text{
 		background-color: #979088;
 		padding: 20px;
 		text-align: left;
+		h4{
+			color: #fff;
+			margin-top: 0;
+			font-size: 15px;
+		}
 		ul{
 			padding-left: 20px;
 			li{
@@ -57,6 +101,9 @@
 //===============================================================================
 @media (min-width: @screen-sm-min) {
 	#career-page{
+		h4{
+	    	text-align: left;
+	 	}
 		.career-list-container{
 	  		padding: 20px 40px;
 	  		ul{
@@ -69,6 +116,27 @@
 					float: left;
 					width: 50%;
 					height: 80px;
+		  		}
+	  		}
+	  	}
+
+	  	.career-office-list-container{
+	  		ul{
+	  			list-style-type: none;
+	  			padding-left: 0;
+
+		  		.career-post{
+		  			padding-right: 0;
+					float: none;
+					width: auto;
+					height: auto;
+
+					h3{
+						text-align: left;
+					}
+		  		}
+
+		  		ul{
 		  		}
 	  		}
 	  	}
