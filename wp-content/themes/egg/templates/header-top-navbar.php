@@ -8,7 +8,13 @@
         <span class="icon-bar"></span>
       </button>
       <a href="javascript:;" class="menu-label hidden-xs hidden-sm hidden-md hidden-lg" data-toggle="collapse" data-target=".navbar-collapse">menu</a>
-      <a class="navbar-brand" href="<?php echo home_url(); ?>/"><img src="<?=get_stylesheet_directory_uri()?>/assets/img/logo-top.png"></a>
+    <?
+      $is_eggstar = false;
+      if(is_child_of(2872) || is_child_of(2878) || is_child_of(2880)){
+        $is_eggstar = true;
+      }
+    ?>
+      <a class="navbar-brand" href="<?php echo home_url(); ?>/"><img src="<?=get_stylesheet_directory_uri()?>/assets/img/<?=($is_eggstar?"logo-top-eggstar.jpg":"logo-top.png")?>"></a>
     </div>
 
     <div class="lang-switcher hidden-xs visible-sm visible-md visible-lg">

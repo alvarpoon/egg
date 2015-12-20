@@ -85,7 +85,60 @@ var Roots = {
 	  
     }
   },
-  
+ 
+   // eGG* Home page
+  page_template_template_eggstar_home: {
+    init: function() {
+      // JavaScript to be fired on the home page
+      
+	$(document).ready(function(){
+	  $('#main-banner').slick({
+		infinite: true,
+		autoplay: true,
+		autoplaySpeed: 2000
+	  });
+	  
+	  $('.home-news .section-contents').slick({
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 3,
+		  slidesToScroll: 3,
+		  responsive: [
+			{
+			  breakpoint: 9999,
+			  settings: {
+				slidesToShow: 3,
+				slidesToScroll: 3,
+				infinite: true
+			  }
+			},
+			{
+			  breakpoint: 992,
+			  settings: {
+				slidesToShow: 2,
+				slidesToScroll: 2,
+				infinite: true
+			  }
+			},
+			{
+			  breakpoint: 768,
+			  settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1,
+				infinite: true
+			  }
+			}
+			// You can unslick at a given breakpoint now by adding:
+			// settings: "unslick"
+			// instead of a settings object
+		  ]
+	  });
+
+
+	});
+	  
+    }
+  },
   
   // News page
   page_template_template_news_php: {
@@ -242,7 +295,78 @@ var Roots = {
     }
   },
   
-  
+  // eGG* Product Content page
+  single_eggstar_product: {
+    init: function() {
+      
+	$(document).ready(function(){
+		
+	   $('.product-left-container').slick({
+		  slidesToShow: 1,
+		  slidesToScroll: 1,
+		  arrows: false,
+		  fade: true,
+		  asNavFor: '#product-slider',
+		  responsive: [
+			{
+			  breakpoint: 767,
+			  settings: {
+				arrows: true
+			  }
+			}
+		  ]
+		});
+		$('#product-slider').slick({
+		  slidesToShow: 2,
+		  slidesToScroll: 1,
+		  asNavFor: '.product-left-container',
+		  centerMode: true,
+		  focusOnSelect: true
+		});
+				
+				
+				
+
+	$('#collection-slider').slick({
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 5,
+		  slidesToScroll: 5,
+		  responsive: [
+			{
+			  breakpoint: 1024,
+			  settings: {
+				slidesToShow: 5,
+				slidesToScroll: 5,
+				infinite: true,
+			  }
+			},
+			{
+			  breakpoint: 600,
+			  settings: {
+				slidesToShow: 2,
+				slidesToScroll: 2
+			  }
+			},
+			{
+			  breakpoint: 480,
+			  settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1
+			  }
+			}
+			// You can unslick at a given breakpoint now by adding:
+			// settings: "unslick"
+			// instead of a settings object
+		  ]
+	  });
+
+
+
+	  });
+	  
+    }
+  },
   
   
   // Our Stores page
@@ -299,8 +423,59 @@ var Roots = {
     }
   },
   
+  // eGG* Stores page
+ stores: {
+    
+    init: function() {
+      
+	$(document).ready(function(){
+		
+	$('.store-slider').slick({
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 3,
+		  slidesToScroll: 3,
+		  responsive: [
+			{
+			  breakpoint: 9999,
+			  settings: {
+				slidesToShow: 3,
+				slidesToScroll: 3,
+				infinite: true
+			  }
+			},
+			{
+			  breakpoint: 992,
+			  settings: {
+				slidesToShow: 2,
+				slidesToScroll: 2,
+				infinite: true
+			  }
+			},
+			{
+			  breakpoint: 768,
+			  settings: {
+				slidesToShow: 1,
+				slidesToScroll: 1,
+				infinite: true,
+			  }
+			}
+			// You can unslick at a given breakpoint now by adding:
+			// settings: "unslick"
+			// instead of a settings object
+		  ]
+	  });
+	
+	  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	  	//console.log($(e.target).attr('href'));
+	  	$('.store-slider').slick('setPosition');
+	  });
+   
   
-  
+	  });
+	  
+    }
+  },  
   // About us page, note the change from about-us to about_us.
   about_us: {
     init: function() {

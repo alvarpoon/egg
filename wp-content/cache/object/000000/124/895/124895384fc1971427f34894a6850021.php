@@ -1,0 +1,1 @@
+­[vV<?php exit; ?>a:1:{s:7:"content";s:277:"[{"message":"Yoast SEO has been updated to version 2.3.5. <a href=\"http:\/\/local.egg.com\/wp-admin\/admin.php?page=wpseo_dashboard&intro=1\">Click here<\/a> to find out what's new!","options":{"type":"updated","id":"wpseo-dismiss-about","nonce":"88ef5ada26","data_json":[]}}]";}

@@ -18,6 +18,24 @@ function create_product_taxonomies() {
   );
 }
 
+/*add_action( 'init', 'create_eggstar_product_taxonomies', 0 );
+function create_eggstar_product_taxonomies() {
+  register_taxonomy(
+      'eggstar_collection',
+      'eggstar_product',
+      array(
+          'labels' => array(
+              'name' => 'eGG* Collection',
+              'add_new_item' => 'Add eGG* Collection',
+              'new_item_name' => 'New eGG* Collection'
+          ),
+          'show_ui' => true,
+          'show_tagcloud' => false,
+          'hierarchical' => true
+      )
+  );
+}*/
+
 add_action( 'init', 'create_store_taxonomies', 0 );
 function create_store_taxonomies() {
   register_taxonomy(
@@ -28,6 +46,24 @@ function create_store_taxonomies() {
               'name' => 'Store Region',
               'add_new_item' => 'Add Store Region',
               'new_item_name' => 'New Store Region'
+          ),
+          'show_ui' => true,
+          'show_tagcloud' => false,
+          'hierarchical' => true
+      )
+  );
+}
+
+add_action( 'init', 'create_eggstar_store_taxonomies', 0 );
+function create_eggstar_store_taxonomies() {
+  register_taxonomy(
+      'eggstar_region',
+      'eggstar_store',
+      array(
+          'labels' => array(
+              'name' => 'eGG* Store Region',
+              'add_new_item' => 'Add eGG* Store Region',
+              'new_item_name' => 'New eGG* Store Region'
           ),
           'show_ui' => true,
           'show_tagcloud' => false,

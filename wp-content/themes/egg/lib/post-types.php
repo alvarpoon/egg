@@ -27,15 +27,15 @@ function mainpage_banner_register() {
       'rewrite' => true,
       'capability_type' => 'post',
       'hierarchical' => true,
-      'menu_position' => 3,
+      'menu_position' => 4,
       'supports'      => array( 'title', 'thumbnail'),
   );
   register_post_type( 'mainpage_banner' , $args );
 }
 
 // eGG* mainpaage banner
-add_action('init', 'eggstar_mainpage_banner_register');
-function eggstar_mainpage_banner_register() {
+add_action('init', 'mainpage_banner2_register');
+function mainpage_banner2_register() {
   $labels = array(
       'name' => _x('eGG* Mainpage banner', 'post type general name'),
       'singular_name' => _x('eGG* Mainpage banner', 'post type singular name'),
@@ -58,10 +58,10 @@ function eggstar_mainpage_banner_register() {
       'rewrite' => true,
       'capability_type' => 'post',
       'hierarchical' => true,
-      'menu_position' => 3,
+      'menu_position' => 4,
       'supports'      => array( 'title', 'thumbnail'),
   );
-  register_post_type( 'eggstar_mainpage_banner' , $args );
+  register_post_type( 'mainpage_banner2' , $args );
 }
 
 // Product
@@ -155,6 +155,37 @@ function store_register() {
       'supports'      => array( 'title', 'editor', 'thumbnail'),
   );
   register_post_type( 'store' , $args );
+}
+
+// eGG* store
+add_action('init', 'eggstar_store_register');
+function eggstar_store_register() {
+  $labels = array(
+      'name' => _x('eGG* Store', 'post type general name'),
+      'singular_name' => _x('eGG* Store', 'post type singular name'),
+      'add_new' => _x('Add eGG* Store', 'rep'),
+      'add_new_item' => __('Add New eGG* Store'),
+      'edit_item' => __('Edit eGG* Store'),
+      'new_item' => __('New eGG* Store'),
+      'view_item' => __('View eGG* Store'),
+      'search_items' => __('Search eGG* Store'),
+      'not_found' =>  __('Nothing found'),
+      'not_found_in_trash' => __('Nothing found in Trash'),
+      'parent_item_colon' => ''
+  );
+  $args = array(
+      'labels' => $labels,
+      'public' => true,
+      'publicly_queryable' => true,
+      'show_ui' => true,
+      'query_var' => true,
+      'rewrite' => true,
+      'capability_type' => 'post',
+      'hierarchical' => true,
+      'menu_position' => 5,
+      'supports'      => array( 'title', 'editor', 'thumbnail'),
+  );
+  register_post_type( 'eggstar_store' , $args );
 }
 
 // Shop opening

@@ -7235,10 +7235,12 @@ figure.alignnone {
     padding: 20px 30px 34px;
   }
 }
-.single-product .main {
+.single-product .main,
+.single-eggstar_product .main {
   margin-top: 0px;
 }
-.single-product .navbar-default .nav-container li.menu-collections a {
+.single-product .navbar-default .nav-container li.menu-collections a,
+.single-eggstar_product .navbar-default .nav-container li.menu-collections a {
   color: #f8b03a!important;
   background: none;
 }
@@ -7419,7 +7421,8 @@ figure.alignnone {
   background-position: -5px -39px;
 }
 @media (min-width: 768px) {
-  .single-product .main {
+  .single-product .main,
+  .single-eggstar_product .main {
     margin-top: 150px;
   }
   #product-content-page .product-container .model-name {
@@ -8239,7 +8242,7 @@ figure.alignnone {
     display: inline-block;
   }
   .navbar-default .nav-container li a {
-    padding: 10px 14px;
+    padding: 10px 10px;
   }
   .navbar-default .nav-container .main-menu {
     padding-top: 0px;
@@ -8277,6 +8280,42 @@ figure.alignnone {
   .lang-switcher {
     right: 15px;
   }
+}
+.eggstar .navbar-default {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+.eggstar .navbar-default .nav-container li:hover a,
+.eggstar .navbar-default .nav-container li.active a {
+  color: #99E5FF!important;
+}
+.eggstar .navbar-default .nav-container .mobile-language-selector-wrapper a:active,
+.eggstar .navbar-default .nav-container .mobile-language-selector-wrapper a:hover {
+  color: #99E5FF!important;
+}
+.eggstar .home-new-collection .sectionIntro .section-contents,
+.eggstar .home-new-collection .section-title h2,
+.eggstar .home-find-store .section-title .find-store-btn h2,
+.eggstar .home-find-store .section-title .find-store-btn {
+  border: 1px solid #333;
+}
+.eggstar .home-new-collection .sectionIntro .section-contents .view-all-btn a {
+  border-left: 1px solid #333;
+  border-bottom: 1px solid #333;
+  border-right: 1px solid #333;
+}
+.eggstar .home-new-collection .section-title h2#product-highlight-heading {
+  color: #5F5F5D;
+}
+.page-template-template-eggstar-stores .navbar-default {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+.page-template-template-eggstar-stores .navbar-default .nav-container li:hover a,
+.page-template-template-eggstar-stores .navbar-default .nav-container li.active a {
+  color: #99E5FF!important;
+}
+.page-template-template-eggstar-stores .navbar-default .nav-container .mobile-language-selector-wrapper a:active,
+.page-template-template-eggstar-stores .navbar-default .nav-container .mobile-language-selector-wrapper a:hover {
+  color: #99E5FF!important;
 }
 /* Slider */
 .slick-slider {
