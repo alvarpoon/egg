@@ -19,6 +19,7 @@
 # Ignore everything in the "wp-content" directory, except the "plugins"
 # and "themes" directories.
 wp-content/uploads/
+wp-content/backupwordpress-8d0171916a-backups/
 #wp-content/themes/.DS_Store
 #!wp-content/plugins/
 #!wp-content/themes/
