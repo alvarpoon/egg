@@ -8306,6 +8306,32 @@ figure.alignnone {
 .eggstar .home-new-collection .section-title h2#product-highlight-heading {
   color: #5F5F5D;
 }
+.eggstar .home-banner .container h3 {
+  color: #333;
+  border-bottom: 1px solid #333;
+}
+.eggstar .home-new-collection .sectionIntro .section-contents {
+  border: none;
+  padding-bottom: 50px;
+  padding-top: 80px;
+}
+.eggstar .home-new-collection {
+  background-color: #949494;
+  padding: 0 0px 15px;
+  margin: 0 auto 0;
+}
+.eggstar .home-find-store {
+  background: transparent url(../img/eggstar-bg.jpg);
+  margin: 0 auto 0;
+  padding: 70px 0px 50px;
+}
+.eggstar .home-banner {
+  background: transparent url(../img/eggstar-bg.jpg);
+  padding-bottom: 80px;
+}
+.eggstar .home-banner .container {
+  margin-bottom: 0;
+}
 .page-template-template-eggstar-stores .navbar-default {
   background-color: rgba(0, 0, 0, 0.9);
 }

@@ -22,7 +22,7 @@
 		</div>
 	<? endforeach;?>
 	</div>
-	<div class="container">
+	<div class="container philosophy-container">
 		<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-10 col-lg-8 col-md-push-1 col-lg-push-2 sectionIntro">
 			<div class="section-contents"><?=apply_filters('the_content',$post->post_content);?></div>
@@ -40,24 +40,15 @@
             <div class="section-contents">
             	<?
                     $new_collection = get_field('product_highlight',$post->ID);
-                    //$new_collection_name = get_field('new_collection_name',$post->ID);
-                    /*$args= array(
-						'post_type' => 'product',
-						'tax_query' => array(
-										  array(
-											'taxonomy' => 'collection',
-											'field'    => 'term_id',
-											'terms'    => $new_collection_name
-										  )
-										),
-						'post_status' 		=> 'publish',
-						'orderby'			=> 'menu_order',
-						'order' 			=> 'ASC',
-						'numberposts' 		=> 1,
-						'suppress_filters' => 0
-					);*/
-                    //echo  '<p>'.$new_collection_name.'</p>';
-					//$results = get_posts( $args );
+                    $args= array(
+                        'post_type' => 'eggstar_product',
+                        'post_status'       => 'publish',
+                        'orderby'           => 'menu_order',
+                        'order'             => 'ASC',
+                        'numberposts'       => 1,
+                        'suppress_filters' => 0
+                    );
+                    $results = get_posts( $args );
                     if( $new_collection){
                         foreach( $new_collection as $index => $new_product ){
                             if($index==6){
@@ -76,7 +67,7 @@
                 <?
                             }
                 ?>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 col-md-3">
                                 <a href="<?=get_permalink($new_product->ID)?>"><img class="img-responsive" src="<?=$product_image_url; ?>" /></a>
                             </div>
                 <?
@@ -89,7 +80,7 @@
                     }
                 ?>
 
-                <div class="view-all-btn"><a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/eggstar/collection/"><?_e('All in Collection');?> ></a></div>
+                <div class="view-all-btn"><a href="<?=get_permalink($results[0]->ID);?>"><?_e('All in Collection');?> ></a></div>
             </div>
         </div>
     </div>
