@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EGG website\n"
-"POT-Creation-Date: 2015-12-20 18:44+0800\n"
-"PO-Revision-Date: 2015-12-20 18:48+0800\n"
+"POT-Creation-Date: 2015-12-22 22:19+0800\n"
+"PO-Revision-Date: 2015-12-22 22:19+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -28,11 +28,15 @@ msgid "Comments are closed."
 msgstr ""
 
 #: ../themes/egg/templates/content-careers.php:14
-msgid "Office Openings"
+msgid "Office Recruitment"
 msgstr "辦公室空缺"
 
-#: ../themes/egg/templates/content-careers.php:50
-msgid "Shop Openings"
+#: ../themes/egg/templates/content-careers.php:35
+msgid "Expand for more details"
+msgstr "展開更多細節"
+
+#: ../themes/egg/templates/content-careers.php:51
+msgid "Shop Recruitment"
 msgstr "商店空缺"
 
 #: ../themes/egg/templates/content-collection.php:36
@@ -43,11 +47,11 @@ msgstr "瀏覽系列"
 msgid "Product Highlight"
 msgstr "產品焦點"
 
-#: ../themes/egg/templates/content-eggstar-home.php:92
+#: ../themes/egg/templates/content-eggstar-home.php:83
 msgid "All in Collection"
 msgstr "eGG*系列其他款式"
 
-#: ../themes/egg/templates/content-eggstar-home.php:105
+#: ../themes/egg/templates/content-eggstar-home.php:96
 msgid "Find a EGG* Store"
 msgstr "eGG*分店網絡"
 
@@ -59,6 +63,13 @@ msgstr "返回eGG*系列"
 #: ../themes/egg/templates/content-product.php:120
 msgid "Others in this collection"
 msgstr "同系列其他款式"
+
+#: ../themes/egg/templates/content-eggstar-stores.php:106
+#: ../themes/egg/templates/content-eggstar-stores.php:111
+#: ../themes/egg/templates/content-stores.php:106
+#: ../themes/egg/templates/content-stores.php:111
+msgid "map"
+msgstr "地圖"
 
 #: ../themes/egg/templates/content-home.php:43
 msgid "News"
@@ -96,11 +107,6 @@ msgstr "返回所有眼鏡系列"
 msgid "Pages:"
 msgstr ""
 
-#: ../themes/egg/templates/content-stores.php:106
-#: ../themes/egg/templates/content-stores.php:111
-msgid "map"
-msgstr "地圖"
-
 #: ../themes/egg/templates/entry-meta.php:2
 msgid "By"
 msgstr ""
@@ -113,6 +119,12 @@ msgstr "搜尋："
 #: ../themes/egg/templates/searchform.php:6
 msgid "Search"
 msgstr "搜尋"
+
+#~ msgid "Office Openings"
+#~ msgstr "辦公室空缺"
+
+#~ msgid "Shop Openings"
+#~ msgstr "商店空缺"
 
 #~ msgid "All in"
 #~ msgstr "全部"

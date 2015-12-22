@@ -11,7 +11,7 @@
 	</div>
 	<div class="row career-section-container">
 		<div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1 ">
-			<h4><?_e('Office Openings')?></h4>
+			<h4><?_e('Office Recruitment')?></h4>
 			<div class="career-list-container career-office-list-container clearfix">
 				
 			<ul>
@@ -31,7 +31,8 @@
 	
 				
 						<li class="career-post">
-							<h3><? echo $post_title; ?><span class="expend-btn"></span></h3>
+							<h3><? echo $post_title; ?></h3>
+							<a class="expend-btn" href="#"><?_e('Expand for more details')?><span></span></a>
 							<div class="career-details-container" style="display:none"><?=apply_filters('the_content', $result->post_content); ?></div>
 						</li>
 					
@@ -47,7 +48,7 @@
 	</div>
 	<div class="row career-section-container">
 		<div class="col-md-push-1 col-md-10 col-lg-10 col-lg-push-1 ">
-			<h4><?_e('Shop Openings')?></h4>
+			<h4><?_e('Shop Recruitment')?></h4>
 			<div class="career-list-container clearfix">
 				
 			<ul>

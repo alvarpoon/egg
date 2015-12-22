@@ -18,7 +18,7 @@ function create_product_taxonomies() {
   );
 }
 
-/*add_action( 'init', 'create_eggstar_product_taxonomies', 0 );
+add_action( 'init', 'create_eggstar_product_taxonomies', 0 );
 function create_eggstar_product_taxonomies() {
   register_taxonomy(
       'eggstar_collection',
@@ -34,7 +34,7 @@ function create_eggstar_product_taxonomies() {
           'hierarchical' => true
       )
   );
-}*/
+}
 
 add_action( 'init', 'create_store_taxonomies', 0 );
 function create_store_taxonomies() {

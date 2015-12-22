@@ -210,11 +210,13 @@ var Roots = {
       	$('.expend-btn').click(function(e){
 			e.preventDefault();
 			// hide all span
-			var $thiscontent = $(this).parent().parent().find('.career-details-container');
+			var $thiscontent = $(this).parent().find('.career-details-container');
 
 			$thiscontent.slideToggle(500);
 			
 			$(this).toggleClass('expended');
+
+			$(this).slideUp();
 
 		});
       });

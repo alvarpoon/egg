@@ -65,10 +65,12 @@
 		<nav class="collapse navbar-collapse main-menu" role="navigation">
 			<?php
 				//Main menu
-				if (has_nav_menu('primary_navigation')) :
+				if (has_nav_menu('primary_navigation') && !$is_eggstar){
 				  wp_nav_menu(array('theme_location' => 'primary_navigation', 'menu_class' => 'nav navbar-nav', 'depth' => -1));
-				endif;
-
+				}
+        else if (has_nav_menu('eggstar_navigation') && $is_eggstar){
+          wp_nav_menu(array('theme_location' => 'eggstar_navigation', 'menu_class' => 'nav navbar-nav', 'depth' => -1));
+        }
 			?>
 		</nav>
 		

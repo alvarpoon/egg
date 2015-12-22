@@ -15,7 +15,8 @@ function roots_setup() {
   // http://codex.wordpress.org/Function_Reference/register_nav_menus
   register_nav_menus(array(
     'primary_navigation' => __('Primary Navigation', 'roots'),
-    'footer_navigation' => __('Footer Navigation', 'roots')
+    'footer_navigation' => __('Footer Navigation', 'roots'),
+    'eggstar_navigation' => __('eGG* Navigation', 'roots')
   ));
 
   // Add post thumbnails
