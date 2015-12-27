@@ -32,8 +32,8 @@
 				
 						<li class="career-post">
 							<h3><? echo $post_title; ?></h3>
-							<a class="expend-btn" href="#"><?_e('Expand for more details')?><span></span></a>
 							<div class="career-details-container" style="display:none"><?=apply_filters('the_content', $result->post_content); ?></div>
+							<a class="expend-btn" href="#"><em><?_e('Expand for more details')?></em><span></span></a>
 						</li>
 					
 			

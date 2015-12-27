@@ -7183,7 +7183,9 @@ var Roots = {
 			
 			$(this).toggleClass('expended');
 
-			$(this).slideUp();
+			//$(this).slideUp();
+
+			$(this).find('em').toggle();
 
 		});
       });

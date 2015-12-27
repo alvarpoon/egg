@@ -7727,10 +7727,12 @@ figure.alignnone {
 		top: 8px;*/
   position: relative;
   float: none;
-  display: block;
+  /*display: block;*/
+  display: inline-block;
   font-size: 14px;
   color: #666666;
-  width: 185px;
+  /*width: 185px;*/
+  width: auto;
   background-position: right center;
   background-repeat: no-repeat;
   -webkit-background-size: initial initial;
@@ -7740,9 +7742,16 @@ figure.alignnone {
   font-weight: bold;
   text-decoration: none;
   background-image: url(../img/icon-expend-small.png);
+  padding-right: 30px;
+}
+#career-page .expend-btn em {
+  font-style: normal;
 }
 #career-page .expend-btn:hover {
   text-decoration: none;
+}
+#career-page .expend-btn.expended {
+  background-image: url(../img/icon-expended-small.png);
 }
 #career-page .career-section-container {
   margin-bottom: 40px;
@@ -7821,10 +7830,13 @@ figure.alignnone {
 #career-page .career-text-after-box a {
   color: #664400;
 }
-.zh-hant #career-page .expend-btn,
-.zh-hans #career-page .expend-btn {
-  width: 120px;
-}
+/*.zh-hant,.zh-hans{
+	#career-page{
+		.expend-btn {
+			    width: 120px;
+		}
+	}
+}*/
 @media (min-width: 768px) {
   #career-page h4 {
     text-align: left;

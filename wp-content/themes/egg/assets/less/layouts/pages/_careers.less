@@ -20,10 +20,12 @@
 		top: 8px;*/
 		position: relative;
 		float: none;
-		display: block;
+		/*display: block;*/
+		display: inline-block;
 		font-size: 14px;
 		color: #666666;
-		width: 185px;
+		/*width: 185px;*/
+		width:auto;
 		background-position: right center;
 		background-repeat: no-repeat;
 		    background-size: initial;
@@ -32,8 +34,15 @@
 		font-weight: bold;
 		text-decoration: none;
 		    background-image: url(../img/icon-expend-small.png);
+		    padding-right: 30px;
+		em{
+			    font-style: normal;
+		}
 		&:hover{
 			text-decoration: none;
+		}
+		&.expended{
+			background-image: url(../img/icon-expended-small.png);
 		}
  	}
 
@@ -112,13 +121,13 @@
  	}
 }
 
-.zh-hant,.zh-hans{
+/*.zh-hant,.zh-hans{
 	#career-page{
 		.expend-btn {
 			    width: 120px;
 		}
 	}
-}
+}*/
 //===============================================================================
 //===============================================================================
 // tablet
