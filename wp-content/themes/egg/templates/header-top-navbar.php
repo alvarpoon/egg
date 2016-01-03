@@ -14,7 +14,7 @@
         $is_eggstar = true;
       }
     ?>
-      <a class="navbar-brand" href="<?php echo home_url(); ?>/"><img src="<?=get_stylesheet_directory_uri()?>/assets/img/<?=($is_eggstar?"logo-top-eggstar.jpg":"logo-top.png")?>"></a>
+      <a class="navbar-brand" href="<?=($is_eggstar?home_url().'/eggstar':home_url()); ?>/"><img src="<?=get_stylesheet_directory_uri()?>/assets/img/<?=($is_eggstar?"logo-top-eggstar.png":"logo-top.png")?>"></a>
     </div>
 
     <div class="lang-switcher hidden-xs visible-sm visible-md visible-lg">
