@@ -123,22 +123,23 @@
             <div class="collection-container">
             <?
                 //$terms = get_the_terms( $post->ID, 'collection' );
-                if ( $terms && ! is_wp_error( $terms )){
+                //if ( $terms && ! is_wp_error( $terms )){
                     //$term = $terms[0];
                     $args= array(
-                        'post_type' => 'product',
-                        'tax_query' => array(
+                        'post_type' => 'eggstar_product',
+                        /*'tax_query' => array(
                                           array(
                                             'taxonomy' => 'collection',
                                             'field'    => 'slug',
                                             'terms'    => $term->slug,
                                             'include_children' => false
                                           )
-                                        ),
+                                        ),*/
                         'post_status' 		=> 'publish',
                         'orderby'			=> 'menu_order',
                         'order' 			=> 'ASC',
-                        'numberposts' 		=> -1
+                        'numberposts' 		=> -1,
+                        'suppress_filters'  => 0
                     );
                     $products = get_posts( $args );
                     //$size = sizeof($products);
@@ -167,7 +168,7 @@
                         </div>
         <?
                     }
-                }
+                //}
         ?>
         	</div>
 		</div>

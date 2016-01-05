@@ -7718,6 +7718,7 @@ figure.alignnone {
 #career-page h4 {
   font-weight: bold;
   text-align: center;
+  font-size: 21px;
 }
 #career-page .expend-btn {
   /*		position: relative;
@@ -7735,14 +7736,15 @@ figure.alignnone {
   width: auto;
   background-position: right center;
   background-repeat: no-repeat;
-  -webkit-background-size: initial initial;
-          background-size: initial;
+  -webkit-background-size: inherit inherit;
+          background-size: inherit;
   padding-top: 5px;
   margin-left: 0;
   font-weight: bold;
   text-decoration: none;
   background-image: url(../img/icon-expend-small.png);
   padding-right: 30px;
+  outline: none;
 }
 #career-page .expend-btn em {
   font-style: normal;
@@ -8346,14 +8348,14 @@ figure.alignnone {
   border-bottom: 1px solid #333;
 }
 .eggstar .home-new-collection .sectionIntro .section-contents {
-  border: none;
   padding-bottom: 50px;
   padding-top: 80px;
 }
 .eggstar .home-new-collection {
-  background-color: #93908b;
+  /*background-color: #93908b;*/
   padding: 0 0px 15px;
-  margin: 0 auto 0;
+  margin: 10px auto 0;
+  margin-bottom: 40px;
 }
 .eggstar .home-find-store {
   background: transparent url(../img/eggstar-bg.jpg);

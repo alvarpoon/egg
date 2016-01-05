@@ -43,7 +43,9 @@
 	?>
 		</ul>
 		</div>
+		<? if(get_field("office_opening_text",$post->ID)){ ?>
 		<div class="career-box-text clearfix"><?=apply_filters('the_content', get_field("office_opening_text",$post->ID)); ?></div>
+	 	<? } ?>
 	 	</div>
 	</div>
 	<div class="row career-section-container">
@@ -79,7 +81,9 @@
 	?>
 		</ul>
 		</div>
+		<? if(get_field("box_text",$post->ID)){	?>
 		<div class="career-box-text clearfix"><?=apply_filters('the_content', get_field("box_text",$post->ID)); ?></div>
+		<? } ?>
 	 	<div class="career-text-after-box"><?=apply_filters('the_content', get_field("text_after_box",$post->ID)); ?></div>
 	 	</div>
 	</div>

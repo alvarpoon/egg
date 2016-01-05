@@ -10,7 +10,7 @@
       <a href="javascript:;" class="menu-label hidden-xs hidden-sm hidden-md hidden-lg" data-toggle="collapse" data-target=".navbar-collapse">menu</a>
     <?
       $is_eggstar = false;
-      if(is_child_of(2872) || is_child_of(2878) || is_child_of(2880)){
+      if(is_child_of(2872) || is_child_of(2878) || is_child_of(2880) || get_post_type()=='eggstar_product'){
         $is_eggstar = true;
       }
     ?>

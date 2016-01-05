@@ -67,7 +67,7 @@
                 <?
                             }
                 ?>
-                            <div class="col-sm-4 col-md-3">
+                            <div class="col-sm-4">
                                 <a href="<?=get_permalink($new_product->ID)?>"><img class="img-responsive" src="<?=$product_image_url; ?>" /></a>
                             </div>
                 <?
