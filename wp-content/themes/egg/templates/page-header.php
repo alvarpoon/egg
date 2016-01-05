@@ -10,7 +10,11 @@
 		<? } else { ?>
 			<div class="no-featured-img	"></div>
 		<? } ?>
+		<?
+		$template_name = get_post_meta( $post->ID, '_wp_page_template', true );
+		if ($template_name!='template-promo.php'){?>
 		<div class="page-title"><h2><?=roots_title(); ?></h2></div>
+		<? } ?>
 	</div>
 <?
 	}
