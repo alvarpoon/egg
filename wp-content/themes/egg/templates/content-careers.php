@@ -57,8 +57,8 @@
 	<?
 		$args= array(
 			'post_type' 		=> 'career',
-			'orderby'			=> 'date',
-			'order' 			=> 'DESC',
+			'orderby'			=> 'menu_order',
+			'order' 			=> 'ASC',
 			'numberposts' 		=> -1,
 			'suppress_filters' 	=> 0
 		  );
