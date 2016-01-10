@@ -8119,7 +8119,9 @@ figure.alignnone {
 .navbar-default .nav-container #menu-primary-navigation,
 .navbar-default .nav-container #menu-primary-navigation-chinese-traditional,
 .navbar-default .nav-container #menu-primary-navigation-chinese-simplified,
-.navbar-default .nav-container #menu-egg-star-main-menu {
+.navbar-default .nav-container #menu-egg-star-main-menu,
+.navbar-default .nav-container #menu-egg-star-main-menu-chinese-traditional,
+.navbar-default .nav-container #menu-egg-star-main-menu-chinese-simplified {
   float: none;
   text-align: center;
   margin: 0 auto;
@@ -8381,16 +8383,32 @@ figure.alignnone {
   /* Good browsers */
   opacity: 0.9;
 }
-.page-template-template-eggstar-stores .navbar-default {
+.page-template-template-eggstar-stores .navbar-default,
+.single-eggstar_product .navbar-default {
   background-color: rgba(0, 0, 0, 0.9);
 }
 .page-template-template-eggstar-stores .navbar-default .nav-container li:hover a,
-.page-template-template-eggstar-stores .navbar-default .nav-container li.active a {
+.single-eggstar_product .navbar-default .nav-container li:hover a,
+.page-template-template-eggstar-stores .navbar-default .nav-container li.active a,
+.single-eggstar_product .navbar-default .nav-container li.active a {
   color: #99E5FF!important;
 }
 .page-template-template-eggstar-stores .navbar-default .nav-container .mobile-language-selector-wrapper a:active,
-.page-template-template-eggstar-stores .navbar-default .nav-container .mobile-language-selector-wrapper a:hover {
+.single-eggstar_product .navbar-default .nav-container .mobile-language-selector-wrapper a:active,
+.page-template-template-eggstar-stores .navbar-default .nav-container .mobile-language-selector-wrapper a:hover,
+.single-eggstar_product .navbar-default .nav-container .mobile-language-selector-wrapper a:hover {
   color: #99E5FF!important;
+}
+.single-eggstar_product .navbar-default .nav-container li.eggstar-collection-chi-menu-link a {
+  color: #99E5FF!important;
+}
+.page-template-template-eggstar-stores .slick-slider .slick-track {
+  margin: 0 auto;
+}
+.parent-pageid-2872 .navbar-default .nav-container li.active.menu-home a,
+.parent-pageid-2880 .navbar-default .nav-container li.active.menu-egg a,
+.parent-pageid-2878 .navbar-default .nav-container li.active.menu-egg a {
+  color: #fff!important;
 }
 /* Slider */
 .slick-slider {
