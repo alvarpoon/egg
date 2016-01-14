@@ -25,15 +25,23 @@
 		  );
 		$results = get_posts( $args );
 		foreach( $results as $result ){
-			$url = wp_get_attachment_url( get_post_thumbnail_id($result->ID, 'thumbnail') );
+			$thumb = get_post_thumbnail_id($result->ID, 'thumbnail');
 			$post_title = get_the_title( $result->ID );
 	  ?>
 	
 				
 						<li class="career-post">
 							<h3><? echo $post_title; ?></h3>
-							<div class="career-details-container" style="display:none"><?=apply_filters('the_content', $result->post_content); ?></div>
-							<a class="expend-btn" href="#"><em><?_e('Expand for more details')?></em><span></span></a>
+							<? if($thumb!=""){?>
+							<div>
+								<div class="career-details-container" style="display:none"><img class="img-career" src="<?=wp_get_attachment_url($thumb)?>" /></div>
+								<a class="expend-btn" href="#"><em><?_e('Know more about your career path')?></em><span></span></a>
+							</div>
+							<? } ?>
+							<div>
+								<div class="career-details-container" style="display:none"><?=apply_filters('the_content', $result->post_content); ?></div>
+								<a class="expend-btn" href="#"><em><?_e('Expand for more details')?></em><span></span></a>
+							</div>
 						</li>
 					
 			

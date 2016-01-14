@@ -7832,6 +7832,11 @@ figure.alignnone {
 #career-page .career-text-after-box a {
   color: #664400;
 }
+.img-career {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 /*.zh-hant,.zh-hans{
 	#career-page{
 		.expend-btn {
@@ -7875,6 +7880,9 @@ figure.alignnone {
     float: left;
     width: 50%;
     padding-right: 10px;
+  }
+  .img-career {
+    width: auto;
   }
 }
 #stores-page section.tab-nav {

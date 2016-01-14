@@ -214,7 +214,7 @@ function career_register() {
       'capability_type' => 'post',
       'hierarchical' => true,
       'menu_position' => 6,
-      'supports'      => array( 'title', 'editor'),
+      'supports'      => array( 'title', 'editor', 'thumbnail'),
   );
   register_post_type( 'career' , $args );
 }
@@ -245,7 +245,7 @@ function career_office_register() {
       'capability_type' => 'post',
       'hierarchical' => true,
       'menu_position' => 7,
-      'supports'      => array( 'title', 'editor'),
+      'supports'      => array( 'title', 'editor', 'thumbnail'),
   );
   register_post_type( 'career_office' , $args );
 }

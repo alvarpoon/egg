@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EGG website\n"
-"POT-Creation-Date: 2015-12-22 22:19+0800\n"
-"PO-Revision-Date: 2016-01-04 00:11+0800\n"
+"POT-Creation-Date: 2016-01-15 00:37+0800\n"
+"PO-Revision-Date: 2016-01-15 00:37+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -31,11 +31,15 @@ msgstr ""
 msgid "Office Recruitment"
 msgstr "办公室空缺"
 
-#: ../themes/egg/templates/content-careers.php:35
+#: ../themes/egg/templates/content-careers.php:38
+msgid "Know more about your career path"
+msgstr "了解更多关于你的职业路径"
+
+#: ../themes/egg/templates/content-careers.php:43
 msgid "Expand for more details"
 msgstr "展开更多细节"
 
-#: ../themes/egg/templates/content-careers.php:51
+#: ../themes/egg/templates/content-careers.php:61
 msgid "Shop Recruitment"
 msgstr "门市空缺"
 
