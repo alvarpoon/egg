@@ -8237,7 +8237,7 @@ figure.alignnone {
     display: inline-block;
   }
   .navbar-default .nav-container li a {
-    padding: 10px 12px;
+    padding: 10px 10px;
   }
   .navbar-default .nav-container li:last-child a {
     padding-right: 0;
@@ -8289,7 +8289,7 @@ figure.alignnone {
     display: inline-block;
   }
   .navbar-default .nav-container li a {
-    padding: 10px 10px;
+    padding: 10px 6px;
   }
   .navbar-default .nav-container .main-menu {
     padding-top: 0px;
@@ -8314,6 +8314,9 @@ figure.alignnone {
   }
 }
 @media (min-width: 1200px) {
+  .navbar-default .nav-container li a {
+    padding: 10px 10px;
+  }
   /*.main{
    position: initial;
    top: 0px;

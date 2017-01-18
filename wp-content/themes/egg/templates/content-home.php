@@ -206,3 +206,28 @@
     </div>
 </div>
 </section>
+<?
+if(get_field('show_banner')){
+    $popup_banner_image = get_field('popup_banner_image');
+    $popup_banner_link = get_field('popup_banner_link');
+    if( !empty($popup_banner_image)){
+?>
+<div id="popup" style="width: 640px; height:415px;display: none;">
+    <a href="<?=$popup_banner_link?>"><img src="<?=$popup_banner_image['url']; ?>" /></a>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+/*$("#popup").fancybox({
+    autoResize:true,
+    closeClick  : false, // prevents closing when clicking INSIDE fancybox 
+    helpers : {
+        overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
+    }    
+});*/
+$.fancybox.open($('#popup'));
+});
+</script>
+<?
+    }
+}
+?>
