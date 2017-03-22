@@ -216,7 +216,8 @@ if(get_field('show_banner')){
     <a href="<?=$popup_banner_link?>"><img class="img-responsive" src="<?=$popup_banner_image['url']; ?>" /></a>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){
+$('#popup').imagesLoaded( function() {
+  //$(document).ready(function(){
 /*$("#popup").fancybox({
     autoResize:true,
     closeClick  : false, // prevents closing when clicking INSIDE fancybox 
