@@ -5,13 +5,13 @@ abstract class WPML_Menu_Sync_Functionality extends WPML_Full_Translation_API {
 	private $menu_items_cache;
 
 	/**
-	 * @param SitePress             $sitepress
-	 * @param wpdb                  $wpdb
-	 * @param WPML_Post_Translation $post_translations
-	 * @param WPML_Term_Translation $term_translation
+	 * @param SitePress               $sitepress
+	 * @param wpdb                    $wpdb
+	 * @param WPML_Post_Translation   $post_translations
+	 * @param WPML_Terms_Translations $term_translations
 	 */
-	function __construct( $sitepress, $wpdb, $post_translations, $term_translation ) {
-		parent::__construct( $sitepress, $wpdb, $post_translations, $term_translation );
+	function __construct( &$sitepress, &$wpdb, &$post_translations, &$term_translations ) {
+		parent::__construct( $sitepress, $wpdb, $post_translations, $term_translations );
 		$this->menu_items_cache = array();
 	}
 

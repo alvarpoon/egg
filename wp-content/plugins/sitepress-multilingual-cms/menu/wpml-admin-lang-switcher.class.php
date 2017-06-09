@@ -2,10 +2,7 @@
 
 class WPML_Admin_Language_Switcher {
     
-    function render()
-    {
-        if(!SitePress::check_settings_integrity()) return;
-    
+    function render() {
         /** @var $wp_admin_bar WP_Admin_Bar */
         global $wpdb, $wp_admin_bar, $pagenow, $mode, $sitepress;
     
@@ -49,8 +46,9 @@ class WPML_Admin_Language_Switcher {
                 }
                 break;
             case 'edit-tags.php':
+			case 'term.php':
                 $is_tax = true;
-                if ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'edit' ) {
+                if ( $sitepress->get_wp_api()->is_term_edit_page() ) {
                     $all_languages_enabled = false;
                 }
     
@@ -85,7 +83,15 @@ class WPML_Admin_Language_Switcher {
                 break;
     
         }
-        $active_languages = $sitepress->get_active_languages();
+
+			$active_languages = $sitepress->get_active_languages();
+			if ( 'all' !== $current_language ) {
+				$current_active_language = $active_languages[ $current_language ];
+			}
+			$active_languages = apply_filters( 'wpml_admin_language_switcher_active_languages', $active_languages );
+			if ( 'all' !== $current_language && ! isset( $active_languages[ $current_language ] ) ) {
+				array_unshift( $active_languages, $current_active_language );
+			}
 
         foreach ( $active_languages as $lang ) {
             $current_page_lang = $current_page;
@@ -181,7 +187,13 @@ class WPML_Admin_Language_Switcher {
                 $languages_links[ $current_language ][ 'current' ] = true;
             }
         }
-    
+
+			$current_language_item = $languages_links[ $current_language ];
+			$languages_links       = apply_filters( 'wpml_admin_language_switcher_items', $languages_links );
+			if ( ! isset( $languages_links[ $current_language ] ) ) {
+				$languages_links = array_merge( array( $current_language => $current_language_item ), $languages_links );
+			}
+
         $parent = 'WPML_ALS';
         $lang   = $languages_links[ $current_language ];
         // Current language

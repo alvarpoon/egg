@@ -14,10 +14,20 @@ class WPML_Root_Page_Actions {
 		$root_id = $this->get_root_page_id ();
 
 		if ( $root_id ) {
-			$wpdb->delete (
-				$wpdb->prefix . 'icl_translations',
-				array( 'element_id' => $root_id, 'element_type' => 'post_page' )
+
+			$update_args = array(
+				'element_id' => $root_id,
+				'element_type' => 'post_page',
+				'context' => 'post'
 			);
+
+			do_action( 'wpml_translation_update', array_merge( $update_args, array( 'type' => 'before_delete' ) ) );
+
+			$wpdb->delete (
+				$wpdb->prefix . 'icl_translations', array( 'element_id' => $root_id, 'element_type' => 'post_page' ), array( '%d', '%s' )
+			);
+
+			do_action( 'wpml_translation_update', array_merge( $update_args, array( 'type' => 'after_delete' ) ) );
 		}
 	}
 
@@ -31,8 +41,13 @@ class WPML_Root_Page_Actions {
 	 * @uses \WPML_Root_Page::is_root_page
 	 */
 	public function is_url_root_page( $url ) {
+		$ret = false;
 
-		return WPML_Root_Page::is_root_page( $url );
+		if ( $this->get_root_page_id() ) {
+			$ret = WPML_Root_Page::is_root_page( $url );
+		}
+
+		return $ret;
 	}
 
 	/**
@@ -41,12 +56,14 @@ class WPML_Root_Page_Actions {
 	 * @return bool|false|int
 	 */
 	public function get_root_page_id() {
+		$urls_in_dirs = isset($this->sp_settings['language_negotiation_type']) && (int)$this->sp_settings['language_negotiation_type'] === 1;
 		$urls = isset( $this->sp_settings['urls'] ) ? $this->sp_settings['urls'] : array();
 
-		return isset( $urls['root_page'] )
+		return $urls_in_dirs && isset( $urls['root_page'] )
 		       && ! empty( $urls['directory_for_default_language'] )
 		       && isset( $urls['show_on_root'] )
 		       && $urls['show_on_root'] === 'page'
+		       && $urls['root_page']
 				? $urls['root_page'] : false;
 	}
 
@@ -172,12 +189,22 @@ class WPML_Root_Page_Actions {
 				remove_action ( 'save_post', array( $iclTranslationManagement, 'save_post_actions' ), 11, 2 );
 			}
 
+			$update_args = array(
+				'element_id' => $post->ID,
+				'element_type' => 'post_page',
+				'context' => 'post'
+			);
+
+			do_action( 'wpml_translation_update', array_merge( $update_args, array( 'type' => 'before_delete' ) ) );
+
 			$wpdb->query (
 				$wpdb->prepare (
 					"DELETE FROM {$wpdb->prefix}icl_translations WHERE element_type='post_page' AND element_id=%d",
 					$post->ID
 				)
 			);
+
+			do_action( 'wpml_translation_update', array_merge( $update_args, array( 'type' => 'after_delete' ) ) );
 		}
 	}
 
@@ -210,7 +237,7 @@ class WPML_Root_Page_Actions {
 		} else {
 			remove_action( 'parse_query', array( $this, 'wpml_home_url_parse_query' ) );
 
-			$request_array                  = explode( '/', $_SERVER["REQUEST_URI"] );
+			$request_array                  = explode( '/', $_SERVER['REQUEST_URI'] );
 			$sanitized_query                = array_pop( $request_array );
 			$potential_pagination_parameter = array_pop( $request_array );
 
@@ -223,26 +250,49 @@ class WPML_Root_Page_Actions {
 
 			$sanitized_query = str_replace( '?', '', $sanitized_query );
 			$q->parse_query( $sanitized_query );
-			add_action( 'parse_query', array( $this, 'wpml_home_url_parse_query' ) );
 			$root_id                  = $this->get_root_page_id();
-			$q->query_vars['page_id'] = $root_id;
-			$q->query['page_id']      = $root_id;
-			$q->is_page               = 1;
-			$q->queried_object        = new WP_Post( get_post( $root_id ) );
-			$q->queried_object_id     = $root_id;
-			$q->query_vars['error']   = "";
-			$q->is_404                = false;
-			$q->query['error']        = null;
+			add_action( 'parse_query', array( $this, 'wpml_home_url_parse_query' ) );
+			if ( false !== $root_id ) {
+				$q = $this->set_page_query_parameters( $q, $root_id );
+			} else {
+				$front_page = get_option( 'page_on_front' );
+				if ( $front_page ) {
+					$q = $this->set_page_query_parameters( $q, $front_page );
+				}
+			}
 		}
+
+		return $q;
+	}
+
+	private function set_page_query_parameters( $q, $page_id ) {
+		$q->query_vars['page_id'] = $page_id;
+		$q->query['page_id']      = $page_id;
+		$q->is_page               = 1;
+		$q->queried_object        = new WP_Post( get_post( $page_id ) );
+		$q->queried_object_id     = $page_id;
+		$q->query_vars['error']   = '';
+		$q->is_404                = false;
+		$q->query['error']        = null;
+		$q->is_home               = false;
 
 		return $q;
 	}
 }
 
+/**
+ * Checks if the language switcher is to be displayed.
+ * Used to check if the displayed page is a root page and the switcher is to be hidden because of it.
+ *
+ * @return bool true if the switcher is to be hidden
+ */
 function wpml_home_url_ls_hide_check() {
-	global $sitepress_settings, $sitepress;
+	global $sitepress;
 
-	$hide = $sitepress_settings[ 'language_negotiation_type' ] == 1 && $sitepress_settings[ 'urls' ][ 'directory_for_default_language' ] && $sitepress_settings[ 'urls' ][ 'show_on_root' ] == 'page' && $sitepress_settings[ 'urls' ][ 'hide_language_switchers' ] && isset( $sitepress->ROOT_URL_PAGE_ID ) && $sitepress->ROOT_URL_PAGE_ID == $sitepress_settings[ 'urls' ][ 'root_page' ];
-
-	return $hide;
+	return $sitepress->get_setting( 'language_negotiation_type' ) == 1
+	       && (bool) ( $urls = $sitepress->get_setting( 'urls' ) ) === true
+	       && ! empty( $urls['directory_for_default_language'] )
+	       && isset( $urls['show_on_root'] ) && $urls['show_on_root'] === 'page'
+	       && ! empty( $urls['hide_language_switchers'] )
+	       && WPML_Root_Page::is_current_request_root();
 }

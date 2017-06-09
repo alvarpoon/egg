@@ -20,7 +20,7 @@ class WPML_Tax_Menu_Loader extends WPML_WPDB_And_SP_User {
 
 	public function init(){
 		$tax_get = filter_input(INPUT_GET, 'taxonomy');
-		require ICL_PLUGIN_PATH . '/menu/term-taxonomy-menus/wpml-term-language-filter.class.php';
+		require WPML_PLUGIN_PATH . '/menu/term-taxonomy-menus/wpml-term-language-filter.class.php';
 		if ( ( $trid = filter_input ( INPUT_GET, 'trid' ) )
 		     && ( $source_lang = filter_input ( INPUT_GET, 'source_lang' ) )
 		     && get_taxonomy ( $tax_get ) !== false
@@ -33,7 +33,6 @@ class WPML_Tax_Menu_Loader extends WPML_WPDB_And_SP_User {
 				add_action ( 'admin_notices', array( $this, '_tax_adding' ) );
 			}
 		}
-		$term_lang_filter = new WPML_Term_Language_Filter( $this->wpdb, $this->sitepress );
 		if ( $this->taxonomy === 'category' ) {
 			add_action ( 'edit_category_form', array( $this, 'wpml_edit_term_form' ) );
 		} else {
@@ -41,8 +40,12 @@ class WPML_Tax_Menu_Loader extends WPML_WPDB_And_SP_User {
 			add_action ( 'edit_tag_form', array( $this, 'wpml_edit_term_form' ) );
 		}
 		add_action ( 'admin_print_scripts-edit-tags.php', array( $this, 'js_scripts_tags' ) );
+		add_action ( 'admin_print_scripts-term.php', array( $this, 'js_scripts_tags' ) );
 		add_filter ( 'wp_dropdown_cats', array( $this, 'wp_dropdown_cats_select_parent' ), 10, 2 );
-		add_action ( 'admin_footer', array( $term_lang_filter, 'terms_language_filter' ), 0 );
+		if ( ! $this->sitepress->get_wp_api()->is_term_edit_page() ) {
+			$term_lang_filter = new WPML_Term_Language_Filter( $this->wpdb, $this->sitepress );
+			add_action ( 'admin_footer', array( $term_lang_filter, 'terms_language_filter' ), 0 );
+		}
 	}
 
 	/**
@@ -97,7 +100,7 @@ class WPML_Tax_Menu_Loader extends WPML_WPDB_And_SP_User {
 	 * @param Object $term
 	 */
 	public function wpml_edit_term_form( $term ) {
-		include ICL_PLUGIN_PATH . '/menu/term-taxonomy-menus/taxonomy-menu.php';
+		include WPML_PLUGIN_PATH . '/menu/term-taxonomy-menus/taxonomy-menu.php';
 	}
 
 	function _tax_adding() {

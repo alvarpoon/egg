@@ -105,7 +105,7 @@ class WPML_Menu_Item_Sync extends WPML_Menu_Sync_Functionality {
 					$icl_st_label_exists = false;
 					$icl_st_url_exists   = false;
 					if ( $object_type === 'custom' && ( function_exists( 'icl_t' ) || ! $this->string_translation_default_language_ok() ) ) {
-						if ( function_exists( 'icl_t' ) && $this->string_translation_default_language_ok() ) {
+						if ( function_exists( 'icl_t' ) ) {
 							$this->sitepress->switch_lang( $language, false );
 							$item             = new stdClass();
 							$item->url        = $object_url;
@@ -119,12 +119,22 @@ class WPML_Menu_Item_Sync extends WPML_Menu_Sync_Functionality {
 							$this->sitepress->switch_lang( $current_language, false );
 
 							if ( ! $icl_st_label_exists ) {
-								icl_register_string( $menu_name . ' menu',
-								                     'Menu Item Label ' . $item_id,
-								                     $object_title );
+								if( isset( $current_language ) ) {
+									icl_register_string( $menu_name . ' menu',
+										'Menu Item Label ' . $item_id,
+										$object_title, false, $current_language );
+								} else {
+									icl_register_string( $menu_name . ' menu',
+										'Menu Item Label ' . $item_id,
+										$object_title );
+								}
 							}
 							if ( ! $icl_st_url_exists ) {
-								icl_register_string( $menu_name . ' menu', 'Menu Item URL ' . $item_id, $object_url );
+								if( isset( $current_language ) ) {
+									icl_register_string( $menu_name . ' menu', 'Menu Item URL ' . $item_id, $object_url, false, $current_language );
+								} else {
+									icl_register_string( $menu_name . ' menu', 'Menu Item URL ' . $item_id, $object_url );
+								}
 							}
 						} else {
 							$object_title = $name;
@@ -151,7 +161,7 @@ class WPML_Menu_Item_Sync extends WPML_Menu_Sync_Functionality {
 
 					$translated_menu_id = $menus[ $menu_id ]['translations'][ $language ]['id'];
 
-					remove_filter( 'get_term', array( $this->sitepress, 'get_term_adjust_id' ) );
+					remove_filter( 'get_term', array( $this->sitepress, 'get_term_adjust_id' ), 1 );
 					$translated_item_id = wp_update_nav_menu_item( $translated_menu_id, 0, $menu_data );
 
 					// set language explicitly since the 'wp_update_nav_menu_item' is still TBD
@@ -182,7 +192,7 @@ class WPML_Menu_Item_Sync extends WPML_Menu_Sync_Functionality {
 				}
 			}
 		}
-		$this->fix_hierarchy_added_items( $added_data, $menus );
+		$this->fix_hierarchy_added_items( $added_data );
 
 		return $menus;
 	}
@@ -209,12 +219,25 @@ class WPML_Menu_Item_Sync extends WPML_Menu_Sync_Functionality {
 																		$trid,
 																		$language );
 					}
+
+					$translated_menu_id = $menus[ $menu_id ]['translations'][ $language ]['id'];
+					$this->assign_orphan_item_to_menu( $translated_item_id, $translated_menu_id );
 				}
 			}
 		}
 		$this->fix_hierarchy_moved_items( $moved_data );
 
 		return $menus;
+	}
+
+	/**
+	 * @param int $item_id
+	 * @param int $menu_id
+	 */
+	private function assign_orphan_item_to_menu( $item_id, $menu_id ) {
+		if ( ! wp_get_object_terms( $item_id, 'nav_menu' ) ) {
+			wp_set_object_terms( $item_id, array( $menu_id ), 'nav_menu' );
+		}
 	}
 
 	function sync_caption( $label_change_data ) {
@@ -291,9 +314,7 @@ class WPML_Menu_Item_Sync extends WPML_Menu_Sync_Functionality {
 		}
 	}
 
-	private function fix_hierarchy_added_items( $added_data, $menus ) {
-		global $wpdb;
-
+	private function fix_hierarchy_added_items( $added_data ) {
 		foreach ( $added_data as $menu_id => $items ) {
 			foreach ( $items as $language => $translations ) {
 				foreach ( $translations as $item_id => $name ) {

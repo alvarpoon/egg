@@ -24,7 +24,7 @@ WPML_core.PostEditDuplicates = function($) {
 	};
 
 	var _duplicate_click_handler = function () {
-		if(jQuery('#post ').find('input[name="icl_dupes[]"]:checked'.length > 0)){
+		if(jQuery('#post').find('input[name="icl_dupes[]"]:checked').length > 0){
 			jQuery('#icl_make_duplicates').show().removeAttr('disabled');
 		}else{
 			jQuery('#icl_make_duplicates').hide().attr('disabled', 'disabled');
@@ -106,12 +106,12 @@ jQuery(document).ready(function($){
 
     jQuery('#icl_custom_posts_sync_options').submit(function(){
         iclHaltSave = false;
-        var slugTranslationChoice = jQuery('.icl_slug_translation_choice input[type=text]');
+        var slugTranslationChoice = jQuery('.icl_slug_translation_choice input[type=text].js-translate-slug');
         var ajaxResponseCP = jQuery('#icl_ajx_response_cp');
         slugTranslationChoice.removeClass('icl_error_input');
         ajaxResponseCP.html('').fadeOut();
         slugTranslationChoice.each(function(){
-            if(jQuery(this).is(':visible') && jQuery.trim(jQuery(this).val()) === ''){
+            if(jQuery(this).is(':visible') && !jQuery(this).is(':disabled') && jQuery.trim(jQuery(this).val()) === ''){
                 jQuery(this).addClass('icl_error_input');
                 iclHaltSave = true;
             }
@@ -151,15 +151,14 @@ jQuery(document).ready(function($){
 
         var $target = $( $(this).attr('href') );
         var $caret = $(this).find('.js-arrow-toggle');
-        console.log($caret);
 
         if ( $target.is(':visible') ) {
             $target.slideUp();
-            $caret.removeClass('icon-caret-up').addClass('icon-caret-down');
+            $caret.removeClass('dashicons-arrow-up').addClass('dashicons-arrow-down');
         }
         else {
             $target.slideDown();
-            $caret.removeClass('icon-caret-down').addClass('icon-caret-up');
+            $caret.removeClass('dashicons-arrow-down').addClass('dashicons-arrow-up');
         }
 
         return false;
@@ -221,16 +220,7 @@ jQuery(document).ready(function($){
 
 	update_icl_untranslated_blog_posts();
 	icl_untranslated_blog_posts.bind('click', update_icl_untranslated_blog_posts);
-
 });
-
-var icl_tn_initial_value   = '';
-
-window.onbeforeunload = function() {
-    if(icl_tn_initial_value != jQuery('#icl_post_note').find('textarea').val()){
-        return jQuery('#icl_tn_cancel_confirm').val();
-    }
-};
 
 function fadeInAjxResp(spot, msg, err){
     if(err != undefined){
@@ -274,7 +264,9 @@ function iclSaveForm() {
 				for (var i = 0; i < iclSaveForm_success_cb.length; i++) {
 					iclSaveForm_success_cb[i](jQuery('form[name="' + form_name + '"]'), spl);
 				}
-				if (form_name == 'icl_slug_translation' || form_name == 'icl_save_language_switcher_options') {
+				if (form_name == 'icl_slug_translation' ||
+						form_name == 'wpml_ls_settings_form' ||
+						form_name == 'icl_custom_posts_sync_options') {
 					location.reload();
 				}
 			} else {
