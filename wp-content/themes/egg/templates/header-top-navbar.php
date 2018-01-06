@@ -50,7 +50,7 @@
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
 		</span></a>
-		<a href="http://www.instagram.com/eggoptical" target="_blank"><span class="fa-stack fa-lg">
+		<a href="https://www.instagram.com/eggopticalhk/" target="_blank"><span class="fa-stack fa-lg">
 		  <i class="fa fa-circle fa-stack-2x"></i>
 		  <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
 		</span></a>
