@@ -87,6 +87,75 @@
 </div>
 </section>
 
+<section class="home-collections">
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-push-1 sectionIntro">
+            <div class="section-title"><h2><?_e('Collections');?></h2></div>
+            <div class="section-contents">
+                    
+                <?
+
+                    $collections = get_terms( array(
+                        'taxonomy' => 'eggstar_collection',
+                        'orderby'  => 'term_order'
+                    ) );
+                    $featured_collections = get_field('featured_collection',$post->ID);
+                    $index = 0;
+                    if( $featured_collections){
+                         foreach( $collections as $collection ){
+                            //check each collection according to order
+                            foreach($featured_collections as $featured_collection) {
+                                //the collection is selected as featured
+                                if ($featured_collection->term_id == $collection->term_id) {
+                                    $args= array(
+                                        'post_type' => 'eggstar_product',
+                                        'tax_query' => array(
+                                                          array(
+                                                            'taxonomy' => 'eggstar_collection',
+                                                            'field'    => 'slug',
+                                                            'terms'    => $collection->slug
+                                                          )
+                                                        ),
+                                        'post_status'       => 'publish',
+                                        'orderby'           => 'menu_order',
+                                        'order'             => 'ASC',
+                                        'numberposts'       => 1,
+                                        'suppress_filters' => 0
+                                    );
+                                    $results = get_posts( $args );
+                                    if($index%4==0){
+                        ?>
+                                    <div class="row">
+                        <?
+                                    }
+                        ?>
+                                        <div class="col-sm-3">
+                                            <div class="single-collection">
+                                                <div class="single-collection-img"><a href="<?=get_permalink($results[0]->ID);?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($collection->term_id); ?>" /></a></div>
+                                                <div class="single-collection-title"><h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$collection->name?></a></h3></div>
+                                            </div>
+                                        </div>
+                        <?
+                                    if($index%4==3){
+                        ?>
+                                    </div>
+                        <?
+                                    }
+                                    $index++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                ?>
+                </div>
+                <div class="view-all-btn"><a href="<?=(ICL_LANGUAGE_CODE=='en'?"":'/'.ICL_LANGUAGE_CODE)?>/eggstar/our-collections"><?_e('All Collections');?> ></a></div>
+            </div>
+    </div>
+</div>
+</section>
+
 <section class="home-find-store">
 <div class="container">
 	<div class="row">

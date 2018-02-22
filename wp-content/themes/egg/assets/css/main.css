@@ -8331,6 +8331,13 @@ figure.alignnone {
     right: 15px;
   }
 }
+.eggstar {
+  /*.home-new-collection{
+		padding: 0 0px 15px;
+		margin: 10px auto 0;
+		    margin-bottom: 40px;
+	}*/
+}
 .eggstar .navbar-default {
   background-color: rgba(0, 0, 0, 0.9);
 }
@@ -8363,12 +8370,6 @@ figure.alignnone {
 .eggstar .home-new-collection .sectionIntro .section-contents {
   padding-bottom: 50px;
   padding-top: 80px;
-}
-.eggstar .home-new-collection {
-  /*background-color: #93908b;*/
-  padding: 0 0px 15px;
-  margin: 10px auto 0;
-  margin-bottom: 40px;
 }
 .eggstar .home-find-store {
   background: transparent url(../img/eggstar-bg.jpg);
