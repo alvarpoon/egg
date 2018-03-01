@@ -124,20 +124,20 @@
                                         'suppress_filters' => 0
                                     );
                                     $results = get_posts( $args );
-                                    if($index%4==0){
+                                    if($index%3==0){
                         ?>
                                     <div class="row">
                         <?
                                     }
                         ?>
-                                        <div class="col-sm-3">
+                                        <div class="col-sm-4">
                                             <div class="single-collection">
                                                 <div class="single-collection-img"><a href="<?=get_permalink($results[0]->ID);?>"><img class="img-responsive" src="<?=z_taxonomy_image_url($collection->term_id); ?>" /></a></div>
                                                 <div class="single-collection-title"><h3><a href="<?=get_permalink($results[0]->ID);?>"><?=$collection->name?></a></h3></div>
                                             </div>
                                         </div>
                         <?
-                                    if($index%4==3){
+                                    if($index%3==2){
                         ?>
                                     </div>
                         <?

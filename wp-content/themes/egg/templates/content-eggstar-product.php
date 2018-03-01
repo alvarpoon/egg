@@ -2,9 +2,9 @@
 
     
 <?
-	/*$terms = get_the_terms( $post->ID, 'collection' );
+	$terms = get_the_terms( $post->ID, 'eggstar_collection' );
 	if ( $terms && ! is_wp_error( $terms )){
-		$term = $terms[0];*/
+		$term = $terms[0];
 ?>
 
 <section class="product-back-btn-container">
@@ -27,7 +27,7 @@
 </section>
 
 <?
-	//}
+	}
 ?>
     
     
@@ -86,10 +86,10 @@
                                 if($product->post_content!=""){
                                     echo apply_filters('the_content', $product->post_content);
                                 }
-                                else{
-                                    $collection_page_id = ['en'=>2874,'zh-hant'=>2883, 'zh-hans'=>2885];
+                                /*else{
+                                    $collection_page_id = array('en'=>2874,'zh-hant'=>2883,'zh-hans'=>2885);
                                     echo apply_filters('the_content',get_post($collection_page_id[ICL_LANGUAGE_CODE])->post_content);
-                                }
+                                }*/
                             ?>
                             </div>
                             <?
@@ -123,23 +123,22 @@
             <div class="collection-container">
             <?
                 //$terms = get_the_terms( $post->ID, 'collection' );
-                //if ( $terms && ! is_wp_error( $terms )){
+                if ( $terms && ! is_wp_error( $terms )){
                     //$term = $terms[0];
                     $args= array(
                         'post_type' => 'eggstar_product',
-                        /*'tax_query' => array(
+                        'tax_query' => array(
                                           array(
-                                            'taxonomy' => 'collection',
+                                            'taxonomy' => 'eggstar_collection',
                                             'field'    => 'slug',
                                             'terms'    => $term->slug,
                                             'include_children' => false
                                           )
-                                        ),*/
+                                        ),
                         'post_status' 		=> 'publish',
                         'orderby'			=> 'menu_order',
                         'order' 			=> 'ASC',
-                        'numberposts' 		=> -1,
-                        'suppress_filters'  => 0
+                        'numberposts' 		=> -1
                     );
                     $products = get_posts( $args );
                     //$size = sizeof($products);
@@ -168,7 +167,7 @@
                         </div>
         <?
                     }
-                //}
+                }
         ?>
         	</div>
 		</div>

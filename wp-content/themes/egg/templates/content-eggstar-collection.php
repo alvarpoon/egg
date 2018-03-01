@@ -11,7 +11,7 @@
 	$terms = get_terms('eggstar_collection',$args);
 	  foreach ( $terms as $index => $term ) {
 	  	$args= array(
-			'post_type' => 'product',
+			'post_type' => 'eggstar_product',
 			'tax_query' => array(
 							  array(
 								'taxonomy' => 'eggstar_collection',
